@@ -8,14 +8,17 @@ using System.Threading.Tasks;
 
 namespace Jrg.SisMed.Domain.Entities
 {
+    /// <summary>
+    /// Representa um endereço no sistema.
+    /// </summary>
     public class Address : EntityBase
     {
-        private readonly int MaxStreetLength = 200;
-        private readonly int MaxNumberLength = 20;
-        private readonly int MaxComplementLength = 100;
-        private readonly int MaxZipCodeLength = 10;
-        private readonly int MaxCityLength = 100;
-        private readonly int MaxStateLength = 50;
+        private const int MaxStreetLength = 200;
+        private const int MaxNumberLength = 20;
+        private const int MaxComplementLength = 100;
+        private const int MaxZipCodeLength = 10;
+        private const int MaxCityLength = 100;
+        private const int MaxStateLength = 50;
 
         public string Street { get; private set; } = string.Empty;
         public string Number { get; private set; } = string.Empty;
@@ -25,60 +28,90 @@ namespace Jrg.SisMed.Domain.Entities
         public string State { get; private set; } = string.Empty;
 
         #region Constructors
+        /// <summary>
+        /// Construtor protegido para uso do Entity Framework.
+        /// </summary>
         internal Address() { }
+        
+        /// <summary>
+        /// Cria uma nova instância de Address com validação completa.
+        /// </summary>
+        /// <param name="street">Nome da rua/logradouro.</param>
+        /// <param name="number">Número do endereço.</param>
+        /// <param name="complement">Complemento (opcional).</param>
+        /// <param name="zipCode">CEP do endereço.</param>
+        /// <param name="city">Cidade.</param>
+        /// <param name="state">Estado/UF.</param>
         public Address(string street, string number, string? complement, string zipCode, string city, string state)
         {
-            Validate();
-
             Update(street, number, complement, zipCode, city, state);
         }
         #endregion
 
         #region Public Methods
+        /// <summary>
+        /// Atualiza os dados do endereço com validação completa.
+        /// </summary>
         public void Update(string street, string number, string? complement, string zipCode, string city, string state)
         {
-            Validate();
+            // Atribui valores para validação
             Street = street;
             Number = number;
             Complement = complement;
-            ZipCode = zipCode.FormatCep();
+            ZipCode = zipCode;
             City = city;
             State = state;
+            
+            // Normaliza e valida
+            Normalize();
+            Validate();
+            
+            // Atualiza timestamp se já existe
+            if (Id > 0)
+                UpdatedAt = DateTime.UtcNow;
         }
-
         #endregion
 
         #region Private Methods
-        public void Validate()
+        /// <summary>
+        /// Valida todos os dados do endereço.
+        /// </summary>
+        private void Validate()
         {
-            Normalize();
-
             var v = new ValidationCollector();
 
-            v.When(Street.IsNullOrWhiteSpace(), "Street is required.");
-            v.When(Street.Length > MaxStreetLength, $"Street must be at most {MaxStreetLength} characters long.");
-            v.When(Number.IsNullOrWhiteSpace(), "Number is required.");
-            v.When(Number.Length > MaxNumberLength, $"Number must be at most {MaxNumberLength} characters long.");
-            v.When(Complement != null && Complement.Length > MaxComplementLength, $"Complement must be at most {MaxComplementLength} characters long.");
-            v.When(ZipCode.IsNullOrWhiteSpace(), "ZipCode is required.");
-            v.When(ZipCode.Length > MaxZipCodeLength, $"ZipCode must be at most {MaxZipCodeLength} characters long.");
-            v.When(City.IsNullOrWhiteSpace(), "City is required.");
-            v.When(City.Length > MaxCityLength, $"City must be at most {MaxCityLength} characters long.");
-            v.When(State.IsNullOrWhiteSpace(), "State is required.");
-            v.When(State.Length > MaxStateLength, $"State must be at most {MaxStateLength} characters long.");
+            v.When(Street.IsNullOrWhiteSpace(), "A rua é obrigatória.");
+            v.When(Street.Length > MaxStreetLength, $"A rua deve conter no máximo {MaxStreetLength} caracteres.");
+            
+            v.When(Number.IsNullOrWhiteSpace(), "O número é obrigatório.");
+            v.When(Number.Length > MaxNumberLength, $"O número deve conter no máximo {MaxNumberLength} caracteres.");
+            
+            v.When(Complement != null && Complement.Length > MaxComplementLength, 
+                $"O complemento deve conter no máximo {MaxComplementLength} caracteres.");
+            
+            v.When(ZipCode.IsNullOrWhiteSpace(), "O CEP é obrigatório.");
+            v.When(!ZipCode.IsCep(), "O CEP informado é inválido.");
+            
+            v.When(City.IsNullOrWhiteSpace(), "A cidade é obrigatória.");
+            v.When(City.Length > MaxCityLength, $"A cidade deve conter no máximo {MaxCityLength} caracteres.");
+            
+            v.When(State.IsNullOrWhiteSpace(), "O estado é obrigatório.");
+            v.When(State.Length > MaxStateLength, $"O estado deve conter no máximo {MaxStateLength} caracteres.");
+            
             v.ThrowIfAny();
-
         }
 
-        public void Normalize()
+        /// <summary>
+        /// Normaliza os dados do endereço.
+        /// </summary>
+        private void Normalize()
         {
-            Street = Street.Trim();
+            Street = Street.Trim().ToTitleCase();
             Number = Number.Trim();
-            if (Complement != null)
-                Complement = Complement.Trim();
-            ZipCode = ZipCode.Trim();
-            City = City.Trim();
-            State = State.Trim();
+            Complement = Complement?.Trim();
+            ZipCode = ZipCode.GetOnlyNumbers();
+            City = City.Trim().ToTitleCase();
+            State = State.Trim().ToUpper();
         }
         #endregion
     }
