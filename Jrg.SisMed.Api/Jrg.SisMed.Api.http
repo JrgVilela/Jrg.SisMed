@@ -1,0 +1,6 @@
+@Jrg.SisMed.Api_HostAddress = http://localhost:5063
+
+GET {{Jrg.SisMed.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

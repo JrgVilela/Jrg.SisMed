@@ -1,0 +1,7 @@
+<Solution>
+  <Project Path="Jrg.SisMed.Api/Jrg.SisMed.Api.csproj" />
+  <Project Path="Jrg.SisMed.Application/Jrg.SisMed.Application.csproj" />
+  <Project Path="Jrg.SisMed.Domain/Jrg.SisMed.Domain.csproj" />
+  <Project Path="Jrg.SisMed.Infra.Data/Jrg.SisMed.Infra.Data.csproj" Id="42c2bcbe-72f1-472c-91c2-fd8efab20bfb" />
+  <Project Path="Jrg.SisMed.Infra.IoC/Jrg.SisMed.Infra.IoC.csproj" Id="291de8dc-238f-4b44-9b2e-3bb9b26579d3" />
+</Solution>
