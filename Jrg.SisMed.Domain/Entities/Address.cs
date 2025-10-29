@@ -16,13 +16,14 @@ namespace Jrg.SisMed.Domain.Entities
         private const int MaxStreetLength = 200;
         private const int MaxNumberLength = 20;
         private const int MaxComplementLength = 100;
-        private const int MaxZipCodeLength = 10;
+        private const int MaxNeighborhoodLength = 100;
         private const int MaxCityLength = 100;
         private const int MaxStateLength = 50;
 
         public string Street { get; private set; } = string.Empty;
         public string Number { get; private set; } = string.Empty;
         public string? Complement { get; private set; }
+        public string Neighborhood { get; private set; } = string.Empty;
         public string ZipCode { get; private set; } = string.Empty;
         public string City { get; private set; } = string.Empty;
         public string State { get; private set; } = string.Empty;
@@ -42,9 +43,9 @@ namespace Jrg.SisMed.Domain.Entities
         /// <param name="zipCode">CEP do endereço.</param>
         /// <param name="city">Cidade.</param>
         /// <param name="state">Estado/UF.</param>
-        public Address(string street, string number, string? complement, string zipCode, string city, string state)
+        public Address(string street, string number, string? complement, string neighborhood, string zipCode, string city, string state)
         {
-            Update(street, number, complement, zipCode, city, state);
+            Update(street, number, complement, neighborhood, zipCode, city, state);
         }
         #endregion
 
@@ -52,12 +53,13 @@ namespace Jrg.SisMed.Domain.Entities
         /// <summary>
         /// Atualiza os dados do endereço com validação completa.
         /// </summary>
-        public void Update(string street, string number, string? complement, string zipCode, string city, string state)
+        public void Update(string street, string number, string? complement, string neighborhood, string zipCode, string city, string state)
         {
             // Atribui valores para validação
             Street = street;
             Number = number;
             Complement = complement;
+            Neighborhood = neighborhood;
             ZipCode = zipCode;
             City = city;
             State = state;
@@ -89,6 +91,10 @@ namespace Jrg.SisMed.Domain.Entities
             v.When(Complement != null && Complement.Length > MaxComplementLength, 
                 $"O complemento deve conter no máximo {MaxComplementLength} caracteres.");
             
+            v.When(Neighborhood.IsNullOrWhiteSpace(), "O bairro é obrigatório.");
+            v.When(Neighborhood.Length > MaxNeighborhoodLength, 
+                $"O bairro deve conter no máximo {MaxNeighborhoodLength} caracteres.");
+
             v.When(ZipCode.IsNullOrWhiteSpace(), "O CEP é obrigatório.");
             v.When(!ZipCode.IsCep(), "O CEP informado é inválido.");
             
@@ -109,6 +115,7 @@ namespace Jrg.SisMed.Domain.Entities
             Street = Street.Trim().ToTitleCase();
             Number = Number.Trim();
             Complement = Complement?.Trim();
+            Neighborhood = Neighborhood.Trim().ToTitleCase();
             ZipCode = ZipCode.GetOnlyNumbers();
             City = City.Trim().ToTitleCase();
             State = State.Trim().ToUpper();

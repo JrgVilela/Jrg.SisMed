@@ -7,8 +7,7 @@ using System.Threading.Tasks;
 
 namespace Jrg.SisMed.Domain.Interfaces.Repositories
 {
-    public interface IUserRepository : IRepository<Person>
+    public interface IOrganizationRepository : IRepository<Organization>
     {
-        Task<Person?> GetByEmailAsync(string email, CancellationToken cancellationToken = default);
     }
 }

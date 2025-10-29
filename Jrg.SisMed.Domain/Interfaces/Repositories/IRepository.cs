@@ -1,15 +1,16 @@
-﻿using System.Linq.Expressions;
+﻿using Jrg.SisMed.Domain.Entities;
+using System.Linq.Expressions;
 
 namespace Jrg.SisMed.Domain.Interfaces.Repositories
 {
-    public interface IRepository<T>
+    public interface IRepository<T> where T : Entity
     {
-        Task<T?> GetByIdAsync(int id, CancellationToken cancellationToken = default);
-        Task<IEnumerable<T>> GetAllAsync(CancellationToken cancellationToken = default);
-        Task<IEnumerable<T>> FindAsync(Expression<Func<T, bool>> predicate, CancellationToken cancellationToken = default);
-        Task AddAsync(T entity, CancellationToken cancellationToken = default);
-        void Update(T entity);
-        void Remove(T entity);
-        IQueryable<T> AsQueryable();
+        Task<T?> GetByIdAsync(int id);
+        Task<IEnumerable<T>> FindAsync(Expression<Func<T, bool>> predicate);
+        Task<IEnumerable<T>> GetAllAsync();
+        Task CreateAsync(T entity);
+        Task UpdateAsync(T entity);
+        Task DeleteAsync(int id);
+        Task CommitAsync();
     }
 }
