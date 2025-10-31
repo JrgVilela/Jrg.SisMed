@@ -1,4 +1,12 @@
 <Solution>
+  <Folder Name="/Docs/">
+    <File Path="ABSTRACT_FACTORY_CODE_REVIEW.md" />
+    <File Path="CODE_REVIEW_PHONE_ORGANIZATION.md" />
+    <File Path="CORRECOES_APLICADAS.md" />
+    <File Path="DOMAIN_CODE_REVIEW.md" />
+    <File Path="EF_CONFIGURATIONS_RESUMO.md" />
+    <File Path="REPOSITORY_PATTERN_IMPLEMENTACAO.md" />
+  </Folder>
   <Project Path="Jrg.SisMed.Api/Jrg.SisMed.Api.csproj" />
   <Project Path="Jrg.SisMed.Application/Jrg.SisMed.Application.csproj" />
   <Project Path="Jrg.SisMed.Domain/Jrg.SisMed.Domain.csproj" />
