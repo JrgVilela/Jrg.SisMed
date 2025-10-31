@@ -203,11 +203,11 @@ namespace Jrg.SisMed.Domain.Entities
         }
         #endregion
 
-        #region Private Methods
+        #region Private and Protected Methods
         /// <summary>
         /// Valida todos os dados da entidade.
         /// </summary>
-        private void Validate()
+        protected virtual void Validate()
         {
             var v = new ValidationCollector();
 

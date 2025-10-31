@@ -6,4 +6,10 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Jrg.SisMed.Application\Jrg.SisMed.Application.csproj" />
+    <ProjectReference Include="..\Jrg.SisMed.Domain\Jrg.SisMed.Domain.csproj" />
+    <ProjectReference Include="..\Jrg.SisMed.Infra.Data\Jrg.SisMed.Infra.Data.csproj" />
+  </ItemGroup>
+
 </Project>

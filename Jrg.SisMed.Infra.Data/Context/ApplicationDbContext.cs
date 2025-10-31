@@ -17,6 +17,8 @@ namespace Jrg.SisMed.Infra.Data.Context
         public DbSet<Address> Addresses { get; set; }
         public DbSet<Phone> Phones { get; set; }
         public DbSet<Person> Persons { get; set; }
+        public DbSet<Psychologist> Psychologists { get; set; }
+        public DbSet<Nutritionist> Nutritionists { get; set; }
         public DbSet<Organization> Organizations { get; set; }
         public DbSet<OrganizationPhone> OrganizationPhones { get; set; }
         public DbSet<PersonAddress> PersonAddresses { get; set; }
