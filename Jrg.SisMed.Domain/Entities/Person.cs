@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Jrg.SisMed.Domain.Entities
 {
-    public class Person : Entity
+    public abstract class Person : Entity
     {
         private const int MaxNameLength = 150;
         private const int MaxCpfLength = 11;
