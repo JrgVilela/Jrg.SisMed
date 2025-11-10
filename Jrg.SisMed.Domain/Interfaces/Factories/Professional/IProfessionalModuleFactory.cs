@@ -1,6 +1,7 @@
-﻿using Jrg.SisMed.Domain.Entities;
+﻿
+using Jrg.SisMed.Domain.Entities;
 
-namespace Jrg.SisMed.Domain.Interfaces.Factories
+namespace Jrg.SisMed.Domain.Interfaces.Factories.Professional
 {
     /// <summary>
     /// Interface base para factories de módulos profissionais.
@@ -15,12 +16,12 @@ namespace Jrg.SisMed.Domain.Interfaces.Factories
         /// As implementações concretas na Application Layer definirão os parâmetros específicos
         /// através de métodos adicionais ou sobrecarga.
         /// </summary>
-        /// <returns>Instância de Person (Psychologist ou Nutritionist).</returns>
-        Person CreateProfessional(
+        /// <returns>Instância de Professional (Psychologist ou Nutritionist).</returns>
+        Professional CreateProfessional(
             string name,
             string cpf,
             string? rg,
-            System.DateTime? birthDate,
+            DateTime? birthDate,
             PersonEnum.Gender gender,
             string email,
             string password,

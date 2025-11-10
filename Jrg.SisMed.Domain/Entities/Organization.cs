@@ -1,5 +1,7 @@
 ﻿using Jrg.SisMed.Domain.Exceptions;
 using Jrg.SisMed.Domain.Helpers;
+using Jrg.SisMed.Domain.Resources;
+using Microsoft.Extensions.Localization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +15,8 @@ namespace Jrg.SisMed.Domain.Entities
     /// </summary>
     public class Organization : Entity
     {
+        private readonly IStringLocalizer<Messages> _localizer;
+
         private const int MaxNameFantasiaLength = 150;
         private const int MaxRazaoSocialLength = 150;
         private const int MaxCnpjLength = 14;
@@ -28,9 +32,9 @@ namespace Jrg.SisMed.Domain.Entities
         public string RazaoSocial { get; private set; } = string.Empty;
         
         /// <summary>
-        /// CNPJ da organização (apenas números).
+        /// Cnpj da organização (apenas números).
         /// </summary>
-        public string CNPJ { get; private set; } = string.Empty;
+        public string Cnpj { get; private set; } = string.Empty;
         
         /// <summary>
         /// Estado/status da organização no sistema.
@@ -46,14 +50,17 @@ namespace Jrg.SisMed.Domain.Entities
         /// <summary>
         /// Construtor protegido para uso do Entity Framework.
         /// </summary>
-        internal Organization() { }
-        
+        internal Organization(IStringLocalizer<Messages> localizer)
+        {
+            _localizer = localizer;
+        }
+
         /// <summary>
         /// Cria uma nova instância de Organization com validação completa.
         /// </summary>
         /// <param name="nameFantasia">Nome fantasia (nome comercial).</param>
         /// <param name="razaoSocial">Razão social (nome jurídico).</param>
-        /// <param name="cnpj">CNPJ (pode conter formatação).</param>
+        /// <param name="cnpj">Cnpj (pode conter formatação).</param>
         /// <param name="state">Estado inicial (padrão: Active).</param>
         /// <example>
         /// <code>
@@ -81,7 +88,7 @@ namespace Jrg.SisMed.Domain.Entities
         /// </summary>
         /// <param name="nameFantasia">Nome fantasia (nome comercial).</param>
         /// <param name="razaoSocial">Razão social (nome jurídico).</param>
-        /// <param name="cnpj">CNPJ.</param>
+        /// <param name="cnpj">Cnpj.</param>
         /// <param name="state">Estado da organização.</param>
         public void Update(
             string nameFantasia, 
@@ -92,16 +99,12 @@ namespace Jrg.SisMed.Domain.Entities
             // Atribui valores para validação
             NameFantasia = nameFantasia;
             RazaoSocial = razaoSocial;
-            CNPJ = cnpj;
+            Cnpj = cnpj;
             State = state;
             
             // Normaliza e valida
             Normalize();
             Validate();
-            
-            // Atualiza timestamp se já existe
-            if (Id > 0)
-                UpdatedAt = DateTime.UtcNow;
         }
 
         /// <summary>
@@ -112,7 +115,7 @@ namespace Jrg.SisMed.Domain.Entities
         public void AddPhone(OrganizationPhone phone)
         {
             if (phone == null)
-                throw new ArgumentNullException(nameof(phone));
+                throw new ArgumentNullException(_localizer.For(CommonMessage.ArgumentNull, nameof(phone)));
                 
             // Se for o primeiro telefone ou marcado como principal, remove flag dos outros
             if (!Phones.Any() || phone.IsPrincipal)
@@ -132,8 +135,8 @@ namespace Jrg.SisMed.Domain.Entities
         public void RemovePhone(OrganizationPhone phone)
         {
             if (phone == null)
-                throw new ArgumentNullException(nameof(phone));
-                
+                throw new ArgumentNullException(_localizer.For(CommonMessage.ArgumentNull, nameof(phone)));
+
             Phones.Remove(phone);
         }
 
@@ -173,20 +176,17 @@ namespace Jrg.SisMed.Domain.Entities
         {
             var v = new ValidationCollector();
 
-            v.When(NameFantasia.IsNullOrWhiteSpace(), "O nome fantasia é obrigatório.");
-            v.When(NameFantasia.Length > MaxNameFantasiaLength, 
-                $"O nome fantasia deve conter no máximo {MaxNameFantasiaLength} caracteres.");
+            v.When(NameFantasia.IsNullOrWhiteSpace(), _localizer.For(OrganizationMessage.TradeNameRequired));
+            v.When(NameFantasia.Length > MaxNameFantasiaLength, _localizer.For(OrganizationMessage.TradeNameMaxLength, MaxNameFantasiaLength));
             
-            v.When(RazaoSocial.IsNullOrWhiteSpace(), "A razão social é obrigatória.");
-            v.When(RazaoSocial.Length > MaxRazaoSocialLength, 
-                $"A razão social deve conter no máximo {MaxRazaoSocialLength} caracteres.");
-            
-            v.When(CNPJ.IsNullOrWhiteSpace(), "O CNPJ é obrigatório.");
-            v.When(!CNPJ.IsCnpj(), "O CNPJ informado é inválido.");
-            
+            v.When(RazaoSocial.IsNullOrWhiteSpace(), _localizer.For(OrganizationMessage.LegalNameRequired));
+            v.When(RazaoSocial.Length > MaxRazaoSocialLength, _localizer.For(OrganizationMessage.LegalNameMaxLength, MaxRazaoSocialLength));
+
+            v.When(Cnpj.IsNullOrWhiteSpace(), _localizer.For(OrganizationMessage.CnpjRequired));
+            v.When(!Cnpj.IsCnpj(), _localizer.For(OrganizationMessage.CnpjInvalid));
+
             // Validação de enum - CORRIGIDO: Adiciona ! para inverter a lógica
-            v.When(!Enum.IsDefined(typeof(OrganizationEnum.State), State), 
-                "O status da organização é inválido.");
+            v.When(!Enum.IsDefined(typeof(OrganizationEnum.State), State), _localizer.For(OrganizationMessage.StateInvalid));
 
             v.ThrowIfAny();
         }
@@ -198,7 +198,7 @@ namespace Jrg.SisMed.Domain.Entities
         {
             NameFantasia = NameFantasia.RemoveDoubleSpaces().ToTitleCase();
             RazaoSocial = RazaoSocial.RemoveDoubleSpaces().ToTitleCase();
-            CNPJ = CNPJ.GetOnlyNumbers();
+            Cnpj = Cnpj.GetOnlyNumbers();
         }
         #endregion
     }

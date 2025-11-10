@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Jrg.SisMed.Domain.Interfaces.Services
+namespace Jrg.SisMed.Domain.Interfaces.Services.ProfessionalServices
 {
     public interface IAgendaService
     {
-        void ScheduleAppointment(DateTime date);
+        Task ScheduleAppointment(DateTime date);
     }
 }

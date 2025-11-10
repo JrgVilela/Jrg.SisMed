@@ -10,11 +10,11 @@ using System.Threading.Tasks;
 namespace Jrg.SisMed.Infra.Data.EntityConfiguration
 {
     /// <summary>
-    /// Configuração do Entity Framework para a entidade PersonPhone (tabela de relacionamento).
+    /// Configuração do Entity Framework para a entidade ProfessionalPhone (tabela de relacionamento).
     /// </summary>
-    public class PersonPhoneConfiguration : IEntityTypeConfiguration<PersonPhone>
+    public class PersonPhoneConfiguration : IEntityTypeConfiguration<ProfessionalPhone>
     {
-        public void Configure(EntityTypeBuilder<PersonPhone> builder)
+        public void Configure(EntityTypeBuilder<ProfessionalPhone> builder)
         {
             // Tabela
             builder.ToTable("PersonPhones");

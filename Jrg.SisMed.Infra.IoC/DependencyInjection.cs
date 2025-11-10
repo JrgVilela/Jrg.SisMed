@@ -1,7 +1,7 @@
 ﻿using Jrg.SisMed.Application.Factories;
 using Jrg.SisMed.Application.Providers;
-using Jrg.SisMed.Domain.Interfaces.Factories;
-using Jrg.SisMed.Domain.Interfaces.Providers;
+using Jrg.SisMed.Domain.Interfaces.Factories.Person;
+using Jrg.SisMed.Domain.Interfaces.Providers.Professional;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Jrg.SisMed.Infra.IoC

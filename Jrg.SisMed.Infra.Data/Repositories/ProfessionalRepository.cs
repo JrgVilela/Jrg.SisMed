@@ -11,15 +11,15 @@ using System.Threading.Tasks;
 namespace Jrg.SisMed.Infra.Data.Repositories
 {
     /// <summary>
-    /// Implementação do repositório de Person (User).
+    /// Implementação do repositório de Professional (User).
     /// </summary>
-    public class PersonRepository : Repository<Person>, IPersonRepository
+    public class ProfessionalRepository : Repository<Professional>, IProfessionalRepository
     {
         /// <summary>
         /// Construtor do repositório de usuários.
         /// </summary>
         /// <param name="context">Contexto do banco de dados.</param>
-        public PersonRepository(ApplicationDbContext context) : base(context)
+        public ProfessionalRepository(ApplicationDbContext context) : base(context)
         {
         }
 
@@ -29,7 +29,7 @@ namespace Jrg.SisMed.Infra.Data.Repositories
         /// <param name="email">Email do usuário.</param>
         /// <param name="cancellationToken">Token de cancelamento.</param>
         /// <returns>Usuário encontrado ou null.</returns>
-        public async Task<Person?> GetByEmailAsync(string email, CancellationToken cancellationToken = default)
+        public async Task<Professional?> GetByEmailAsync(string email, CancellationToken cancellationToken = default)
         {
             if (string.IsNullOrWhiteSpace(email))
                 return null;
@@ -45,7 +45,7 @@ namespace Jrg.SisMed.Infra.Data.Repositories
         /// <param name="cpf">CPF do usuário (apenas números).</param>
         /// <param name="cancellationToken">Token de cancelamento.</param>
         /// <returns>Usuário encontrado ou null.</returns>
-        public async Task<Person?> GetByCpfAsync(string cpf, CancellationToken cancellationToken = default)
+        public async Task<Professional?> GetByCpfAsync(string cpf, CancellationToken cancellationToken = default)
         {
             if (string.IsNullOrWhiteSpace(cpf))
                 return null;
@@ -106,7 +106,7 @@ namespace Jrg.SisMed.Infra.Data.Repositories
         /// </summary>
         /// <param name="cancellationToken">Token de cancelamento.</param>
         /// <returns>Lista de usuários ativos.</returns>
-        public async Task<IEnumerable<Person>> GetActiveUsersAsync(CancellationToken cancellationToken = default)
+        public async Task<IEnumerable<Professional>> GetActiveUsersAsync(CancellationToken cancellationToken = default)
         {
             return await _dbSet
                 .AsNoTracking()
@@ -121,7 +121,7 @@ namespace Jrg.SisMed.Infra.Data.Repositories
         /// <param name="id">ID do usuário.</param>
         /// <param name="cancellationToken">Token de cancelamento.</param>
         /// <returns>Usuário com relacionamentos carregados ou null.</returns>
-        public async Task<Person?> GetByIdWithDetailsAsync(int id, CancellationToken cancellationToken = default)
+        public async Task<Professional?> GetByIdWithDetailsAsync(int id, CancellationToken cancellationToken = default)
         {
             return await _dbSet
                 .Include(u => u.Addresses)

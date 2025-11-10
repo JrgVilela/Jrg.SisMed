@@ -8,7 +8,7 @@ namespace Jrg.SisMed.Domain.Entities
     /// Entidade que representa um nutricionista no sistema.
     /// Contém informações específicas como CRN (Conselho Regional de Nutricionistas).
     /// </summary>
-    public class Nutritionist : Person
+    public class Nutritionist : Professional
     {
         private const int MaxCrnLength = 20;
         

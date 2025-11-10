@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Jrg.SisMed.Domain.Entities
 {
-    public abstract class Person : Entity
+    public abstract class Professional : Entity
     {
         private const int MaxNameLength = 150;
         private const int MaxCpfLength = 11;
@@ -27,17 +27,17 @@ namespace Jrg.SisMed.Domain.Entities
         public string Email { get; private set; } = string.Empty;
         public string PasswordHash { get; private set; } = string.Empty;
 
-        public virtual List<PersonAddress> Addresses { get; private set; } = new List<PersonAddress>();
-        public virtual List<PersonPhone> Phones { get; private set; } = new List<PersonPhone>();
+        public virtual List<ProfessionalAddress> Addresses { get; private set; } = new List<ProfessionalAddress>();
+        public virtual List<ProfessionalPhone> Phones { get; private set; } = new List<ProfessionalPhone>();
 
         #region Constructors
         /// <summary>
         /// Construtor protegido para uso do Entity Framework.
         /// </summary>
-        internal Person() { }
+        internal Professional() { }
 
         /// <summary>
-        /// Cria uma nova instância de Person com validação completa.
+        /// Cria uma nova instância de Professional com validação completa.
         /// </summary>
         /// <param name="name">Nome completo da pessoa.</param>
         /// <param name="cpf">CPF da pessoa (pode conter formatação).</param>
@@ -46,7 +46,7 @@ namespace Jrg.SisMed.Domain.Entities
         /// <param name="gender">Gênero da pessoa.</param>
         /// <param name="email">E-mail da pessoa.</param>
         /// <param name="password">Senha em texto plano (será hasheada automaticamente).</param>
-        public Person(
+        public Professional(
             string name, 
             string cpf, 
             string? rg, 
@@ -105,7 +105,7 @@ namespace Jrg.SisMed.Domain.Entities
         /// <summary>
         /// Adiciona um endereço à pessoa.
         /// </summary>
-        public void AddAddress(PersonAddress address)
+        public void AddAddress(ProfessionalAddress address)
         {
             if (address == null)
                 throw new ArgumentNullException(nameof(address));
@@ -123,7 +123,7 @@ namespace Jrg.SisMed.Domain.Entities
         /// <summary>
         /// Adiciona um telefone à pessoa.
         /// </summary>
-        public void AddPhone(PersonPhone phone)
+        public void AddPhone(ProfessionalPhone phone)
         {
             if (phone == null)
                 throw new ArgumentNullException(nameof(phone));
@@ -141,7 +141,7 @@ namespace Jrg.SisMed.Domain.Entities
         /// <summary>
         /// Remove um endereço da pessoa.
         /// </summary>
-        public void RemoveAddress(PersonAddress address)
+        public void RemoveAddress(ProfessionalAddress address)
         {
             if (address == null)
                 throw new ArgumentNullException(nameof(address));
@@ -152,7 +152,7 @@ namespace Jrg.SisMed.Domain.Entities
         /// <summary>
         /// Remove um telefone da pessoa.
         /// </summary>
-        public void RemovePhone(PersonPhone phone)
+        public void RemovePhone(ProfessionalPhone phone)
         {
             if (phone == null)
                 throw new ArgumentNullException(nameof(phone));
@@ -278,7 +278,7 @@ namespace Jrg.SisMed.Domain.Entities
     }
 
     /// <summary>
-    /// Enumerações relacionadas à entidade Person.
+    /// Enumerações relacionadas à entidade Professional.
     /// TODO: Mover para namespace Jrg.SisMed.Domain.Enums em refatoração futura.
     /// </summary>
     public class PersonEnum

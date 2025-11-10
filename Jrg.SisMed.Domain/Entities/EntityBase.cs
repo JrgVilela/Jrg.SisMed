@@ -19,7 +19,7 @@ namespace Jrg.SisMed.Domain.Entities
         /// <summary>
         /// Pessoa que criou esta entidade.
         /// </summary>
-        public virtual Person? CreatedBy { get; protected set; }
+        public virtual Professional? CreatedBy { get; protected set; }
         
         /// <summary>
         /// ID da pessoa que fez a última atualização nesta entidade.
@@ -29,7 +29,7 @@ namespace Jrg.SisMed.Domain.Entities
         /// <summary>
         /// Pessoa que fez a última atualização nesta entidade.
         /// </summary>
-        public virtual Person? UpdatedBy { get; protected set; }
+        public virtual Professional? UpdatedBy { get; protected set; }
 
         /// <summary>
         /// Define quem criou esta entidade.
@@ -37,7 +37,7 @@ namespace Jrg.SisMed.Domain.Entities
         /// <param name="person">Pessoa que criou a entidade.</param>
         /// <exception cref="ArgumentNullException">Lançado quando person é null.</exception>
         /// <exception cref="InvalidOperationException">Lançado quando CreatedBy já foi definido.</exception>
-        public virtual void SetCreatedBy(Person person)
+        public virtual void SetCreatedBy(Professional person)
         {
             if (person == null)
                 throw new ArgumentNullException(nameof(person), "A pessoa que criou a entidade não pode ser nula.");
@@ -55,7 +55,7 @@ namespace Jrg.SisMed.Domain.Entities
         /// </summary>
         /// <param name="person">Pessoa que atualizou a entidade.</param>
         /// <exception cref="ArgumentNullException">Lançado quando person é null.</exception>
-        public virtual void SetUpdatedBy(Person person)
+        public virtual void SetUpdatedBy(Professional person)
         {
             if (person == null)
                 throw new ArgumentNullException(nameof(person), "A pessoa que atualizou a entidade não pode ser nula.");

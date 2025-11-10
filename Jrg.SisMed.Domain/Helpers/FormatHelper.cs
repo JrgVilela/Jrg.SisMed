@@ -36,10 +36,10 @@ namespace Jrg.SisMed.Domain.Helpers
         }
 
         /// <summary>
-        /// Formata uma string de CNPJ no padrão brasileiro (00.000.000/0000-00).
+        /// Formata uma string de Cnpj no padrão brasileiro (00.000.000/0000-00).
         /// </summary>
-        /// <param name="cnpj">CNPJ a ser formatado (pode conter caracteres não numéricos).</param>
-        /// <returns>CNPJ formatado no padrão 00.000.000/0000-00 ou string vazia se inválido.</returns>
+        /// <param name="cnpj">Cnpj a ser formatado (pode conter caracteres não numéricos).</param>
+        /// <returns>Cnpj formatado no padrão 00.000.000/0000-00 ou string vazia se inválido.</returns>
         /// <example>
         /// <code>
         /// string cnpj = "12345678000195";
@@ -84,10 +84,10 @@ namespace Jrg.SisMed.Domain.Helpers
         }
 
         /// <summary>
-        /// Formata uma string de CPF ou CNPJ automaticamente, detectando qual é baseado no comprimento.
+        /// Formata uma string de CPF ou Cnpj automaticamente, detectando qual é baseado no comprimento.
         /// </summary>
-        /// <param name="cpfCnpj">CPF ou CNPJ a ser formatado.</param>
-        /// <returns>CPF ou CNPJ formatado ou string vazia se inválido.</returns>
+        /// <param name="cpfCnpj">CPF ou Cnpj a ser formatado.</param>
+        /// <returns>CPF ou Cnpj formatado ou string vazia se inválido.</returns>
         /// <remarks>
         /// Usa os métodos de validação IsCpf() e IsCnpj() para determinar o tipo do documento.
         /// </remarks>

@@ -64,7 +64,7 @@ namespace Jrg.SisMed.Infra.Data.EntityConfiguration
             builder.HasIndex(p => p.CreatedAt)
                 .HasDatabaseName("IX_Phones_CreatedAt");
 
-            // Relacionamentos com Person (CreatedBy, UpdatedBy)
+            // Relacionamentos com Professional (CreatedBy, UpdatedBy)
             builder.HasOne(p => p.CreatedBy)
                 .WithMany()
                 .HasForeignKey(p => p.CreatedById)

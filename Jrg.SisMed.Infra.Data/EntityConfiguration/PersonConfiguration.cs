@@ -10,11 +10,11 @@ using System.Threading.Tasks;
 namespace Jrg.SisMed.Infra.Data.EntityConfiguration
 {
     /// <summary>
-    /// Configuração do Entity Framework para a entidade Person.
+    /// Configuração do Entity Framework para a entidade Professional.
     /// </summary>
-    public class PersonConfiguration : IEntityTypeConfiguration<Person>
+    public class PersonConfiguration : IEntityTypeConfiguration<Professional>
     {
-        public void Configure(EntityTypeBuilder<Person> builder)
+        public void Configure(EntityTypeBuilder<Professional> builder)
         {
             // Tabela
             builder.ToTable("Persons");
@@ -92,7 +92,7 @@ namespace Jrg.SisMed.Infra.Data.EntityConfiguration
 
             // Relacionamentos
             builder.HasMany(p => p.Addresses)
-                .WithOne(pa => pa.Person)
+                .WithOne(pa => pa.Professional)
                 .HasForeignKey(pa => pa.PersonId)
                 .OnDelete(DeleteBehavior.Cascade);
 

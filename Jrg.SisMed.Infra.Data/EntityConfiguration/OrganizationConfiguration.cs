@@ -36,10 +36,10 @@ namespace Jrg.SisMed.Infra.Data.EntityConfiguration
                 .HasMaxLength(150)
                 .HasComment("Razão social da organização (nome jurídico)");
 
-            builder.Property(o => o.CNPJ)
+            builder.Property(o => o.Cnpj)
                 .IsRequired()
                 .HasMaxLength(14)
-                .HasComment("CNPJ da organização (apenas números)");
+                .HasComment("Cnpj da organização (apenas números)");
 
             builder.Property(o => o.State)
                 .IsRequired()
@@ -56,7 +56,7 @@ namespace Jrg.SisMed.Infra.Data.EntityConfiguration
                 .HasComment("Data da última atualização do registro");
 
             // Índices
-            builder.HasIndex(o => o.CNPJ)
+            builder.HasIndex(o => o.Cnpj)
                 .IsUnique()
                 .HasDatabaseName("IX_Organizations_CNPJ");
 

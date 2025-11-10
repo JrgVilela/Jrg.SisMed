@@ -6,7 +6,7 @@ namespace Jrg.SisMed.Domain.Interfaces.Repositories
     /// Interface genérica para repositórios de acesso a dados.
     /// </summary>
     /// <typeparam name="T">Tipo da entidade.</typeparam>
-    public interface IRepository<T>
+    public interface IRepository<T> : IDisposable, IAsyncDisposable
     {
         /// <summary>
         /// Obtém uma entidade pelo ID.
@@ -55,5 +55,12 @@ namespace Jrg.SisMed.Domain.Interfaces.Repositories
         /// </summary>
         /// <returns>IQueryable da entidade.</returns>
         IQueryable<T> AsQueryable();
+
+        /// <summary>
+        /// Salva todas as alterações pendentes no banco de dados.
+        /// </summary>
+        /// <param name="cancellationToken">Token de cancelamento.</param>
+        /// <returns>Número de registros afetados.</returns>
+        Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
     }
 }

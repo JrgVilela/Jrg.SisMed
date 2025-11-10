@@ -8,20 +8,20 @@ using System.Threading.Tasks;
 namespace Jrg.SisMed.Domain.Entities
 {
     /// <summary>
-    /// Representa o relacionamento entre Person e Phone.
+    /// Representa o relacionamento entre professional e Phone.
     /// </summary>
-    public class PersonPhone : EntityBase
+    public class ProfessionalPhone : EntityBase
     {
         /// <summary>
-        /// ID da pessoa.
+        /// ID da professional.
         /// </summary>
-        [ForeignKey(nameof(Person))]
-        public int PersonId { get; set; }
-        
+        [ForeignKey(nameof(Professional))]
+        public int ProfessionalId { get; set; }
+
         /// <summary>
-        /// Navegação para a pessoa.
+        /// Navegação para a professional.
         /// </summary>
-        public virtual Person Person { get; set; } = null!;
+        public virtual Professional Professional { get; set; } = null!;
 
         /// <summary>
         /// ID do telefone.
@@ -35,7 +35,7 @@ namespace Jrg.SisMed.Domain.Entities
         public virtual Phone Phone { get; set; } = null!;
 
         /// <summary>
-        /// Indica se este é o telefone principal da pessoa.
+        /// Indica se este é o telefone principal da professional.
         /// </summary>
         public bool IsPrincipal { get; private set; }
 
@@ -43,19 +43,19 @@ namespace Jrg.SisMed.Domain.Entities
         /// <summary>
         /// Construtor protegido para uso do Entity Framework.
         /// </summary>
-        internal PersonPhone() { }
+        internal ProfessionalPhone() { }
 
         /// <summary>
-        /// Cria uma nova relação entre pessoa e telefone.
+        /// Cria uma nova relação entre professional e telefone.
         /// </summary>
-        /// <param name="person">Pessoa dona do telefone.</param>
+        /// <param name="professional">professional dona do telefone.</param>
         /// <param name="phone">Telefone a ser associado.</param>
         /// <param name="isPrincipal">Se é o telefone principal.</param>
-        public PersonPhone(Person person, Phone phone, bool isPrincipal = false)
+        public ProfessionalPhone(Professional professional, Phone phone, bool isPrincipal = false)
         {
-            Person = person ?? throw new ArgumentNullException(nameof(person));
+            this.Professional = professional ?? throw new ArgumentNullException(nameof(professional));
             Phone = phone ?? throw new ArgumentNullException(nameof(phone));
-            PersonId = person.Id;
+            ProfessionalId = professional.Id;
             PhoneId = phone.Id;
             IsPrincipal = isPrincipal;
         }
