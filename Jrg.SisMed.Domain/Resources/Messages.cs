@@ -44,6 +44,8 @@ namespace Jrg.SisMed.Domain.Resources
         AlreadyExistsByCnpj,
         AlreadyExistsByRazaoSocial,
 
+        NotFound,
+
         TradeNameRequired,
         TradeNameMaxLength,
 
@@ -53,15 +55,16 @@ namespace Jrg.SisMed.Domain.Resources
         CnpjRequired,
         CnpjInvalid,
 
-        StateInvalid
+        StateInvalid,
     }
 
     public enum CommonMessage
     {
         ArgumentNull_Generic,
         ArgumentNull,
+        InvalidArgument,
         RequiredValidation,
-        MaxLengthValidation
-        
+        MaxLengthValidation,
+        NotFound
     }
 }

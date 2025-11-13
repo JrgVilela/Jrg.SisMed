@@ -1,10 +1,12 @@
-using Jrg.SisMed.Domain.Resources;
+using Jrg.SisMed.Infra.IoC;
 
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Adiciona suporte à localização, apontando para a pasta dentro do Domain
 builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
+
+builder.Services.AddInfrastructure(builder.Configuration);
 
 // Add services to the container.
 

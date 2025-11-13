@@ -123,6 +123,9 @@
   <data name="CommonMessage_ArgumentNull_Generic" xml:space="preserve">
     <value>Um parâmetros obrigatório não foi informado.</value>
   </data>
+  <data name="CommonMessage_NotFound" xml:space="preserve">
+    <value>Não foi identificado o valor esperado.</value>
+  </data>
   <data name="CommonMessage_MaxLengthValidation" xml:space="preserve">
     <value>{0} deve ter no máximo {1} caracteres.</value>
   </data>
@@ -155,5 +158,11 @@
   </data>
   <data name="OrganizationMessage_TradeNameRequired" xml:space="preserve">
     <value>O nome fantasia é obrigatório.</value>
+  </data>
+  <data name="OrganizationMessage_NotFound" xml:space="preserve">
+    <value>Não foi localizado uma organização com o valor {0}.</value>
+  </data>
+  <data name="CommonMessage_InvalidArgument" xml:space="preserve">
+    <value>O valor informado como parametro não é válido.</value>
   </data>
 </root>

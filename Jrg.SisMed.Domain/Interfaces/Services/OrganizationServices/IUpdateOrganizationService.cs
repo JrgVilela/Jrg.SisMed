@@ -9,6 +9,6 @@ namespace Jrg.SisMed.Domain.Interfaces.Services.OrganizationServices
 {
     public interface IUpdateOrganizationService
     {
-        Task Execute(Guid id, Organization organization);
+        Task ExecuteAsync(int id, Organization organization, CancellationToken cancellationToken = default);
     }
 }

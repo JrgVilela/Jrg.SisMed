@@ -46,7 +46,7 @@ namespace Jrg.SisMed.Application.Factories
         /// <summary>
         /// Implementação da interface Domain. Cria um nutricionista com parâmetros primitivos.
         /// </summary>
-        public Professional IProfessionalModuleFactory.CreateProfessional(
+        public Professional CreateProfessional(
             string name,
             string cpf,
             string? rg,

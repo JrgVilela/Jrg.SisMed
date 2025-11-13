@@ -15,6 +15,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Jrg.SisMed.Domain\Jrg.SisMed.Domain.csproj" />
+    <ProjectReference Include="..\Jrg.SisMed.Infra.IoC\Jrg.SisMed.Infra.IoC.csproj" />
   </ItemGroup>
 
 </Project>

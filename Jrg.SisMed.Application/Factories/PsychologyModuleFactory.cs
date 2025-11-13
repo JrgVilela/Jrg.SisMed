@@ -3,7 +3,7 @@ using Jrg.SisMed.Domain.Attributes;
 using Jrg.SisMed.Domain.Entities;
 using Jrg.SisMed.Domain.Enumerators;
 using Jrg.SisMed.Domain.Exceptions;
-using Jrg.SisMed.Domain.Interfaces.Factories.Person;
+using Jrg.SisMed.Domain.Interfaces.Factories.Professional;
 using System;
 
 namespace Jrg.SisMed.Application.Factories

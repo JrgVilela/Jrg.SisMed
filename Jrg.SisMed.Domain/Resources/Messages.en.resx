@@ -123,6 +123,9 @@
   <data name="CommonMessage_ArgumentNull_Generic" xml:space="preserve">
     <value>A mandatory clause was not included.</value>
   </data>
+  <data name="CommonMessage_NotFound" xml:space="preserve">
+    <value>The expected value was not identified.</value>
+  </data>
   <data name="CommonMessage_MaxLengthValidation" xml:space="preserve">
     <value>{0} must have a maximum of {1} characters.</value>
   </data>
@@ -155,5 +158,11 @@
   </data>
   <data name="OrganizationMessage_TradeNameRequired" xml:space="preserve">
     <value>A trade name is required.</value>
+  </data>
+  <data name="OrganizationMessage_NotFound" xml:space="preserve">
+    <value>No organization was found with the value {0}.</value>
+  </data>
+  <data name="CommonMessage_InvalidArgument" xml:space="preserve">
+    <value>The value provided as a parameter is not valid.</value>
   </data>
 </root>

@@ -32,6 +32,14 @@ namespace Jrg.SisMed.Domain.Interfaces.Repositories
         Task<IEnumerable<T>> FindAsync(Expression<Func<T, bool>> predicate, CancellationToken cancellationToken = default);
 
         /// <summary>
+        /// Retorna um IQueryable para construir queries complexas.
+        /// </summary>
+        /// <returns>IQueryable da entidade.</returns>
+        IQueryable<T> AsQueryable();
+
+        Task<bool> ExistByIdAsync(int id, CancellationToken cancellationToken = default);
+
+        /// <summary>
         /// Adiciona uma nova entidade ao contexto.
         /// </summary>
         /// <param name="entity">Entidade a ser adicionada.</param>
@@ -42,19 +50,13 @@ namespace Jrg.SisMed.Domain.Interfaces.Repositories
         /// Marca uma entidade para atualização.
         /// </summary>
         /// <param name="entity">Entidade a ser atualizada.</param>
-        void Update(T entity);
+        Task UpdateAsync(T entity, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Marca uma entidade para remoção.
         /// </summary>
         /// <param name="entity">Entidade a ser removida.</param>
-        void Remove(T entity);
-
-        /// <summary>
-        /// Retorna um IQueryable para construir queries complexas.
-        /// </summary>
-        /// <returns>IQueryable da entidade.</returns>
-        IQueryable<T> AsQueryable();
+        Task RemoveAsync(int id);
 
         /// <summary>
         /// Salva todas as alterações pendentes no banco de dados.

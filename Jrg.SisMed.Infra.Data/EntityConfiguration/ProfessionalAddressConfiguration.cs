@@ -12,12 +12,12 @@ namespace Jrg.SisMed.Infra.Data.EntityConfiguration
     /// <summary>
     /// Configuração do Entity Framework para a entidade ProfessionalAddress (tabela de relacionamento).
     /// </summary>
-    public class PersonAddressConfiguration : IEntityTypeConfiguration<ProfessionalAddress>
+    public class ProfessionalAddressConfiguration : IEntityTypeConfiguration<ProfessionalAddress>
     {
         public void Configure(EntityTypeBuilder<ProfessionalAddress> builder)
         {
             // Tabela
-            builder.ToTable("PersonAddresses");
+            builder.ToTable("ProfessionalAddresses");
 
             // Chave primária
             builder.HasKey(pa => pa.Id);
@@ -26,9 +26,9 @@ namespace Jrg.SisMed.Infra.Data.EntityConfiguration
             builder.Property(pa => pa.Id)
                 .ValueGeneratedOnAdd();
 
-            builder.Property(pa => pa.PersonId)
+            builder.Property(pa => pa.ProfessionalId)
                 .IsRequired()
-                .HasComment("ID da pessoa");
+                .HasComment("ID do profissional");
 
             builder.Property(pa => pa.AddressId)
                 .IsRequired()
@@ -41,10 +41,10 @@ namespace Jrg.SisMed.Infra.Data.EntityConfiguration
 
             // Propriedades de auditoria (EntityBase)
             builder.Property(pa => pa.CreatedById)
-                .HasComment("ID da pessoa que criou o registro");
+                .HasComment("ID do profissional que criou o registro");
 
             builder.Property(pa => pa.UpdatedById)
-                .HasComment("ID da pessoa que atualizou o registro");
+                .HasComment("ID do profissional que atualizou o registro");
 
             builder.Property(pa => pa.CreatedAt)
                 .IsRequired()
@@ -55,23 +55,23 @@ namespace Jrg.SisMed.Infra.Data.EntityConfiguration
                 .HasComment("Data da última atualização do registro");
 
             // Índices
-            builder.HasIndex(pa => new { pa.PersonId, pa.AddressId })
+            builder.HasIndex(pa => new { pa.ProfessionalId, pa.AddressId })
                 .IsUnique()
-                .HasDatabaseName("IX_PersonAddresses_PersonId_AddressId");
+                .HasDatabaseName("IX_ProfessionalAddresses_ProfessionalId_AddressId");
 
-            builder.HasIndex(pa => pa.PersonId)
-                .HasDatabaseName("IX_PersonAddresses_PersonId");
+            builder.HasIndex(pa => pa.ProfessionalId)
+                .HasDatabaseName("IX_ProfessionalAddresses_ProfessionalId");
 
             builder.HasIndex(pa => pa.AddressId)
-                .HasDatabaseName("IX_PersonAddresses_AddressId");
+                .HasDatabaseName("IX_ProfessionalAddresses_AddressId");
 
             builder.HasIndex(pa => pa.IsPrincipal)
-                .HasDatabaseName("IX_PersonAddresses_IsPrincipal");
+                .HasDatabaseName("IX_ProfessionalAddresses_IsPrincipal");
 
             // Relacionamentos
             builder.HasOne(pa => pa.Professional)
                 .WithMany(p => p.Addresses)
-                .HasForeignKey(pa => pa.PersonId)
+                .HasForeignKey(pa => pa.ProfessionalId)
                 .OnDelete(DeleteBehavior.Cascade);
 
             builder.HasOne(pa => pa.Address)

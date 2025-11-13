@@ -17,7 +17,7 @@ namespace Jrg.SisMed.Domain.Interfaces.Factories.Professional
         /// através de métodos adicionais ou sobrecarga.
         /// </summary>
         /// <returns>Instância de Professional (Psychologist ou Nutritionist).</returns>
-        Professional CreateProfessional(
+        Domain.Entities.Professional CreateProfessional(
             string name,
             string cpf,
             string? rg,

@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace Jrg.SisMed.Domain.Interfaces.Services.OrganizationServices
 {
-    public interface IDeleteOrganizationService
+    public interface IPhoneOrganizationService
     {
-        Task ExecuteAsync(int id);
+        public Task AddPhoneAsync(Guid organizationId, string phoneNumber);
+        public Task RemovePhoneAsync(Guid organizationId, Guid phoneId);
     }
 }

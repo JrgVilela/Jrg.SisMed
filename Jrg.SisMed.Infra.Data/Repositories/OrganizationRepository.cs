@@ -1,7 +1,9 @@
 ﻿using Jrg.SisMed.Domain.Entities;
 using Jrg.SisMed.Domain.Interfaces.Repositories;
+using Jrg.SisMed.Domain.Resources;
 using Jrg.SisMed.Infra.Data.Context;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Localization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,22 +12,20 @@ using System.Threading.Tasks;
 
 namespace Jrg.SisMed.Infra.Data.Repositories
 {
-    internal class OrganizationRepository : Repository<Organization>, IOrganizationRepository
+    public class OrganizationRepository : Repository<Organization>, IOrganizationRepository
     {
-        private readonly ApplicationDbContext _context;
-        public OrganizationRepository(ApplicationDbContext context) : base(context)
+        public OrganizationRepository(ApplicationDbContext context, IStringLocalizer<Messages> localizer) : base(context, localizer)
         {
-            _context = context;
         }
 
         public async Task<bool> ExistsByCnpjAsync(string cnpj, CancellationToken cancellationToken = default)
         {
-            return await _context.Organizations.AnyAsync(o => o.Cnpj == cnpj, cancellationToken);
+            return await _dbSet.AnyAsync(o => o.Cnpj == cnpj, cancellationToken);
         }
 
         public async Task<bool> ExistsByRazaoSocialAsync(string razaoSocial, CancellationToken cancellationToken = default)
         {
-            return await _context.Organizations.AnyAsync(o => o.RazaoSocial == razaoSocial, cancellationToken);
+            return await _dbSet.AnyAsync(o => o.RazaoSocial == razaoSocial, cancellationToken);
         }
     }
 }

@@ -12,12 +12,12 @@ namespace Jrg.SisMed.Infra.Data.EntityConfiguration
     /// <summary>
     /// Configuração do Entity Framework para a entidade Professional.
     /// </summary>
-    public class PersonConfiguration : IEntityTypeConfiguration<Professional>
+    public class ProfessionalConfiguration : IEntityTypeConfiguration<Professional>
     {
         public void Configure(EntityTypeBuilder<Professional> builder)
         {
             // Tabela
-            builder.ToTable("Persons");
+            builder.ToTable("Professionals");
 
             // Chave primária
             builder.HasKey(p => p.Id);
@@ -29,16 +29,16 @@ namespace Jrg.SisMed.Infra.Data.EntityConfiguration
             builder.Property(p => p.Name)
                 .IsRequired()
                 .HasMaxLength(150)
-                .HasComment("Nome completo da pessoa");
+                .HasComment("Nome completo do Professional");
 
             builder.Property(p => p.Cpf)
                 .IsRequired()
                 .HasMaxLength(11)
-                .HasComment("CPF da pessoa (apenas números)");
+                .HasComment("CPF do profissional (apenas números)");
 
             builder.Property(p => p.Rg)
                 .HasMaxLength(20)
-                .HasComment("RG da pessoa");
+                .HasComment("RG do profissional");
 
             builder.Property(p => p.BirthDate)
                 .HasComment("Data de nascimento");
@@ -51,12 +51,12 @@ namespace Jrg.SisMed.Infra.Data.EntityConfiguration
             builder.Property(p => p.State)
                 .IsRequired()
                 .HasConversion<int>()
-                .HasComment("Estado da pessoa: 1=Active, 2=Inactive");
+                .HasComment("Estado do profissional: 1=Active, 2=Inactive");
 
             builder.Property(p => p.Email)
                 .IsRequired()
                 .HasMaxLength(100)
-                .HasComment("E-mail da pessoa");
+                .HasComment("E-mail do profissional");
 
             builder.Property(p => p.PasswordHash)
                 .IsRequired()
@@ -75,30 +75,30 @@ namespace Jrg.SisMed.Infra.Data.EntityConfiguration
             // Índices
             builder.HasIndex(p => p.Cpf)
                 .IsUnique()
-                .HasDatabaseName("IX_Persons_CPF");
+                .HasDatabaseName("IX_Professional_CPF");
 
             builder.HasIndex(p => p.Email)
                 .IsUnique()
-                .HasDatabaseName("IX_Persons_Email");
+                .HasDatabaseName("IX_Professional_Email");
 
             builder.HasIndex(p => p.State)
-                .HasDatabaseName("IX_Persons_State");
+                .HasDatabaseName("IX_Professional_State");
 
             builder.HasIndex(p => p.Name)
-                .HasDatabaseName("IX_Persons_Name");
+                .HasDatabaseName("IX_Professional_Name");
 
             builder.HasIndex(p => p.CreatedAt)
-                .HasDatabaseName("IX_Persons_CreatedAt");
+                .HasDatabaseName("IX_Professional_CreatedAt");
 
             // Relacionamentos
             builder.HasMany(p => p.Addresses)
                 .WithOne(pa => pa.Professional)
-                .HasForeignKey(pa => pa.PersonId)
+                .HasForeignKey(pa => pa.ProfessionalId)
                 .OnDelete(DeleteBehavior.Cascade);
 
             builder.HasMany(p => p.Phones)
-                .WithOne(pp => pp.Person)
-                .HasForeignKey(pp => pp.PersonId)
+                .WithOne(pp => pp.Professional)
+                .HasForeignKey(pp => pp.ProfessionalId)
                 .OnDelete(DeleteBehavior.Cascade);
         }
     }

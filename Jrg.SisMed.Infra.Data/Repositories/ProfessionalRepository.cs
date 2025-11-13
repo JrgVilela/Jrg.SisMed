@@ -1,7 +1,9 @@
 using Jrg.SisMed.Domain.Entities;
 using Jrg.SisMed.Domain.Interfaces.Repositories;
+using Jrg.SisMed.Domain.Resources;
 using Jrg.SisMed.Infra.Data.Context;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Localization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,7 +21,7 @@ namespace Jrg.SisMed.Infra.Data.Repositories
         /// Construtor do repositório de usuários.
         /// </summary>
         /// <param name="context">Contexto do banco de dados.</param>
-        public ProfessionalRepository(ApplicationDbContext context) : base(context)
+        public ProfessionalRepository(ApplicationDbContext context, IStringLocalizer<Messages> localizer) : base(context, localizer)
         {
         }
 
