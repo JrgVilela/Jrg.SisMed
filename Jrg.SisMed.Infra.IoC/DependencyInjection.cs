@@ -29,7 +29,6 @@ namespace Jrg.SisMed.Infra.IoC
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"), b => b.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName)));
 
-
             // Registra todas as fábricas concretas
             services.AddTransient<IProfessionalModuleFactory, PsychologyModuleFactory>();
             services.AddTransient<IProfessionalModuleFactory, NutritionModuleFactory>();
@@ -48,11 +47,11 @@ namespace Jrg.SisMed.Infra.IoC
             services.AddScoped(typeof(CreateOrganizationUseCase));
             services.AddScoped(typeof(UpdateOrganizationUseCase));
             services.AddScoped(typeof(DeleteOrganizationUseCase));
+            services.AddScoped(typeof(ReadOrganizationUseCase));
 
             // Registra Repositories
             services.AddScoped<IOrganizationRepository, OrganizationRepository>();
             services.AddScoped<IProfessionalRepository, ProfessionalRepository>();
-
 
             return services;
         }

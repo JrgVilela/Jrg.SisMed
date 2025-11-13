@@ -9,9 +9,9 @@ namespace Jrg.SisMed.Domain.Interfaces.Services.OrganizationServices
 {
     public interface IReadOrganizationService
     {
-        Task<bool> ExistsByIdAsync(Guid id);
-        Task<IEnumerable<Organization>> GetAllAsync();
-        Task<Organization?> GetByIdAsync(Guid id);
-        Task<Organization?> GetByCnpjAsync(string cnpj);
+        Task<bool> ExistsByIdAsync(int id, CancellationToken cancellationToken = default);
+        Task<IEnumerable<Organization>> GetAllAsync(CancellationToken cancellationToken = default);
+        Task<Organization?> GetByIdAsync(int id, CancellationToken cancellationToken = default);
+        Task<Organization?> GetByCnpjAsync(string cnpj, CancellationToken cancellationToken = default);
     }
 }
