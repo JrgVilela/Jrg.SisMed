@@ -1,4 +1,5 @@
 <Solution>
+  <Folder Name="/WebApp/" />
   <Project Path="Jrg.SisMed.Api/Jrg.SisMed.Api.csproj" />
   <Project Path="Jrg.SisMed.Application/Jrg.SisMed.Application.csproj" />
   <Project Path="Jrg.SisMed.Domain/Jrg.SisMed.Domain.csproj" />
