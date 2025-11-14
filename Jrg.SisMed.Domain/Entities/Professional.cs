@@ -11,7 +11,7 @@ namespace Jrg.SisMed.Domain.Entities
     public abstract class Professional : Entity
     {
         private const int MaxNameLength = 150;
-        private const int MaxCpfLength = 11;
+        private const int MaxCpfLength = 14;
         private const int MaxRgLength = 20;
         private const int MaxEmailLength = 100;
         private const int MinPasswordLength = 8;

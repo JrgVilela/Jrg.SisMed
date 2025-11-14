@@ -19,7 +19,7 @@ namespace Jrg.SisMed.Domain.Entities
 
         private const int MaxNameFantasiaLength = 150;
         private const int MaxRazaoSocialLength = 150;
-        private const int MaxCnpjLength = 14;
+        private const int MaxCnpjLength = 18;
 
         /// <summary>
         /// Nome fantasia da organização (nome comercial).

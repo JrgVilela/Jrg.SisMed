@@ -4,6 +4,7 @@ using Jrg.SisMed.Infra.Data.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Jrg.SisMed.Infra.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251114030820_ProfessionalCpfAjuste")]
+    partial class ProfessionalCpfAjuste
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -115,8 +118,8 @@ namespace Jrg.SisMed.Infra.Data.Migrations
 
                     b.Property<string>("Cnpj")
                         .IsRequired()
-                        .HasMaxLength(18)
-                        .HasColumnType("nvarchar(18)")
+                        .HasMaxLength(14)
+                        .HasColumnType("nvarchar(14)")
                         .HasComment("Cnpj da organização (apenas números)");
 
                     b.Property<DateTime>("CreatedAt")
@@ -254,8 +257,8 @@ namespace Jrg.SisMed.Infra.Data.Migrations
 
                     b.Property<string>("Number")
                         .IsRequired()
-                        .HasMaxLength(10)
-                        .HasColumnType("nvarchar(10)")
+                        .HasMaxLength(9)
+                        .HasColumnType("nvarchar(9)")
                         .HasComment("Número do telefone (8 ou 9 dígitos)");
 
                     b.Property<DateTime?>("UpdatedAt")

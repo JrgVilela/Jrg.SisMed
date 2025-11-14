@@ -14,7 +14,7 @@ namespace Jrg.SisMed.Domain.Entities
     public class Phone : EntityBase
     {
         private const int MinNumberLength = 8;
-        private const int MaxNumberLength = 9;
+        private const int MaxNumberLength = 10;
         private const int DddLength = 2;
         private const int MinDdiLength = 1;
         private const int MaxDdiLength = 3;

@@ -38,7 +38,7 @@ namespace Jrg.SisMed.Infra.Data.EntityConfiguration
 
             builder.Property(p => p.Number)
                 .IsRequired()
-                .HasMaxLength(9)
+                .HasMaxLength(10)
                 .HasComment("Número do telefone (8 ou 9 dígitos)");
 
             // Propriedades de auditoria (EntityBase)

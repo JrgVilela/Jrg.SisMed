@@ -33,7 +33,7 @@ namespace Jrg.SisMed.Infra.Data.EntityConfiguration
 
             builder.Property(p => p.Cpf)
                 .IsRequired()
-                .HasMaxLength(11)
+                .HasMaxLength(14)
                 .HasComment("CPF do profissional (apenas números)");
 
             builder.Property(p => p.Rg)

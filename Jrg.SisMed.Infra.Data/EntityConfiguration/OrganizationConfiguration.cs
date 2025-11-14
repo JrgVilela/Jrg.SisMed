@@ -38,7 +38,7 @@ namespace Jrg.SisMed.Infra.Data.EntityConfiguration
 
             builder.Property(o => o.Cnpj)
                 .IsRequired()
-                .HasMaxLength(14)
+                .HasMaxLength(18)
                 .HasComment("Cnpj da organização (apenas números)");
 
             builder.Property(o => o.State)
