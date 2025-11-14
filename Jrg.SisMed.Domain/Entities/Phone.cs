@@ -109,8 +109,11 @@ namespace Jrg.SisMed.Domain.Entities
         /// string formatted = phone.GetFormattedNumber(); // "(11) 98765-4321"
         /// </code>
         /// </example>
-        public string GetFormattedNumber()
+        public string GetFormattedNumber(bool includeDdi = false)
         {
+            if (includeDdi)
+                return Number.FormatPhoneWithDdiAndDdd(Ddi, Ddd);
+
             return Number.FormatPhoneWithDdd(Ddd);
         }
 

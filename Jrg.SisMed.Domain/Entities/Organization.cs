@@ -1,7 +1,5 @@
 ﻿using Jrg.SisMed.Domain.Exceptions;
 using Jrg.SisMed.Domain.Helpers;
-using Jrg.SisMed.Domain.Resources;
-using Microsoft.Extensions.Localization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,8 +13,6 @@ namespace Jrg.SisMed.Domain.Entities
     /// </summary>
     public class Organization : Entity
     {
-        private readonly IStringLocalizer<Messages> _localizer;
-
         private const int MaxNameFantasiaLength = 150;
         private const int MaxRazaoSocialLength = 150;
         private const int MaxCnpjLength = 18;
@@ -50,9 +46,8 @@ namespace Jrg.SisMed.Domain.Entities
         /// <summary>
         /// Construtor protegido para uso do Entity Framework.
         /// </summary>
-        internal Organization(IStringLocalizer<Messages> localizer)
+        protected Organization()
         {
-            _localizer = localizer;
         }
 
         /// <summary>
@@ -115,7 +110,7 @@ namespace Jrg.SisMed.Domain.Entities
         public void AddPhone(OrganizationPhone phone)
         {
             if (phone == null)
-                throw new ArgumentNullException(_localizer.For(CommonMessage.ArgumentNull, nameof(phone)));
+                throw new ArgumentNullException(nameof(phone));
                 
             // Se for o primeiro telefone ou marcado como principal, remove flag dos outros
             if (!Phones.Any() || phone.IsPrincipal)
@@ -135,7 +130,7 @@ namespace Jrg.SisMed.Domain.Entities
         public void RemovePhone(OrganizationPhone phone)
         {
             if (phone == null)
-                throw new ArgumentNullException(_localizer.For(CommonMessage.ArgumentNull, nameof(phone)));
+                throw new ArgumentNullException(nameof(phone));
 
             Phones.Remove(phone);
         }
@@ -176,17 +171,16 @@ namespace Jrg.SisMed.Domain.Entities
         {
             var v = new ValidationCollector();
 
-            v.When(NameFantasia.IsNullOrWhiteSpace(), _localizer.For(OrganizationMessage.TradeNameRequired));
-            v.When(NameFantasia.Length > MaxNameFantasiaLength, _localizer.For(OrganizationMessage.TradeNameMaxLength, MaxNameFantasiaLength));
+            v.When(NameFantasia.IsNullOrWhiteSpace(), "Trade name is required");
+            v.When(NameFantasia.Length > MaxNameFantasiaLength, $"Trade name must be at most {MaxNameFantasiaLength} characters");
             
-            v.When(RazaoSocial.IsNullOrWhiteSpace(), _localizer.For(OrganizationMessage.LegalNameRequired));
-            v.When(RazaoSocial.Length > MaxRazaoSocialLength, _localizer.For(OrganizationMessage.LegalNameMaxLength, MaxRazaoSocialLength));
+            v.When(RazaoSocial.IsNullOrWhiteSpace(), "Legal name is required");
+            v.When(RazaoSocial.Length > MaxRazaoSocialLength, $"Legal name must be at most {MaxRazaoSocialLength} characters");
 
-            v.When(Cnpj.IsNullOrWhiteSpace(), _localizer.For(OrganizationMessage.CnpjRequired));
-            v.When(!Cnpj.IsCnpj(), _localizer.For(OrganizationMessage.CnpjInvalid));
+            v.When(Cnpj.IsNullOrWhiteSpace(), "CNPJ is required");
+            v.When(!Cnpj.IsCnpj(), "CNPJ is invalid");
 
-            // Validação de enum - CORRIGIDO: Adiciona ! para inverter a lógica
-            v.When(!Enum.IsDefined(typeof(OrganizationEnum.State), State), _localizer.For(OrganizationMessage.StateInvalid));
+            v.When(!Enum.IsDefined(typeof(OrganizationEnum.State), State), "State is invalid");
 
             v.ThrowIfAny();
         }

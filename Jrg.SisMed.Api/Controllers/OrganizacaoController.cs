@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace Jrg.SisMed.Api.Controllers
 {
@@ -48,9 +49,35 @@ namespace Jrg.SisMed.Api.Controllers
             return Ok(result);
         }
 
-        [HttpGet("cnpj/{cnpj}")]
-        public async Task<IActionResult> Get(string cnpj)
+        /// <summary>
+        /// Busca organização por CNPJ (apenas números ou formatado).
+        /// </summary>
+        /// <param name="cnpj">CNPJ com ou sem formatação (ex: 43133410000113 ou 43.133.410/0001-13)</param>
+        //[HttpGet("cnpj/{cnpj}")]
+        //public async Task<IActionResult> GetByCnpj(string cnpj)
+        //{
+        //    // Decodifica o CNPJ (converte %2F de volta para /)
+        //    var decodedCnpj = Uri.UnescapeDataString(cnpj);
+            
+        //    var result = await _readOrganizationUseCase.GetByCnpjAsync(decodedCnpj);
+
+        //    if (result == null)
+        //        return NotFound($"Organization with CNPJ {decodedCnpj} not found.");
+
+        //    return Ok(result);
+        //}
+
+        /// <summary>
+        /// Busca organização por CNPJ usando query string (alternativa mais limpa).
+        /// Exemplo: GET /api/organizacao/search?cnpj=43.133.410/0001-13
+        /// </summary>
+        /// <param name="cnpj">CNPJ com ou sem formatação</param>
+        [HttpGet("search")]
+        public async Task<IActionResult> Search([FromQuery] string cnpj)
         {
+            if (string.IsNullOrWhiteSpace(cnpj))
+                return BadRequest("CNPJ is required");
+
             var result = await _readOrganizationUseCase.GetByCnpjAsync(cnpj);
 
             if (result == null)
