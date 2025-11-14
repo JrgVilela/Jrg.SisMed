@@ -22,7 +22,7 @@ namespace Jrg.SisMed.Domain.Interfaces.Factories.Professional
             string cpf,
             string? rg,
             DateTime? birthDate,
-            PersonEnum.Gender gender,
+            ProfessionalEnum.Gender gender,
             string email,
             string password,
             string professionalRegistration

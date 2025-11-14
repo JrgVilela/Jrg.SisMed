@@ -12,7 +12,7 @@ namespace Jrg.SisMed.Application.DTOs
         string Cpf,
         string? Rg,
         DateTime? BirthDate,
-        PersonEnum.Gender Gender,
+        ProfessionalEnum.Gender Gender,
         string Email,
         string Password,
         string Crn

@@ -112,7 +112,7 @@ namespace Jrg.SisMed.Infra.Data.Repositories
         {
             return await _dbSet
                 .AsNoTracking()
-                .Where(u => u.State == PersonEnum.State.Active)
+                .Where(u => u.State == ProfessionalEnum.State.Active)
                 .OrderBy(u => u.Name)
                 .ToListAsync(cancellationToken);
         }

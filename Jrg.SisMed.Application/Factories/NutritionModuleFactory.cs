@@ -51,7 +51,7 @@ namespace Jrg.SisMed.Application.Factories
             string cpf,
             string? rg,
             DateTime? birthDate,
-            PersonEnum.Gender gender,
+            ProfessionalEnum.Gender gender,
             string email,
             string password,
             string professionalRegistration)
@@ -92,7 +92,7 @@ namespace Jrg.SisMed.Application.Factories
             return crn.Trim().ToUpperInvariant();
         }
 
-        //public Professional IProfessionalModuleFactory.CreateProfessional(string name, string cpf, string? rg, DateTime? birthDate, PersonEnum.Gender gender, string email, string password, string professionalRegistration)
+        //public Professional IProfessionalModuleFactory.CreateProfessional(string name, string cpf, string? rg, DateTime? birthDate, ProfessionalEnum.Gender gender, string email, string password, string professionalRegistration)
         //{
         //    throw new NotImplementedException();
         //}
