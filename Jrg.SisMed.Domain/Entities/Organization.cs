@@ -15,7 +15,7 @@ namespace Jrg.SisMed.Domain.Entities
     {
         private const int MaxNameFantasiaLength = 150;
         private const int MaxRazaoSocialLength = 150;
-        private const int MaxCnpjLength = 14;
+        private const int MaxCnpjLength = 18;
 
         /// <summary>
         /// Nome fantasia da organização (nome comercial).
@@ -28,9 +28,9 @@ namespace Jrg.SisMed.Domain.Entities
         public string RazaoSocial { get; private set; } = string.Empty;
         
         /// <summary>
-        /// CNPJ da organização (apenas números).
+        /// Cnpj da organização (apenas números).
         /// </summary>
-        public string CNPJ { get; private set; } = string.Empty;
+        public string Cnpj { get; private set; } = string.Empty;
         
         /// <summary>
         /// Estado/status da organização no sistema.
@@ -46,14 +46,16 @@ namespace Jrg.SisMed.Domain.Entities
         /// <summary>
         /// Construtor protegido para uso do Entity Framework.
         /// </summary>
-        internal Organization() { }
-        
+        protected Organization()
+        {
+        }
+
         /// <summary>
         /// Cria uma nova instância de Organization com validação completa.
         /// </summary>
         /// <param name="nameFantasia">Nome fantasia (nome comercial).</param>
         /// <param name="razaoSocial">Razão social (nome jurídico).</param>
-        /// <param name="cnpj">CNPJ (pode conter formatação).</param>
+        /// <param name="cnpj">Cnpj (pode conter formatação).</param>
         /// <param name="state">Estado inicial (padrão: Active).</param>
         /// <example>
         /// <code>
@@ -81,7 +83,7 @@ namespace Jrg.SisMed.Domain.Entities
         /// </summary>
         /// <param name="nameFantasia">Nome fantasia (nome comercial).</param>
         /// <param name="razaoSocial">Razão social (nome jurídico).</param>
-        /// <param name="cnpj">CNPJ.</param>
+        /// <param name="cnpj">Cnpj.</param>
         /// <param name="state">Estado da organização.</param>
         public void Update(
             string nameFantasia, 
@@ -92,16 +94,12 @@ namespace Jrg.SisMed.Domain.Entities
             // Atribui valores para validação
             NameFantasia = nameFantasia;
             RazaoSocial = razaoSocial;
-            CNPJ = cnpj;
+            Cnpj = cnpj;
             State = state;
             
             // Normaliza e valida
             Normalize();
             Validate();
-            
-            // Atualiza timestamp se já existe
-            if (Id > 0)
-                UpdatedAt = DateTime.UtcNow;
         }
 
         /// <summary>
@@ -133,7 +131,7 @@ namespace Jrg.SisMed.Domain.Entities
         {
             if (phone == null)
                 throw new ArgumentNullException(nameof(phone));
-                
+
             Phones.Remove(phone);
         }
 
@@ -173,20 +171,16 @@ namespace Jrg.SisMed.Domain.Entities
         {
             var v = new ValidationCollector();
 
-            v.When(NameFantasia.IsNullOrWhiteSpace(), "O nome fantasia é obrigatório.");
-            v.When(NameFantasia.Length > MaxNameFantasiaLength, 
-                $"O nome fantasia deve conter no máximo {MaxNameFantasiaLength} caracteres.");
+            v.When(NameFantasia.IsNullOrWhiteSpace(), "Trade name is required");
+            v.When(NameFantasia.Length > MaxNameFantasiaLength, $"Trade name must be at most {MaxNameFantasiaLength} characters");
             
-            v.When(RazaoSocial.IsNullOrWhiteSpace(), "A razão social é obrigatória.");
-            v.When(RazaoSocial.Length > MaxRazaoSocialLength, 
-                $"A razão social deve conter no máximo {MaxRazaoSocialLength} caracteres.");
-            
-            v.When(CNPJ.IsNullOrWhiteSpace(), "O CNPJ é obrigatório.");
-            v.When(!CNPJ.IsCnpj(), "O CNPJ informado é inválido.");
-            
-            // Validação de enum - CORRIGIDO: Adiciona ! para inverter a lógica
-            v.When(!Enum.IsDefined(typeof(OrganizationEnum.State), State), 
-                "O status da organização é inválido.");
+            v.When(RazaoSocial.IsNullOrWhiteSpace(), "Legal name is required");
+            v.When(RazaoSocial.Length > MaxRazaoSocialLength, $"Legal name must be at most {MaxRazaoSocialLength} characters");
+
+            v.When(Cnpj.IsNullOrWhiteSpace(), "CNPJ is required");
+            v.When(!Cnpj.IsCnpj(), "CNPJ is invalid");
+
+            v.When(!Enum.IsDefined(typeof(OrganizationEnum.State), State), "State is invalid");
 
             v.ThrowIfAny();
         }
@@ -198,7 +192,7 @@ namespace Jrg.SisMed.Domain.Entities
         {
             NameFantasia = NameFantasia.RemoveDoubleSpaces().ToTitleCase();
             RazaoSocial = RazaoSocial.RemoveDoubleSpaces().ToTitleCase();
-            CNPJ = CNPJ.GetOnlyNumbers();
+            Cnpj = Cnpj.GetOnlyNumbers();
         }
         #endregion
     }

@@ -3,7 +3,7 @@ using Jrg.SisMed.Domain.Attributes;
 using Jrg.SisMed.Domain.Entities;
 using Jrg.SisMed.Domain.Enumerators;
 using Jrg.SisMed.Domain.Exceptions;
-using Jrg.SisMed.Domain.Interfaces.Factories;
+using Jrg.SisMed.Domain.Interfaces.Factories.Professional;
 using System;
 
 namespace Jrg.SisMed.Application.Factories
@@ -22,7 +22,7 @@ namespace Jrg.SisMed.Application.Factories
         /// <returns>Instância de Psychologist.</returns>
         /// <exception cref="ArgumentException">Quando o DTO não é do tipo CreatePsychologistDto.</exception>
         /// <exception cref="DomainValidationException">Quando o CRP é inválido.</exception>
-        public Person CreateProfessionalFromDto(CreateProfessionalDto dto)
+        public Professional CreateProfessionalFromDto(CreateProfessionalDto dto)
         {
             if (dto is not CreatePsychologistDto psychologistDto)
                 throw new ArgumentException("DTO inválido para PsychologyModuleFactory. Esperado CreatePsychologistDto.", nameof(dto));
@@ -46,7 +46,7 @@ namespace Jrg.SisMed.Application.Factories
         /// <summary>
         /// Implementação da interface Domain. Cria um psicólogo com parâmetros primitivos.
         /// </summary>
-        public Person CreateProfessional(
+        public Professional CreateProfessional(
             string name,
             string cpf,
             string? rg,

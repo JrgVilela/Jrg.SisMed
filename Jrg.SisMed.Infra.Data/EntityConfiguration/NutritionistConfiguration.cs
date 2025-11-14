@@ -6,7 +6,7 @@ namespace Jrg.SisMed.Infra.Data.EntityConfiguration
 {
     /// <summary>
     /// Configuração do Entity Framework para a entidade Nutritionist.
-    /// Implementa o mapeamento TPT (Table per Type) herdando de Person.
+    /// Implementa o mapeamento TPT (Table per Type) herdando de Professional.
     /// </summary>
     public class NutritionistConfiguration : IEntityTypeConfiguration<Nutritionist>
     {
@@ -20,7 +20,7 @@ namespace Jrg.SisMed.Infra.Data.EntityConfiguration
             builder.ToTable("Nutritionists");
 
             // Configuração de herança: chave compartilhada com a tabela Persons
-            builder.HasBaseType<Person>();
+            builder.HasBaseType<Professional>();
 
             // Propriedades específicas
             builder.Property(n => n.Crn)

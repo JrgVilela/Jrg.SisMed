@@ -11,7 +11,7 @@ namespace Jrg.SisMed.Infra.Data.EntityConfiguration
 {
     /// <summary>
     /// Configuração do Entity Framework para a entidade Psychologist.
-    /// Implementa o mapeamento TPT (Table per Type) herdando de Person.
+    /// Implementa o mapeamento TPT (Table per Type) herdando de Professional.
     /// </summary>
     public class PsychologistConfiguration : IEntityTypeConfiguration<Psychologist>
     {
@@ -21,7 +21,7 @@ namespace Jrg.SisMed.Infra.Data.EntityConfiguration
             builder.ToTable("Psychologists");
 
             // Configuração de herança: chave compartilhada com a tabela Persons
-            builder.HasBaseType<Person>();
+            builder.HasBaseType<Professional>();
 
             // Propriedades específicas
             builder.Property(p => p.Crp)

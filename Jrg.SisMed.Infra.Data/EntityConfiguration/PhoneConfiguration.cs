@@ -38,7 +38,7 @@ namespace Jrg.SisMed.Infra.Data.EntityConfiguration
 
             builder.Property(p => p.Number)
                 .IsRequired()
-                .HasMaxLength(9)
+                .HasMaxLength(10)
                 .HasComment("Número do telefone (8 ou 9 dígitos)");
 
             // Propriedades de auditoria (EntityBase)
@@ -64,7 +64,7 @@ namespace Jrg.SisMed.Infra.Data.EntityConfiguration
             builder.HasIndex(p => p.CreatedAt)
                 .HasDatabaseName("IX_Phones_CreatedAt");
 
-            // Relacionamentos com Person (CreatedBy, UpdatedBy)
+            // Relacionamentos com Professional (CreatedBy, UpdatedBy)
             builder.HasOne(p => p.CreatedBy)
                 .WithMany()
                 .HasForeignKey(p => p.CreatedById)

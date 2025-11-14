@@ -32,13 +32,24 @@ namespace Jrg.SisMed.Domain.Entities
         /// </summary>
         protected Entity()
         {
-            CreatedAt = DateTime.UtcNow;
         }
 
         /// <summary>
         /// Verifica se a entidade foi persistida no banco de dados.
         /// </summary>
         public bool IsTransient() => Id == 0;
+
+        public void SetUpdatedAt()
+        {
+            if(!IsTransient())
+                UpdatedAt = DateTime.UtcNow;
+        }
+
+        public void SetCreatedAt()
+        {
+            if(IsTransient())
+                CreatedAt = DateTime.UtcNow;
+        }
 
         /// <summary>
         /// Verifica igualdade entre entidades baseada no ID.

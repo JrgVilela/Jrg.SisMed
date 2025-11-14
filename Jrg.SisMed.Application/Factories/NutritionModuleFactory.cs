@@ -3,7 +3,7 @@ using Jrg.SisMed.Domain.Attributes;
 using Jrg.SisMed.Domain.Entities;
 using Jrg.SisMed.Domain.Enumerators;
 using Jrg.SisMed.Domain.Exceptions;
-using Jrg.SisMed.Domain.Interfaces.Factories;
+using Jrg.SisMed.Domain.Interfaces.Factories.Professional;
 using System;
 
 namespace Jrg.SisMed.Application.Factories
@@ -22,7 +22,7 @@ namespace Jrg.SisMed.Application.Factories
         /// <returns>Instância de Nutritionist.</returns>
         /// <exception cref="ArgumentException">Quando o DTO não é do tipo CreateNutritionistDto.</exception>
         /// <exception cref="DomainValidationException">Quando o CRN é inválido.</exception>
-        public Person CreateProfessionalFromDto(CreateProfessionalDto dto)
+        public Professional CreateProfessionalFromDto(CreateProfessionalDto dto)
         {
             if (dto is not CreateNutritionistDto nutritionistDto)
                 throw new ArgumentException("DTO inválido para NutritionModuleFactory. Esperado CreateNutritionistDto.", nameof(dto));
@@ -46,7 +46,7 @@ namespace Jrg.SisMed.Application.Factories
         /// <summary>
         /// Implementação da interface Domain. Cria um nutricionista com parâmetros primitivos.
         /// </summary>
-        public Person CreateProfessional(
+        public Professional CreateProfessional(
             string name,
             string cpf,
             string? rg,
@@ -91,5 +91,10 @@ namespace Jrg.SisMed.Application.Factories
         {
             return crn.Trim().ToUpperInvariant();
         }
+
+        //public Professional IProfessionalModuleFactory.CreateProfessional(string name, string cpf, string? rg, DateTime? birthDate, PersonEnum.Gender gender, string email, string password, string professionalRegistration)
+        //{
+        //    throw new NotImplementedException();
+        //}
     }
 }

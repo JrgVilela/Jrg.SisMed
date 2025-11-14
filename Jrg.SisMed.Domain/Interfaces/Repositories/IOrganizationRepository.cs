@@ -9,5 +9,7 @@ namespace Jrg.SisMed.Domain.Interfaces.Repositories
 {
     public interface IOrganizationRepository : IRepository<Organization>
     {
+        Task<bool> ExistsByRazaoSocialAsync(string razaoSocial, CancellationToken cancellationToken = default);
+        Task<bool> ExistsByCnpjAsync(string cnpj, CancellationToken cancellationToken = default);
     }
 }

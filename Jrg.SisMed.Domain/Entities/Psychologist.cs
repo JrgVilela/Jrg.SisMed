@@ -8,7 +8,7 @@ namespace Jrg.SisMed.Domain.Entities
     /// Entidade que representa um psicólogo no sistema.
     /// Contém informações específicas como CRP (Conselho Regional de Psicologia).
     /// </summary>
-    public class Psychologist : Person
+    public class Psychologist : Professional
     {
         private const int MaxCrpLength = 20;
 

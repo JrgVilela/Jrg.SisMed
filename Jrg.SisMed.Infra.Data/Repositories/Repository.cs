@@ -1,7 +1,9 @@
 ﻿using Jrg.SisMed.Domain.Entities;
 using Jrg.SisMed.Domain.Interfaces.Repositories;
+using Jrg.SisMed.Domain.Resources;
 using Jrg.SisMed.Infra.Data.Context;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Localization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,15 +21,17 @@ namespace Jrg.SisMed.Infra.Data.Repositories
     {
         protected readonly ApplicationDbContext _context;
         protected readonly DbSet<T> _dbSet;
+        protected readonly IStringLocalizer<Messages> _localizer;
 
         /// <summary>
         /// Construtor do repositório.
         /// </summary>
         /// <param name="context">Contexto do banco de dados.</param>
-        protected Repository(ApplicationDbContext context)
+        protected Repository(ApplicationDbContext context, IStringLocalizer<Messages> localizer)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
             _dbSet = _context.Set<T>();
+            _localizer = localizer;
         }
 
         /// <summary>
@@ -77,6 +81,8 @@ namespace Jrg.SisMed.Infra.Data.Repositories
             if (entity == null)
                 throw new ArgumentNullException(nameof(entity));
 
+            entity.SetCreatedAt();
+
             await _dbSet.AddAsync(entity, cancellationToken);
         }
 
@@ -88,12 +94,17 @@ namespace Jrg.SisMed.Infra.Data.Repositories
         /// A entidade não é salva no banco até que SaveChangesAsync seja chamado.
         /// Este método é síncrono seguindo o padrão do EF Core.
         /// </remarks>
-        public virtual void Update(T entity)
+        public virtual async Task UpdateAsync(T entity, CancellationToken cancellationToken = default)
         {
             if (entity == null)
                 throw new ArgumentNullException(nameof(entity));
 
-            _dbSet.Update(entity);
+            var currentEntity = await _dbSet.FindAsync(entity.Id, cancellationToken);
+            if (currentEntity == null)
+                throw new KeyNotFoundException(_localizer.For(CommonMessage.NotFound));
+
+            entity.SetUpdatedAt();
+            _dbSet.Entry(currentEntity).CurrentValues.SetValues(entity);
         }
 
         /// <summary>
@@ -104,12 +115,14 @@ namespace Jrg.SisMed.Infra.Data.Repositories
         /// A entidade não é removida do banco até que SaveChangesAsync seja chamado.
         /// Este método é síncrono seguindo o padrão do EF Core.
         /// </remarks>
-        public virtual void Remove(T entity)
+        public virtual async Task RemoveAsync(int id)
         {
-            if (entity == null)
-                throw new ArgumentNullException(nameof(entity));
+            var currentEntity = await _dbSet.FindAsync(id);
 
-            _dbSet.Remove(entity);
+            if (currentEntity == null)
+                throw new KeyNotFoundException(_localizer.For(CommonMessage.NotFound));
+
+            _dbSet.Remove(currentEntity);
         }
 
         /// <summary>
@@ -190,6 +203,52 @@ namespace Jrg.SisMed.Infra.Data.Repositories
                 throw new ArgumentNullException(nameof(entities));
 
             _dbSet.RemoveRange(entities);
+        }
+
+        /// <summary>
+        /// Salva todas as alterações pendentes no banco de dados.
+        /// </summary>
+        /// <param name="cancellationToken">Token de cancelamento.</param>
+        /// <returns>Número de registros afetados.</returns>
+        /// <exception cref="DbUpdateException">Lançado quando há erro ao salvar no banco.</exception>
+        /// <exception cref="DbUpdateConcurrencyException">Lançado quando há conflito de concorrência.</exception>
+        public async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+        {
+            try
+            {
+                return await _context.SaveChangesAsync(cancellationToken);
+            }
+            catch (DbUpdateException ex)
+            {
+                // Log do erro (adicionar logging futuramente)
+                throw new InvalidOperationException("Erro ao salvar alterações no banco de dados.", ex);
+            }
+        }
+
+        /// <summary>
+        /// Libera os recursos utilizados pelo contexto.
+        /// </summary>
+        public void Dispose()
+        {
+            _context?.Dispose();
+            GC.SuppressFinalize(this);
+        }
+
+        /// <summary>
+        /// Libera os recursos utilizados pelo contexto de forma assíncrona.
+        /// </summary>
+        public async ValueTask DisposeAsync()
+        {
+            if (_context != null)
+            {
+                await _context.DisposeAsync();
+            }
+            GC.SuppressFinalize(this);
+        }
+
+        public async Task<bool> ExistByIdAsync(int id, CancellationToken cancellationToken = default)
+        {
+            return await _dbSet.AnyAsync(e => e.Id == id, cancellationToken);
         }
     }
 }

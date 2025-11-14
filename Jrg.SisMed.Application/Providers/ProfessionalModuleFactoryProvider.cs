@@ -1,8 +1,8 @@
 ﻿using Jrg.SisMed.Application.Factories;
 using Jrg.SisMed.Domain.Attributes;
 using Jrg.SisMed.Domain.Enumerators;
-using Jrg.SisMed.Domain.Interfaces.Factories;
-using Jrg.SisMed.Domain.Interfaces.Providers;
+using Jrg.SisMed.Domain.Interfaces.Factories.Professional;
+using Jrg.SisMed.Domain.Interfaces.Providers.Professional;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -18,7 +18,7 @@ namespace Jrg.SisMed.Domain.Helpers
             RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.IgnoreCase, matchTimeoutMilliseconds: 1000)]
         private static partial Regex EmailRegex();
 
-        // Multiplicadores para validação de CNPJ
+        // Multiplicadores para validação de Cnpj
         private static readonly int[] CnpjMultiplier1 = [5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2];
         private static readonly int[] CnpjMultiplier2 = [6, 5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2];
 
@@ -43,14 +43,14 @@ namespace Jrg.SisMed.Domain.Helpers
         };
 
         /// <summary>
-        /// Valida se um CNPJ é válido de acordo com o algoritmo oficial da Receita Federal.
+        /// Valida se um Cnpj é válido de acordo com o algoritmo oficial da Receita Federal.
         /// </summary>
-        /// <param name="cnpj">CNPJ a ser validado (pode conter formatação).</param>
-        /// <returns>Retorna true se o CNPJ for válido, false caso contrário.</returns>
+        /// <param name="cnpj">Cnpj a ser validado (pode conter formatação).</param>
+        /// <returns>Retorna true se o Cnpj for válido, false caso contrário.</returns>
         /// <example>
         /// <code>
         /// string cnpj1 = "12.345.678/0001-95";
-        /// bool isValid1 = cnpj1.IsCnpj(); // Valida o CNPJ
+        /// bool isValid1 = cnpj1.IsCnpj(); // Valida o Cnpj
         /// 
         /// string cnpj2 = "12345678000195";
         /// bool isValid2 = cnpj2.IsCnpj(); // Também aceita sem formatação
@@ -155,9 +155,9 @@ namespace Jrg.SisMed.Domain.Helpers
         }
 
         /// <summary>
-        /// Valida se um CPF ou CNPJ é válido, detectando automaticamente o tipo baseado no comprimento.
+        /// Valida se um CPF ou Cnpj é válido, detectando automaticamente o tipo baseado no comprimento.
         /// </summary>
-        /// <param name="cpfOrCnpj">CPF ou CNPJ a ser validado.</param>
+        /// <param name="cpfOrCnpj">CPF ou Cnpj a ser validado.</param>
         /// <returns>Retorna true se o documento for válido, false caso contrário.</returns>
         /// <example>
         /// <code>
@@ -165,7 +165,7 @@ namespace Jrg.SisMed.Domain.Helpers
         /// bool isValid1 = doc1.IsCpfOrCnpj(); // Valida como CPF
         /// 
         /// string doc2 = "12.345.678/0001-95";
-        /// bool isValid2 = doc2.IsCpfOrCnpj(); // Valida como CNPJ
+        /// bool isValid2 = doc2.IsCpfOrCnpj(); // Valida como Cnpj
         /// </code>
         /// </example>
         public static bool IsCpfOrCnpj(this string cpfOrCnpj)

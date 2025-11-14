@@ -6,7 +6,7 @@ namespace Jrg.SisMed.Domain.Interfaces.Repositories
     /// Interface genérica para repositórios de acesso a dados.
     /// </summary>
     /// <typeparam name="T">Tipo da entidade.</typeparam>
-    public interface IRepository<T>
+    public interface IRepository<T> : IDisposable, IAsyncDisposable
     {
         /// <summary>
         /// Obtém uma entidade pelo ID.
@@ -32,6 +32,14 @@ namespace Jrg.SisMed.Domain.Interfaces.Repositories
         Task<IEnumerable<T>> FindAsync(Expression<Func<T, bool>> predicate, CancellationToken cancellationToken = default);
 
         /// <summary>
+        /// Retorna um IQueryable para construir queries complexas.
+        /// </summary>
+        /// <returns>IQueryable da entidade.</returns>
+        IQueryable<T> AsQueryable();
+
+        Task<bool> ExistByIdAsync(int id, CancellationToken cancellationToken = default);
+
+        /// <summary>
         /// Adiciona uma nova entidade ao contexto.
         /// </summary>
         /// <param name="entity">Entidade a ser adicionada.</param>
@@ -42,18 +50,19 @@ namespace Jrg.SisMed.Domain.Interfaces.Repositories
         /// Marca uma entidade para atualização.
         /// </summary>
         /// <param name="entity">Entidade a ser atualizada.</param>
-        void Update(T entity);
+        Task UpdateAsync(T entity, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Marca uma entidade para remoção.
         /// </summary>
         /// <param name="entity">Entidade a ser removida.</param>
-        void Remove(T entity);
+        Task RemoveAsync(int id);
 
         /// <summary>
-        /// Retorna um IQueryable para construir queries complexas.
+        /// Salva todas as alterações pendentes no banco de dados.
         /// </summary>
-        /// <returns>IQueryable da entidade.</returns>
-        IQueryable<T> AsQueryable();
+        /// <param name="cancellationToken">Token de cancelamento.</param>
+        /// <returns>Número de registros afetados.</returns>
+        Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
     }
 }

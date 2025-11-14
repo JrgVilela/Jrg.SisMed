@@ -11,6 +11,12 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.9" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.23.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="7.2.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Jrg.SisMed.Domain\Jrg.SisMed.Domain.csproj" />
+    <ProjectReference Include="..\Jrg.SisMed.Infra.IoC\Jrg.SisMed.Infra.IoC.csproj" />
   </ItemGroup>
 
 </Project>
