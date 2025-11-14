@@ -1,4 +1,5 @@
-﻿using Jrg.SisMed.Application.UseCases.Organization;
+﻿using Jrg.SisMed.Application.DTOs.OrganizationDto;
+using Jrg.SisMed.Application.UseCases.Organization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
@@ -28,9 +29,9 @@ namespace Jrg.SisMed.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get()
+        public async Task<IActionResult> Get(CancellationToken cancellationToken)
         {
-            var result = await _readOrganizationUseCase.GetAllAsync();
+            var result = await _readOrganizationUseCase.GetAllAsync(cancellationToken);
 
             if(!result.Any())
                 return NotFound("No organizations found.");
@@ -39,9 +40,9 @@ namespace Jrg.SisMed.Api.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> Get(int id)
+        public async Task<IActionResult> Get(int id, CancellationToken cancellationToken)
         {
-            var result = await _readOrganizationUseCase.GetByIdAsync(id);
+            var result = await _readOrganizationUseCase.GetByIdAsync(id, cancellationToken);
 
             if (result == null)
                 return NotFound($"Organization with id {id} not found.");
@@ -50,35 +51,17 @@ namespace Jrg.SisMed.Api.Controllers
         }
 
         /// <summary>
-        /// Busca organização por CNPJ (apenas números ou formatado).
-        /// </summary>
-        /// <param name="cnpj">CNPJ com ou sem formatação (ex: 43133410000113 ou 43.133.410/0001-13)</param>
-        //[HttpGet("cnpj/{cnpj}")]
-        //public async Task<IActionResult> GetByCnpj(string cnpj)
-        //{
-        //    // Decodifica o CNPJ (converte %2F de volta para /)
-        //    var decodedCnpj = Uri.UnescapeDataString(cnpj);
-            
-        //    var result = await _readOrganizationUseCase.GetByCnpjAsync(decodedCnpj);
-
-        //    if (result == null)
-        //        return NotFound($"Organization with CNPJ {decodedCnpj} not found.");
-
-        //    return Ok(result);
-        //}
-
-        /// <summary>
         /// Busca organização por CNPJ usando query string (alternativa mais limpa).
         /// Exemplo: GET /api/organizacao/search?cnpj=43.133.410/0001-13
         /// </summary>
         /// <param name="cnpj">CNPJ com ou sem formatação</param>
         [HttpGet("search")]
-        public async Task<IActionResult> Search([FromQuery] string cnpj)
+        public async Task<IActionResult> Search([FromQuery] string cnpj, CancellationToken cancellationToken)
         {
             if (string.IsNullOrWhiteSpace(cnpj))
                 return BadRequest("CNPJ is required");
 
-            var result = await _readOrganizationUseCase.GetByCnpjAsync(cnpj);
+            var result = await _readOrganizationUseCase.GetByCnpjAsync(cnpj, cancellationToken);
 
             if (result == null)
                 return NotFound($"Organization with CNPJ {cnpj} not found.");
@@ -87,21 +70,29 @@ namespace Jrg.SisMed.Api.Controllers
         }
 
         [HttpPost]
-        public IActionResult Post()
+        public async Task<IActionResult> Post(CreateOrganizationDto createOrganizationDto, CancellationToken cancellationToken)
         {
-            return Ok("OrganizacaoController POST is working!");
+            var result = await _createOrganizationUseCase.ExecuteAsync(createOrganizationDto, cancellationToken);
+
+            if(result == null || result <= 0)
+                return BadRequest("Failed to create organization.");
+
+            return CreatedAtAction(nameof(Get), new { id = result }, result);
         }
 
         [HttpPut("{id}")]
-        public IActionResult Put(int id)
+        public async Task<IActionResult> Put(int id, UpdateOrganizationDto updateOrganizationDto, CancellationToken cancellationToken)
         {
-            return Ok($"OrganizacaoController PUT is working with id: {id}");
+            await _updateOrganizationUseCase.ExecuteAsync(id, updateOrganizationDto, cancellationToken);
+
+            return Ok();
         }
 
         [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            return Ok($"OrganizacaoController DELETE is working with id: {id}");
+            await _deleteOrganizationUseCase.ExecuteAsync(id);
+            return NoContent();
         }
     }
 }
