@@ -1,7 +1,9 @@
-﻿using Jrg.SisMed.Application.Factories;
+﻿using FluentValidation;
+using Jrg.SisMed.Application.Factories;
 using Jrg.SisMed.Application.Providers;
 using Jrg.SisMed.Application.Services.OrganizationServices;
 using Jrg.SisMed.Application.UseCases.Organization;
+using Jrg.SisMed.Application.Validations.UserValidations;
 using Jrg.SisMed.Domain.Interfaces.Factories.Professional;
 using Jrg.SisMed.Domain.Interfaces.Providers.Professional;
 using Jrg.SisMed.Domain.Interfaces.Repositories;
@@ -50,8 +52,12 @@ namespace Jrg.SisMed.Infra.IoC
             services.AddScoped(typeof(ReadOrganizationUseCase));
 
             // Registra Repositories
+            services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IOrganizationRepository, OrganizationRepository>();
             services.AddScoped<IProfessionalRepository, ProfessionalRepository>();
+
+            // Registra FluentValidation - registra TODOS os validators do assembly automaticamente
+            services.AddValidatorsFromAssemblyContaining<CreateUserValidation>();
 
             return services;
         }

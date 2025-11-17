@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Jrg.SisMed.Infra.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20251114031207_OrganizationCnpjAjuste")]
-    partial class OrganizationCnpjAjuste
+    [Migration("20251116233259_Inicial")]
+    partial class Inicial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -257,8 +257,8 @@ namespace Jrg.SisMed.Infra.Data.Migrations
 
                     b.Property<string>("Number")
                         .IsRequired()
-                        .HasMaxLength(9)
-                        .HasColumnType("nvarchar(9)")
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)")
                         .HasComment("Número do telefone (8 ou 9 dígitos)");
 
                     b.Property<DateTime?>("UpdatedAt")
@@ -309,12 +309,6 @@ namespace Jrg.SisMed.Infra.Data.Migrations
                         .HasDefaultValueSql("GETUTCDATE()")
                         .HasComment("Data de criação do registro");
 
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)")
-                        .HasComment("E-mail do profissional");
-
                     b.Property<int>("Gender")
                         .HasColumnType("int")
                         .HasComment("Gênero: 0=None, 1=Male, 2=Female, 3=Other");
@@ -324,12 +318,6 @@ namespace Jrg.SisMed.Infra.Data.Migrations
                         .HasMaxLength(150)
                         .HasColumnType("nvarchar(150)")
                         .HasComment("Nome completo do Professional");
-
-                    b.Property<string>("PasswordHash")
-                        .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)")
-                        .HasComment("Hash da senha (PBKDF2)");
 
                     b.Property<string>("Rg")
                         .HasMaxLength(20)
@@ -352,10 +340,6 @@ namespace Jrg.SisMed.Infra.Data.Migrations
 
                     b.HasIndex("CreatedAt")
                         .HasDatabaseName("IX_Professional_CreatedAt");
-
-                    b.HasIndex("Email")
-                        .IsUnique()
-                        .HasDatabaseName("IX_Professional_Email");
 
                     b.HasIndex("Name")
                         .HasDatabaseName("IX_Professional_Name");
@@ -490,6 +474,61 @@ namespace Jrg.SisMed.Infra.Data.Migrations
                         .HasDatabaseName("IX_ProfessionalPhones_ProfessionalId_PhoneId");
 
                     b.ToTable("ProfessionalPhones", (string)null);
+                });
+
+            modelBuilder.Entity("Jrg.SisMed.Domain.Entities.User", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETUTCDATE()")
+                        .HasComment("Data de criação do registro");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)")
+                        .HasComment("E-mail do usuário (único)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)")
+                        .HasComment("Nome completo do usuário");
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)")
+                        .HasComment("Senha do usuário (hash PBKDF2)");
+
+                    b.Property<int>("State")
+                        .HasColumnType("int")
+                        .HasComment("Estado do usuário: 1=Active, 2=Inactive, 3=Blocked");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2")
+                        .HasComment("Data da última atualização do registro");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreatedAt")
+                        .HasDatabaseName("IX_Users_CreatedAt");
+
+                    b.HasIndex("Email")
+                        .IsUnique()
+                        .HasDatabaseName("IX_Users_Email");
+
+                    b.HasIndex("State")
+                        .HasDatabaseName("IX_Users_State");
+
+                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("Jrg.SisMed.Domain.Entities.Nutritionist", b =>

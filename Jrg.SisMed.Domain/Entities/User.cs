@@ -17,16 +17,16 @@ namespace Jrg.SisMed.Domain.Entities
         private const int MaxPasswordLength = 25;
 
 
-        public string Name { get; private set; }
-        public string Email { get; private set; }
-        public string Password { get; private set; }
+        public string Name { get; private set; } = string.Empty;
+        public string Email { get; private set; } = string.Empty;
+        public string Password { get; private set; } = string.Empty;
         public UserEnum.State State { get; private set; }
 
         #region Constructors
 
-        internal User() { }
+        protected User() { }
 
-        public User(string name, string email, string password, UserEnum.State state)
+        public User(string name, string email, string password, UserEnum.State state = UserEnum.State.Active)
         {
             SetProperties(name, email, password, state);
 
@@ -87,16 +87,16 @@ namespace Jrg.SisMed.Domain.Entities
             var v = new ValidationCollector();
 
             // Validação de Nome
-            v.When(Name.IsNullOrWhiteSpace(), "O nome é obrigatório.");
-            v.When(Name.Length > MaxNameLength, $"O nome deve conter no máximo {MaxNameLength} caracteres.");
+            v.When(Name.IsNullOrWhiteSpace(), "Name is required");
+            v.When(Name.Length > MaxNameLength, $"Name must be at most {MaxNameLength} characters.");
 
             // Validação de E-mail
-            v.When(Email.IsNullOrWhiteSpace(), "O e-mail é obrigatório.");
-            v.When(Email.Length > MaxEmailLength, $"O e-mail deve conter no máximo {MaxEmailLength} caracteres.");
-            v.When(!Email.IsEmail(), "O e-mail informado é inválido.");
+            v.When(Email.IsNullOrWhiteSpace(), "Email is required");
+            v.When(Email.Length > MaxEmailLength, $"Email must be at most {MaxEmailLength} characters.");
+            v.When(!Email.IsEmail(), "Email is invalid.");
 
-            v.When(!Enum.IsDefined(typeof(ProfessionalEnum.State), State),
-                "O status da pessoa é inválido.");
+            v.When(!Enum.IsDefined(typeof(UserEnum.State), State),
+                "User state is invalid.");
 
             v.ThrowIfAny();
         }
@@ -105,15 +105,15 @@ namespace Jrg.SisMed.Domain.Entities
         {
             var v = new ValidationCollector();
 
-            v.When(password.IsNullOrWhiteSpace(), "A senha é obrigatória.");
+            v.When(password.IsNullOrWhiteSpace(), "Password is required.");
             v.When(password.Length < MinPasswordLength || password.Length > MaxPasswordLength,
-                $"A senha deve conter entre {MinPasswordLength} e {MaxPasswordLength} caracteres.");
+                $"Password must be between {MinPasswordLength} and {MaxPasswordLength} characters.");
 
             // Validação de força de senha
             if (!password.IsNullOrWhiteSpace())
             {
                 v.When(!SecurityHelper.IsPasswordStrong(password, minLength: MinPasswordLength),
-                    "A senha deve conter letras maiúsculas, minúsculas, números e caracteres especiais.");
+                    "Password must contain uppercase, lowercase, numbers and special characters.");
             }
 
             v.ThrowIfAny();

@@ -53,16 +53,6 @@ namespace Jrg.SisMed.Infra.Data.EntityConfiguration
                 .HasConversion<int>()
                 .HasComment("Estado do profissional: 1=Active, 2=Inactive");
 
-            builder.Property(p => p.Email)
-                .IsRequired()
-                .HasMaxLength(100)
-                .HasComment("E-mail do profissional");
-
-            builder.Property(p => p.PasswordHash)
-                .IsRequired()
-                .HasMaxLength(500)
-                .HasComment("Hash da senha (PBKDF2)");
-
             // Propriedades de auditoria
             builder.Property(p => p.CreatedAt)
                 .IsRequired()
@@ -76,10 +66,6 @@ namespace Jrg.SisMed.Infra.Data.EntityConfiguration
             builder.HasIndex(p => p.Cpf)
                 .IsUnique()
                 .HasDatabaseName("IX_Professional_CPF");
-
-            builder.HasIndex(p => p.Email)
-                .IsUnique()
-                .HasDatabaseName("IX_Professional_Email");
 
             builder.HasIndex(p => p.State)
                 .HasDatabaseName("IX_Professional_State");

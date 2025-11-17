@@ -67,4 +67,19 @@ namespace Jrg.SisMed.Domain.Resources
         MaxLengthValidation,
         NotFound
     }
+
+    public enum UserMessage
+    {
+        AlreadyExistsByEmail,
+        NotFound,
+        NameRequired,
+        NameMaxLength,
+        EmailRequired,
+        EmailInvalid,
+        EmailMaxLength,
+        PasswordRequired,
+        PasswordMinLength,
+        PasswordMaxLength,
+        StateInvalid
+    }
 }

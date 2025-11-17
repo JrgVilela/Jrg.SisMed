@@ -165,4 +165,31 @@
   <data name="CommonMessage_InvalidArgument" xml:space="preserve">
     <value>O valor informado como parametro não é válido.</value>
   </data>
+  <data name="UserMessage_AlreadyExistsByEmail" xml:space="preserve">
+    <value>Já existe um usuário cadastrado com este e-mail.</value>
+  </data>
+  <data name="UserMessage_NameRequired" xml:space="preserve">
+    <value>O nome é obrigatório.</value>
+  </data>
+  <data name="UserMessage_NameMaxLength" xml:space="preserve">
+    <value>O nome não pode exceder {0} caracteres.</value>
+  </data>
+  <data name="UserMessage_EmailRequired" xml:space="preserve">
+    <value>O e-mail é obrigatório.</value>
+  </data>
+  <data name="UserMessage_EmailInvalid" xml:space="preserve">
+    <value>O e-mail informado é inválido.</value>
+  </data>
+  <data name="UserMessage_EmailMaxLength" xml:space="preserve">
+    <value>O e-mail não pode exceder {0} caracteres.</value>
+  </data>
+  <data name="UserMessage_PasswordRequired" xml:space="preserve">
+    <value>A senha é obrigatória.</value>
+  </data>
+  <data name="UserMessage_PasswordMinLength" xml:space="preserve">
+    <value>A senha deve ter pelo menos {0} caracteres.</value>
+  </data>
+  <data name="UserMessage_PasswordMaxLength" xml:space="preserve">
+    <value>A senha não pode exceder {0} caracteres.</value>
+  </data>
 </root>
