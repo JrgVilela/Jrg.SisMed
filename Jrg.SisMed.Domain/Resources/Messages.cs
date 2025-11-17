@@ -71,6 +71,7 @@ namespace Jrg.SisMed.Domain.Resources
     public enum UserMessage
     {
         AlreadyExistsByEmail,
+        EmailAlreadyExists,
         NotFound,
         NameRequired,
         NameMaxLength,
@@ -80,6 +81,7 @@ namespace Jrg.SisMed.Domain.Resources
         PasswordRequired,
         PasswordMinLength,
         PasswordMaxLength,
-        StateInvalid
+        StateInvalid,
+        MultipleUsersFound
     }
 }
