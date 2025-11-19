@@ -26,6 +26,28 @@ builder.Services.AddSwaggerGen(options =>
         }
     });
 
+    // Configura o Swagger para usar nomes únicos para evitar conflitos
+    // Isso resolve o problema de enums com mesmo nome em diferentes namespaces
+    options.CustomSchemaIds(type => 
+    {
+        // Se for um tipo genérico, use o nome genérico
+        if (type.IsGenericType)
+        {
+            var genericTypeName = type.GetGenericTypeDefinition().Name.Replace("`1", "");
+            var genericArgs = string.Join(",", type.GetGenericArguments().Select(t => t.Name));
+            return $"{genericTypeName}Of{genericArgs}";
+        }
+
+        // Se for um tipo aninhado (como enums dentro de classes), use o nome completo
+        if (type.DeclaringType != null)
+        {
+            return $"{type.DeclaringType.Name}{type.Name}";
+        }
+
+        // Caso contrário, use apenas o nome do tipo
+        return type.Name;
+    });
+
     // Habilita comentários XML (opcional)
     // var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
     // var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);

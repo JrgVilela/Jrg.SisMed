@@ -4,6 +4,7 @@ using Jrg.SisMed.Application.Providers;
 using Jrg.SisMed.Application.Services.OrganizationServices;
 using Jrg.SisMed.Application.Services.UserServices;
 using Jrg.SisMed.Application.UseCases.Organization;
+using Jrg.SisMed.Application.UseCases.User;
 using Jrg.SisMed.Application.Validations.UserValidations;
 using Jrg.SisMed.Domain.Interfaces.Factories.Professional;
 using Jrg.SisMed.Domain.Interfaces.Providers.Professional;
@@ -56,10 +57,16 @@ namespace Jrg.SisMed.Infra.IoC
             services.AddScoped<IDeleteUserService, DeleteUserService>();
 
             // Organization UseCases
-            services.AddScoped(typeof(CreateOrganizationUseCase));
-            services.AddScoped(typeof(UpdateOrganizationUseCase));
-            services.AddScoped(typeof(DeleteOrganizationUseCase));
-            services.AddScoped(typeof(ReadOrganizationUseCase));
+            services.AddScoped<CreateOrganizationUseCase>();
+            services.AddScoped<UpdateOrganizationUseCase>();
+            services.AddScoped<DeleteOrganizationUseCase>();
+            services.AddScoped<ReadOrganizationUseCase>();
+
+            // User UseCases
+            services.AddScoped<CreateUserUseCase>();
+            services.AddScoped<UpdateUserUseCase>();
+            services.AddScoped<ReadUserUseCase>();
+            services.AddScoped<DeleteUserUseCase>();
 
             // Repositories
             services.AddScoped<IOrganizationRepository, OrganizationRepository>();
