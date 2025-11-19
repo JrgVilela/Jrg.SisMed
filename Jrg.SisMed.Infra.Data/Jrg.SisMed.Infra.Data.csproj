@@ -21,4 +21,8 @@
     <ProjectReference Include="..\Jrg.SisMed.Domain\Jrg.SisMed.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Migrations\" />
+  </ItemGroup>
+
 </Project>

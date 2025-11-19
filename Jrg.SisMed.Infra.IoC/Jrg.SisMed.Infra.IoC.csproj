@@ -7,6 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="FluentValidation" Version="12.1.0" />
+    <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="12.1.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Jrg.SisMed.Application\Jrg.SisMed.Application.csproj" />
     <ProjectReference Include="..\Jrg.SisMed.Domain\Jrg.SisMed.Domain.csproj" />
     <ProjectReference Include="..\Jrg.SisMed.Infra.Data\Jrg.SisMed.Infra.Data.csproj" />

@@ -26,22 +26,6 @@ namespace Jrg.SisMed.Infra.Data.Repositories
         }
 
         /// <summary>
-        /// Obtém um usuário pelo email.
-        /// </summary>
-        /// <param name="email">Email do usuário.</param>
-        /// <param name="cancellationToken">Token de cancelamento.</param>
-        /// <returns>Usuário encontrado ou null.</returns>
-        public async Task<Professional?> GetByEmailAsync(string email, CancellationToken cancellationToken = default)
-        {
-            if (string.IsNullOrWhiteSpace(email))
-                return null;
-
-            return await _dbSet
-                .AsNoTracking()
-                .FirstOrDefaultAsync(u => u.Email == email.ToLower(), cancellationToken);
-        }
-
-        /// <summary>
         /// Obtém um usuário pelo CPF.
         /// </summary>
         /// <param name="cpf">CPF do usuário (apenas números).</param>
@@ -55,29 +39,6 @@ namespace Jrg.SisMed.Infra.Data.Repositories
             return await _dbSet
                 .AsNoTracking()
                 .FirstOrDefaultAsync(u => u.Cpf == cpf, cancellationToken);
-        }
-
-        /// <summary>
-        /// Verifica se um email já está cadastrado.
-        /// </summary>
-        /// <param name="email">Email a ser verificado.</param>
-        /// <param name="excludeUserId">ID do usuário a ser excluído da verificação (para updates).</param>
-        /// <param name="cancellationToken">Token de cancelamento.</param>
-        /// <returns>True se o email já existe, false caso contrário.</returns>
-        public async Task<bool> EmailExistsAsync(
-            string email, 
-            int? excludeUserId = null, 
-            CancellationToken cancellationToken = default)
-        {
-            if (string.IsNullOrWhiteSpace(email))
-                return false;
-
-            var query = _dbSet.Where(u => u.Email == email.ToLower());
-
-            if (excludeUserId.HasValue)
-                query = query.Where(u => u.Id != excludeUserId.Value);
-
-            return await query.AnyAsync(cancellationToken);
         }
 
         /// <summary>
@@ -112,7 +73,7 @@ namespace Jrg.SisMed.Infra.Data.Repositories
         {
             return await _dbSet
                 .AsNoTracking()
-                .Where(u => u.State == PersonEnum.State.Active)
+                .Where(u => u.State == ProfessionalEnum.State.Active)
                 .OrderBy(u => u.Name)
                 .ToListAsync(cancellationToken);
         }

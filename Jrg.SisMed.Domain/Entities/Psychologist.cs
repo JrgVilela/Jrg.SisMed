@@ -34,7 +34,7 @@ namespace Jrg.SisMed.Domain.Entities
             string cpf,
             string? rg,
             DateTime? birthDate,
-            PersonEnum.Gender gender,
+            ProfessionalEnum.Gender gender,
             string email,
             string password, 
             string crp) : base(name, cpf, rg, birthDate, gender, email, password)
@@ -60,7 +60,7 @@ namespace Jrg.SisMed.Domain.Entities
             string cpf,
             string? rg,
             DateTime? birthDate,
-            PersonEnum.Gender gender,
+            ProfessionalEnum.Gender gender,
             string email,
             string password,
             string crp)

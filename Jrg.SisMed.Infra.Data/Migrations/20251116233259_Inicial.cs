@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Jrg.SisMed.Infra.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial : Migration
+    public partial class Inicial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -19,7 +19,7 @@ namespace Jrg.SisMed.Infra.Data.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     NameFantasia = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: false, comment: "Nome fantasia da organização (nome comercial)"),
                     RazaoSocial = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: false, comment: "Razão social da organização (nome jurídico)"),
-                    Cnpj = table.Column<string>(type: "nvarchar(14)", maxLength: 14, nullable: false, comment: "Cnpj da organização (apenas números)"),
+                    Cnpj = table.Column<string>(type: "nvarchar(18)", maxLength: 18, nullable: false, comment: "Cnpj da organização (apenas números)"),
                     State = table.Column<int>(type: "int", nullable: false, comment: "Estado da organização: 1=Active, 2=Inactive, 3=Suspended"),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()", comment: "Data de criação do registro"),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true, comment: "Data da última atualização do registro")
@@ -36,19 +36,35 @@ namespace Jrg.SisMed.Infra.Data.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: false, comment: "Nome completo do Professional"),
-                    Cpf = table.Column<string>(type: "nvarchar(11)", maxLength: 11, nullable: false, comment: "CPF do profissional (apenas números)"),
+                    Cpf = table.Column<string>(type: "nvarchar(14)", maxLength: 14, nullable: false, comment: "CPF do profissional (apenas números)"),
                     Rg = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true, comment: "RG do profissional"),
                     BirthDate = table.Column<DateTime>(type: "datetime2", nullable: true, comment: "Data de nascimento"),
                     Gender = table.Column<int>(type: "int", nullable: false, comment: "Gênero: 0=None, 1=Male, 2=Female, 3=Other"),
                     State = table.Column<int>(type: "int", nullable: false, comment: "Estado do profissional: 1=Active, 2=Inactive"),
-                    Email = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false, comment: "E-mail do profissional"),
-                    PasswordHash = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false, comment: "Hash da senha (PBKDF2)"),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()", comment: "Data de criação do registro"),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true, comment: "Data da última atualização do registro")
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Professionals", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Users",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false, comment: "Nome completo do usuário"),
+                    Email = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false, comment: "E-mail do usuário (único)"),
+                    Password = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false, comment: "Senha do usuário (hash PBKDF2)"),
+                    State = table.Column<int>(type: "int", nullable: false, comment: "Estado do usuário: 1=Active, 2=Inactive, 3=Blocked"),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()", comment: "Data de criação do registro"),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true, comment: "Data da última atualização do registro")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Users", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -112,7 +128,7 @@ namespace Jrg.SisMed.Infra.Data.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Ddi = table.Column<string>(type: "nvarchar(3)", maxLength: 3, nullable: false, comment: "Código DDI (código internacional do país)"),
                     Ddd = table.Column<string>(type: "nvarchar(2)", maxLength: 2, nullable: false, comment: "Código DDD (código de área)"),
-                    Number = table.Column<string>(type: "nvarchar(9)", maxLength: 9, nullable: false, comment: "Número do telefone (8 ou 9 dígitos)"),
+                    Number = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false, comment: "Número do telefone (8 ou 9 dígitos)"),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()", comment: "Data de criação do registro"),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true, comment: "Data da última atualização do registro"),
                     CreatedById = table.Column<int>(type: "int", nullable: true, comment: "ID da pessoa que criou o registro"),
@@ -456,12 +472,6 @@ namespace Jrg.SisMed.Infra.Data.Migrations
                 column: "CreatedAt");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Professional_Email",
-                table: "Professionals",
-                column: "Email",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Professional_Name",
                 table: "Professionals",
                 column: "Name");
@@ -477,6 +487,22 @@ namespace Jrg.SisMed.Infra.Data.Migrations
                 column: "Crp",
                 unique: true,
                 filter: "[Crp] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Users_CreatedAt",
+                table: "Users",
+                column: "CreatedAt");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Users_Email",
+                table: "Users",
+                column: "Email",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Users_State",
+                table: "Users",
+                column: "State");
         }
 
         /// <inheritdoc />
@@ -496,6 +522,9 @@ namespace Jrg.SisMed.Infra.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "Psychologists");
+
+            migrationBuilder.DropTable(
+                name: "Users");
 
             migrationBuilder.DropTable(
                 name: "Organizations");

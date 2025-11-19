@@ -21,11 +21,11 @@ namespace Jrg.SisMed.Domain.Entities
         public string Cpf { get; private set; } = string.Empty;
         public string? Rg { get; private set; } = string.Empty;
         public DateTime? BirthDate { get; private set; }
-        public PersonEnum.Gender Gender { get; private set; } = PersonEnum.Gender.None;
-        public PersonEnum.State State { get; private set; } = PersonEnum.State.Active;
+        public ProfessionalEnum.Gender Gender { get; private set; } = ProfessionalEnum.Gender.None;
+        public ProfessionalEnum.State State { get; private set; } = ProfessionalEnum.State.Active;
 
-        public string Email { get; private set; } = string.Empty;
-        public string PasswordHash { get; private set; } = string.Empty;
+        //public string Email { get; private set; } = string.Empty;
+        //public string PasswordHash { get; private set; } = string.Empty;
 
         public virtual List<ProfessionalAddress> Addresses { get; private set; } = new List<ProfessionalAddress>();
         public virtual List<ProfessionalPhone> Phones { get; private set; } = new List<ProfessionalPhone>();
@@ -51,7 +51,7 @@ namespace Jrg.SisMed.Domain.Entities
             string cpf, 
             string? rg, 
             DateTime? birthDate, 
-            PersonEnum.Gender gender, 
+            ProfessionalEnum.Gender gender, 
             string email, 
             string password)
         {
@@ -75,7 +75,7 @@ namespace Jrg.SisMed.Domain.Entities
             string cpf, 
             string? rg, 
             DateTime? birthDate, 
-            PersonEnum.Gender gender, 
+            ProfessionalEnum.Gender gender, 
             string email, 
             string password)
         {
@@ -85,17 +85,12 @@ namespace Jrg.SisMed.Domain.Entities
             Rg = rg;
             BirthDate = birthDate;
             Gender = gender;
-            Email = email;
             
             // Valida ANTES de fazer hash da senha
-            ValidatePassword(password);
             Validate();
             
             // Normaliza os dados
             Normalize();
-            
-            // Hash da senha APÓS validação bem-sucedida
-            PasswordHash = SecurityHelper.HashPasswordPbkdf2(password);
             
             // Atualiza timestamp
             if (Id > 0) // Se já existe, atualiza UpdatedAt
@@ -165,7 +160,7 @@ namespace Jrg.SisMed.Domain.Entities
         /// </summary>
         public void Activate()
         {
-            State = PersonEnum.State.Active;
+            State = ProfessionalEnum.State.Active;
             UpdatedAt = DateTime.UtcNow;
         }
 
@@ -174,31 +169,7 @@ namespace Jrg.SisMed.Domain.Entities
         /// </summary>
         public void Deactivate()
         {
-            State = PersonEnum.State.Inactive;
-            UpdatedAt = DateTime.UtcNow;
-        }
-
-        /// <summary>
-        /// Verifica se a senha fornecida corresponde ao hash armazenado.
-        /// </summary>
-        public bool VerifyPassword(string password)
-        {
-            if (password.IsNullOrWhiteSpace())
-                return false;
-                
-            return SecurityHelper.VerifyPasswordPbkdf2(password, PasswordHash);
-        }
-
-        /// <summary>
-        /// Altera a senha da pessoa.
-        /// </summary>
-        public void ChangePassword(string currentPassword, string newPassword)
-        {
-            if (!VerifyPassword(currentPassword))
-                throw new DomainValidationException(new[] { "A senha atual está incorreta." });
-                
-            ValidatePassword(newPassword);
-            PasswordHash = SecurityHelper.HashPasswordPbkdf2(newPassword);
+            State = ProfessionalEnum.State.Inactive;
             UpdatedAt = DateTime.UtcNow;
         }
         #endregion
@@ -223,11 +194,6 @@ namespace Jrg.SisMed.Domain.Entities
             v.When(!Rg.IsNullOrWhiteSpace() && Rg!.Length > MaxRgLength, 
                 $"O RG deve conter no máximo {MaxRgLength} caracteres.");
             
-            // Validação de E-mail
-            v.When(Email.IsNullOrWhiteSpace(), "O e-mail é obrigatório.");
-            v.When(Email.Length > MaxEmailLength, $"O e-mail deve conter no máximo {MaxEmailLength} caracteres.");
-            v.When(!Email.IsEmail(), "O e-mail informado é inválido.");
-
             // Validação de Data de Nascimento
             v.When(BirthDate.HasValue && BirthDate.Value > DateTime.Now, 
                 "A data de nascimento não pode ser maior que a data atual.");
@@ -235,31 +201,10 @@ namespace Jrg.SisMed.Domain.Entities
                 "A data de nascimento é inválida.");
 
             // Validação de Enum - CORRIGIDO: Adiciona ! para inverter a lógica
-            v.When(!Enum.IsDefined(typeof(PersonEnum.Gender), Gender), 
+            v.When(!Enum.IsDefined(typeof(ProfessionalEnum.Gender), Gender), 
                 "O gênero informado é inválido.");
-            v.When(!Enum.IsDefined(typeof(PersonEnum.State), State), 
+            v.When(!Enum.IsDefined(typeof(ProfessionalEnum.State), State), 
                 "O status da pessoa é inválido.");
-            
-            v.ThrowIfAny();
-        }
-
-        /// <summary>
-        /// Valida a senha antes de fazer hash.
-        /// </summary>
-        private void ValidatePassword(string password)
-        {
-            var v = new ValidationCollector();
-            
-            v.When(password.IsNullOrWhiteSpace(), "A senha é obrigatória.");
-            v.When(password.Length < MinPasswordLength || password.Length > MaxPasswordLength, 
-                $"A senha deve conter entre {MinPasswordLength} e {MaxPasswordLength} caracteres.");
-            
-            // Validação de força de senha
-            if (!password.IsNullOrWhiteSpace())
-            {
-                v.When(!SecurityHelper.IsPasswordStrong(password, minLength: MinPasswordLength),
-                    "A senha deve conter letras maiúsculas, minúsculas, números e caracteres especiais.");
-            }
             
             v.ThrowIfAny();
         }
@@ -272,7 +217,6 @@ namespace Jrg.SisMed.Domain.Entities
             Name = Name.RemoveDoubleSpaces().ToTitleCase();
             Cpf = Cpf.GetOnlyNumbers();
             Rg = Rg?.GetOnlyNumbers();
-            Email = Email.RemoveAllSpaces().ToLower();
         }
         #endregion
     }
@@ -281,7 +225,7 @@ namespace Jrg.SisMed.Domain.Entities
     /// Enumerações relacionadas à entidade Professional.
     /// TODO: Mover para namespace Jrg.SisMed.Domain.Enums em refatoração futura.
     /// </summary>
-    public class PersonEnum
+    public class ProfessionalEnum
     {
         /// <summary>
         /// Estado da pessoa no sistema.

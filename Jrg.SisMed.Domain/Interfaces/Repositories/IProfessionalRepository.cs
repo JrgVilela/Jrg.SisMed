@@ -12,14 +12,7 @@ namespace Jrg.SisMed.Domain.Interfaces.Repositories
     /// </summary>
     public interface IProfessionalRepository : IRepository<Professional>
     {
-        /// <summary>
-        /// Obtém um usuário pelo email.
-        /// </summary>
-        /// <param name="email">Email do usuário.</param>
-        /// <param name="cancellationToken">Token de cancelamento.</param>
-        /// <returns>Usuário encontrado ou null.</returns>
-        Task<Professional?> GetByEmailAsync(string email, CancellationToken cancellationToken = default);
-
+       
         /// <summary>
         /// Obtém um usuário pelo CPF.
         /// </summary>
@@ -28,14 +21,6 @@ namespace Jrg.SisMed.Domain.Interfaces.Repositories
         /// <returns>Usuário encontrado ou null.</returns>
         Task<Professional?> GetByCpfAsync(string cpf, CancellationToken cancellationToken = default);
 
-        /// <summary>
-        /// Verifica se um email já está cadastrado.
-        /// </summary>
-        /// <param name="email">Email a ser verificado.</param>
-        /// <param name="excludeUserId">ID do usuário a ser excluído da verificação (para updates).</param>
-        /// <param name="cancellationToken">Token de cancelamento.</param>
-        /// <returns>True se o email já existe, false caso contrário.</returns>
-        Task<bool> EmailExistsAsync(string email, int? excludeUserId = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Verifica se um CPF já está cadastrado.
