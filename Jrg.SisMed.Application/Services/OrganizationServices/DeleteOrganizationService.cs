@@ -1,4 +1,5 @@
-﻿using Jrg.SisMed.Domain.Interfaces.Repositories;
+﻿using Jrg.SisMed.Domain.Exceptions;
+using Jrg.SisMed.Domain.Interfaces.Repositories;
 using Jrg.SisMed.Domain.Interfaces.Services.OrganizationServices;
 using Jrg.SisMed.Domain.Resources;
 using Microsoft.Extensions.Localization;
@@ -25,7 +26,7 @@ namespace Jrg.SisMed.Application.Services.OrganizationServices
         {
             var organization = await _organizationRepository.GetByIdAsync(id);
             if (organization == null)
-                throw new KeyNotFoundException(_localizer.For(OrganizationMessage.NotFound));
+                throw new NotFoundException("Organization", id);
 
             await _organizationRepository.RemoveAsync(id);
             await _organizationRepository.SaveChangesAsync();

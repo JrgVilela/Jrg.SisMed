@@ -1,4 +1,5 @@
 ﻿using Jrg.SisMed.Domain.Entities;
+using Jrg.SisMed.Domain.Exceptions;
 using Jrg.SisMed.Domain.Interfaces.Repositories;
 using Jrg.SisMed.Domain.Interfaces.Services.OrganizationServices;
 using Jrg.SisMed.Domain.Resources;
@@ -25,14 +26,14 @@ namespace Jrg.SisMed.Application.Services.OrganizationServices
         public async Task ExecuteAsync(int id, Organization organization, CancellationToken cancellationToken = default)
         {
             if (organization == null)
-                throw new ArgumentNullException(_localizer.For(CommonMessage.ArgumentNull_Generic));
+                throw new ArgumentNullException(nameof(organization), _localizer.For(CommonMessage.ArgumentNull_Generic, nameof(organization)));
 
             if(organization.Id <= 0)
-                throw new ArgumentNullException(_localizer.For(CommonMessage.InvalidArgument, nameof(organization.Id)));
+                throw new ArgumentException(_localizer.For(CommonMessage.InvalidArgument, nameof(organization.Id)), nameof(organization.Id));
 
             var currentOrganization = await _organizationRepository.GetByIdAsync(id, cancellationToken);
             if(currentOrganization == null)
-                throw new KeyNotFoundException(_localizer.For(OrganizationMessage.NotFound));
+                throw new NotFoundException("Organization", id);
 
 
             currentOrganization.Update(organization.NameFantasia, organization.RazaoSocial, organization.Cnpj, organization.State);

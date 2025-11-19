@@ -1,4 +1,5 @@
 using Jrg.SisMed.Domain.Entities;
+using Jrg.SisMed.Domain.Exceptions;
 using Jrg.SisMed.Domain.Helpers;
 using Jrg.SisMed.Domain.Interfaces.Repositories;
 using Jrg.SisMed.Domain.Interfaces.Services.UserServices;
@@ -42,9 +43,14 @@ namespace Jrg.SisMed.Application.Services.UserServices
                 throw new ArgumentException(_localizer.For(UserMessage.EmailRequired), nameof(email));
 
             if (!email.IsEmail())
-                throw new ArgumentException(_localizer.For(UserMessage.EmailInvalid, email));
+                throw new ArgumentException(_localizer.For(UserMessage.EmailInvalid, email), nameof(email));
 
-            var result = await _userRepository.FindAsync(u => u.Email.Equals(email), cancellationToken);
+            var normalizedEmail = email.Trim().ToLower();
+
+            var result = await _userRepository.FindAsync(u => u.Email.Equals(normalizedEmail), cancellationToken);
+
+            if (!result.Any())
+                throw new NotFoundException("User", normalizedEmail);
 
             if (result.Count() > 1)
                 throw new InvalidOperationException(_localizer.For(UserMessage.MultipleUsersFound, email));
@@ -54,7 +60,12 @@ namespace Jrg.SisMed.Application.Services.UserServices
 
         public async Task<User?> GetByIdAsync(int id, CancellationToken cancellationToken = default)
         {
-            return await _userRepository.GetByIdAsync(id, cancellationToken);
+            var user = await _userRepository.GetByIdAsync(id, cancellationToken);
+            
+            if (user == null)
+                throw new NotFoundException("User", id);
+
+            return user;
         }
     }
 }

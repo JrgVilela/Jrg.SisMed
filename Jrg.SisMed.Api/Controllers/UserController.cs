@@ -43,7 +43,7 @@ namespace Jrg.SisMed.Api.Controllers
             var result = await _readUserUseCase.GetAllAsync(cancellationToken);
 
             if (!result.Any())
-                return NotFound("No users found.");
+                return NotFound(new { message = "No users found." });
 
             return Ok(result);
         }
@@ -60,10 +60,6 @@ namespace Jrg.SisMed.Api.Controllers
         public async Task<IActionResult> GetById(int id, CancellationToken cancellationToken)
         {
             var result = await _readUserUseCase.GetByIdAsync(id, cancellationToken);
-
-            if (result == null)
-                return NotFound($"User with id {id} not found.");
-
             return Ok(result);
         }
 
@@ -73,7 +69,7 @@ namespace Jrg.SisMed.Api.Controllers
         /// </summary>
         /// <param name="email">Email do usuário</param>
         /// <response code="200">Retorna o usuário encontrado</response>
-        /// <response code="400">Email não informado</response>
+        /// <response code="400">Email não informado ou inválido</response>
         /// <response code="404">Usuário não encontrado</response>
         [HttpGet("search")]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -82,13 +78,9 @@ namespace Jrg.SisMed.Api.Controllers
         public async Task<IActionResult> SearchByEmail([FromQuery] string email, CancellationToken cancellationToken)
         {
             if (string.IsNullOrWhiteSpace(email))
-                return BadRequest("Email is required");
+                return BadRequest(new { message = "Email is required" });
 
             var result = await _readUserUseCase.GetByEmailAsync(email, cancellationToken);
-
-            if (result == null)
-                return NotFound($"User with email {email} not found.");
-
             return Ok(result);
         }
 
@@ -97,18 +89,16 @@ namespace Jrg.SisMed.Api.Controllers
         /// </summary>
         /// <param name="createUserDto">Dados do usuário a ser criado</param>
         /// <response code="201">Usuário criado com sucesso</response>
-        /// <response code="400">Dados inválidos</response>
+        /// <response code="400">Dados inválidos ou violação de regras de negócio</response>
+        /// <response code="409">Usuário já existe (conflito)</response>
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status409Conflict)]
         public async Task<IActionResult> Create([FromBody] CreateUserDto createUserDto, CancellationToken cancellationToken)
         {
             var result = await _createUserUseCase.ExecuteAsync(createUserDto, cancellationToken);
-
-            if (result <= 0)
-                return BadRequest("Failed to create user.");
-
-            return CreatedAtAction(nameof(GetById), new { id = result }, result);
+            return CreatedAtAction(nameof(GetById), new { id = result }, new { id = result, message = "User created successfully" });
         }
 
         /// <summary>
@@ -126,7 +116,6 @@ namespace Jrg.SisMed.Api.Controllers
         public async Task<IActionResult> Update(int id, [FromBody] UpdateUserDto updateUserDto, CancellationToken cancellationToken)
         {
             await _updateUserUseCase.ExecuteAsync(id, updateUserDto, cancellationToken);
-
             return Ok(new { message = "User updated successfully" });
         }
 

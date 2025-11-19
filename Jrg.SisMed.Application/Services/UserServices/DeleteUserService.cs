@@ -1,3 +1,4 @@
+using Jrg.SisMed.Domain.Exceptions;
 using Jrg.SisMed.Domain.Interfaces.Repositories;
 using Jrg.SisMed.Domain.Interfaces.Services.UserServices;
 using Jrg.SisMed.Domain.Resources;
@@ -28,7 +29,7 @@ namespace Jrg.SisMed.Application.Services.UserServices
         {
             var user = await _userRepository.GetByIdAsync(id);
             if (user == null)
-                throw new KeyNotFoundException(_localizer.For(UserMessage.NotFound));
+                throw new NotFoundException("User", id);
 
             await _userRepository.RemoveAsync(id);
             await _userRepository.SaveChangesAsync();

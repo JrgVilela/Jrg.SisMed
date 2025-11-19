@@ -1,4 +1,5 @@
 ﻿using Jrg.SisMed.Domain.Entities;
+using Jrg.SisMed.Domain.Exceptions;
 using Jrg.SisMed.Domain.Interfaces.Repositories;
 using Jrg.SisMed.Domain.Interfaces.Services.OrganizationServices;
 using Jrg.SisMed.Domain.Resources;
@@ -25,10 +26,10 @@ namespace Jrg.SisMed.Application.Services.OrganizationServices
         public async Task<int> ExecuteAsync(Organization organization, CancellationToken cancellationToken = default)
         {
             if(await _organizationRepository.ExistsByRazaoSocialAsync(organization.RazaoSocial, cancellationToken))
-                throw new InvalidOperationException(_localizer.For(OrganizationMessage.AlreadyExistsByRazaoSocial));
+                throw new ConflictException("Organization", "RazaoSocial", organization.RazaoSocial);
 
             if(await _organizationRepository.ExistsByCnpjAsync(organization.Cnpj, cancellationToken))
-                throw new InvalidOperationException(_localizer.For(OrganizationMessage.AlreadyExistsByCnpj, organization.Cnpj));
+                throw new ConflictException("Organization", "CNPJ", organization.Cnpj);
 
             // Garantir que a organização esteja ativa ao ser criada
             organization.Activate();

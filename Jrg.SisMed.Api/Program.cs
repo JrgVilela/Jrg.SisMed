@@ -1,3 +1,4 @@
+using Jrg.SisMed.Api.Middleware;
 using Jrg.SisMed.Infra.IoC;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -60,6 +61,10 @@ builder.Services.AddSwaggerGen(options =>
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
+
+// Middleware de tratamento de exceções global (DEVE ser o primeiro middleware)
+app.UseExceptionHandling();
+
 if (app.Environment.IsDevelopment())
 {
     // Habilita Swagger UI no ambiente de desenvolvimento

@@ -1,4 +1,5 @@
 ﻿using Jrg.SisMed.Domain.Entities;
+using Jrg.SisMed.Domain.Exceptions;
 using Jrg.SisMed.Domain.Helpers;
 using Jrg.SisMed.Domain.Interfaces.Repositories;
 using Jrg.SisMed.Domain.Interfaces.Services.OrganizationServices;
@@ -36,15 +37,17 @@ namespace Jrg.SisMed.Application.Services.OrganizationServices
         public async Task<Organization?> GetByCnpjAsync(string cnpj, CancellationToken cancellationToken = default)
         {
             if(cnpj.IsNullOrEmpty())
-                throw new ArgumentException(_localizer.For(OrganizationMessage.CnpjRequired, nameof(cnpj)));
+                throw new ArgumentException(_localizer.For(OrganizationMessage.CnpjRequired), nameof(cnpj));
 
             if(!cnpj.IsCnpj())
-                throw new ArgumentException(_localizer.For(OrganizationMessage.CnpjInvalid, cnpj));
+                throw new ArgumentException(_localizer.For(OrganizationMessage.CnpjInvalid, cnpj), nameof(cnpj));
 
-            if(!(await _organizationRepository.ExistsByCnpjAsync(cnpj, cancellationToken)))
-                throw new ArgumentException(_localizer.For(OrganizationMessage.AlreadyExistsByCnpj, cnpj));
+            var normalizedCnpj = cnpj.GetOnlyNumbers();
 
-            var result = await _organizationRepository.FindAsync(o => o.Cnpj.Equals(cnpj), cancellationToken);
+            if(!(await _organizationRepository.ExistsByCnpjAsync(normalizedCnpj, cancellationToken)))
+                throw new NotFoundException("Organization", normalizedCnpj);
+
+            var result = await _organizationRepository.FindAsync(o => o.Cnpj.Equals(normalizedCnpj), cancellationToken);
 
             if(result.Count() > 1)
                 throw new InvalidOperationException(_localizer.For(OrganizationMessage.NotFound, cnpj));
@@ -54,7 +57,12 @@ namespace Jrg.SisMed.Application.Services.OrganizationServices
 
         public async Task<Organization?> GetByIdAsync(int id, CancellationToken cancellationToken = default)
         {
-            return await _organizationRepository.GetByIdAsync(id, cancellationToken);
+            var organization = await _organizationRepository.GetByIdAsync(id, cancellationToken);
+            
+            if (organization == null)
+                throw new NotFoundException("Organization", id);
+
+            return organization;
         }
     }
 }
