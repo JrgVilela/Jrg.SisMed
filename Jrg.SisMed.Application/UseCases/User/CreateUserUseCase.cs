@@ -30,7 +30,7 @@ namespace Jrg.SisMed.Application.UseCases.User
         /// <param name="userDto">DTO com os dados do usuário a ser criado.</param>
         /// <param name="cancellationToken">Token de cancelamento.</param>
         /// <returns>ID do usuário criado.</returns>
-        public async Task<int> ExecuteAsync(CreateUserDto userDto, CancellationToken cancellationToken = default)
+        public virtual async Task<int> ExecuteAsync(CreateUserDto userDto, CancellationToken cancellationToken = default)
         {
             if (userDto == null)
                 throw new ArgumentNullException(nameof(userDto), _localizer.For(CommonMessage.ArgumentNull_Generic, nameof(userDto)));

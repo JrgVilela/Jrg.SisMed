@@ -9,10 +9,10 @@ namespace Jrg.SisMed.Application.DTOs.OrganizationDto
 {
     public class CreateOrganizationDto
     {
-        public string NameFantasia { get; private set; } = string.Empty;
-        public string RazaoSocial { get; private set; } = string.Empty;
-        public string Cnpj { get; private set; } = string.Empty;
-        public OrganizationEnum.State State { get; private set; } = OrganizationEnum.State.Active;
+        public string NameFantasia { get; set; } = string.Empty;
+        public string RazaoSocial { get; set; } = string.Empty;
+        public string Cnpj { get; set; } = string.Empty;
+        public OrganizationEnum.State State { get; set; } = OrganizationEnum.State.Active;
 
         public Organization ToDomainOrganization()
         {

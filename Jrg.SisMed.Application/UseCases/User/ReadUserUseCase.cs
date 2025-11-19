@@ -23,7 +23,7 @@ namespace Jrg.SisMed.Application.UseCases.User
         /// <summary>
         /// Verifica se um usuário existe pelo ID.
         /// </summary>
-        public async Task<bool> ExistsByIdAsync(int id, CancellationToken cancellationToken = default)
+        public virtual async Task<bool> ExistsByIdAsync(int id, CancellationToken cancellationToken = default)
         {
             return await _readUserService.ExistsByIdAsync(id, cancellationToken);
         }
@@ -31,7 +31,7 @@ namespace Jrg.SisMed.Application.UseCases.User
         /// <summary>
         /// Obtém todos os usuários.
         /// </summary>
-        public async Task<IEnumerable<ReadUserDto>> GetAllAsync(CancellationToken cancellationToken = default)
+        public virtual async Task<IEnumerable<ReadUserDto>> GetAllAsync(CancellationToken cancellationToken = default)
         {
             var result = await _readUserService.GetAllAsync(cancellationToken);
 
@@ -44,7 +44,7 @@ namespace Jrg.SisMed.Application.UseCases.User
         /// <summary>
         /// Obtém um usuário por email.
         /// </summary>
-        public async Task<ReadUserDto?> GetByEmailAsync(string email, CancellationToken cancellationToken = default)
+        public virtual async Task<ReadUserDto?> GetByEmailAsync(string email, CancellationToken cancellationToken = default)
         {
             var result = await _readUserService.GetByEmailAsync(email, cancellationToken);
 
@@ -57,7 +57,7 @@ namespace Jrg.SisMed.Application.UseCases.User
         /// <summary>
         /// Obtém um usuário por ID.
         /// </summary>
-        public async Task<ReadUserDto?> GetByIdAsync(int id, CancellationToken cancellationToken = default)
+        public virtual async Task<ReadUserDto?> GetByIdAsync(int id, CancellationToken cancellationToken = default)
         {
             var result = await _readUserService.GetByIdAsync(id, cancellationToken);
 

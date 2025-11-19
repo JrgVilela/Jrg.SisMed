@@ -27,7 +27,7 @@ namespace Jrg.SisMed.Application.UseCases.User
         /// Executa a exclusão de um usuário.
         /// </summary>
         /// <param name="id">ID do usuário a ser excluído.</param>
-        public async Task ExecuteAsync(int id)
+        public virtual async Task ExecuteAsync(int id)
         {
             if (id <= 0)
                 throw new ArgumentException(_localizer.For(CommonMessage.InvalidArgument), nameof(id));

@@ -21,7 +21,7 @@ namespace Jrg.SisMed.Application.UseCases.Organization
             _localizer = localizer;
         }
 
-        public async Task<int> ExecuteAsync(CreateOrganizationDto organizationDto, CancellationToken cancellationToken = default)
+        public virtual async Task<int> ExecuteAsync(CreateOrganizationDto organizationDto, CancellationToken cancellationToken = default)
         {
             if (organizationDto == null)
                 throw new ArgumentNullException(nameof(organizationDto), _localizer.For(CommonMessage.ArgumentNull_Generic, nameof(organizationDto)));

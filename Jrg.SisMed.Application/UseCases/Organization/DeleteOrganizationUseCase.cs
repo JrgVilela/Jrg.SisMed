@@ -20,7 +20,7 @@ namespace Jrg.SisMed.Application.UseCases.Organization
             _localizer = localizer;
         }
 
-        public async Task ExecuteAsync(int id)
+        public virtual async Task ExecuteAsync(int id)
         {
             if(id <= 0)
                 throw new ArgumentException(_localizer.For(CommonMessage.InvalidArgument), nameof(id));

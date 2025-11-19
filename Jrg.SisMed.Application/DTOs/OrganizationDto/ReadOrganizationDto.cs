@@ -10,20 +10,20 @@ namespace Jrg.SisMed.Application.DTOs.OrganizationDto
     public class ReadOrganizationDto
     {
         public int Id { get; set; }
-        public string NameFantasia { get; private set; } = string.Empty;
-        public string RazaoSocial { get; private set; } = string.Empty;
-        public string Cnpj { get; private set; } = string.Empty;
-        public string PrincipalDdi { get; private set; } = string.Empty;
-        public string PrincipalDdd { get; private set; } = string.Empty;
-        public string PrincipalPhone { get; private set; } = string.Empty;
-        public string PrincipalPhoneFormatted { get; private set; } = string.Empty;
-        public string PrincipalPhoneFullFormatted { get; private set; } = string.Empty;
+        public string NameFantasia { get; set; } = string.Empty;
+        public string RazaoSocial { get; set; } = string.Empty;
+        public string Cnpj { get; set; } = string.Empty;
+        public string PrincipalDdi { get; set; } = string.Empty;
+        public string PrincipalDdd { get; set; } = string.Empty;
+        public string PrincipalPhone { get; set; } = string.Empty;
+        public string PrincipalPhoneFormatted { get; set; } = string.Empty;
+        public string PrincipalPhoneFullFormatted { get; set; } = string.Empty;
 
-        public OrganizationEnum.State State { get; private set; } = OrganizationEnum.State.Active;
+        public OrganizationEnum.State State { get; set; } = OrganizationEnum.State.Active;
 
         public static ReadOrganizationDto FromDomainOrganization(Organization organization)
         {
-            Phone phone = organization.Phones.FirstOrDefault()?.Phone;
+            Phone? phone = organization.Phones.FirstOrDefault()?.Phone;
 
             return new ReadOrganizationDto
             {

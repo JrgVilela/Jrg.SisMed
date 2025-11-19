@@ -30,7 +30,7 @@ namespace Jrg.SisMed.Application.UseCases.User
         /// <param name="id">ID do usuário a ser atualizado.</param>
         /// <param name="userDto">DTO com os novos dados do usuário.</param>
         /// <param name="cancellationToken">Token de cancelamento.</param>
-        public async Task ExecuteAsync(int id, UpdateUserDto userDto, CancellationToken cancellationToken = default)
+        public virtual async Task ExecuteAsync(int id, UpdateUserDto userDto, CancellationToken cancellationToken = default)
         {
             if (id <= 0 || userDto == null)
                 throw new ArgumentNullException(nameof(userDto), _localizer.For(CommonMessage.ArgumentNull));

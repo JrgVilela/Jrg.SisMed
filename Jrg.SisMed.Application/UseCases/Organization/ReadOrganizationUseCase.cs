@@ -17,12 +17,12 @@ namespace Jrg.SisMed.Application.UseCases.Organization
             _readOrganizationService = readOrganizationService;
         }
 
-        public async Task<bool> ExistsByIdAsync(int id, CancellationToken cancellationToken = default)
+        public virtual async Task<bool> ExistsByIdAsync(int id, CancellationToken cancellationToken = default)
         {
             return await _readOrganizationService.ExistsByIdAsync(id, cancellationToken);
         }
 
-        public async Task<IEnumerable<ReadOrganizationDto>> GetAllAsync(CancellationToken cancellationToken = default)
+        public virtual async Task<IEnumerable<ReadOrganizationDto>> GetAllAsync(CancellationToken cancellationToken = default)
         {
             var result = await _readOrganizationService.GetAllAsync(cancellationToken);
 
@@ -32,7 +32,7 @@ namespace Jrg.SisMed.Application.UseCases.Organization
             return result.Select(o => ReadOrganizationDto.FromDomainOrganization(o));
         }
 
-        public async Task<ReadOrganizationDto?> GetByCnpjAsync(string cnpj, CancellationToken cancellationToken = default)
+        public virtual async Task<ReadOrganizationDto?> GetByCnpjAsync(string cnpj, CancellationToken cancellationToken = default)
         {
             var result = await _readOrganizationService.GetByCnpjAsync(cnpj, cancellationToken);
 
@@ -42,7 +42,7 @@ namespace Jrg.SisMed.Application.UseCases.Organization
             return ReadOrganizationDto.FromDomainOrganization(result);
         }
 
-        public async Task<ReadOrganizationDto?> GetByIdAsync(int id, CancellationToken cancellationToken = default)
+        public virtual async Task<ReadOrganizationDto?> GetByIdAsync(int id, CancellationToken cancellationToken = default)
         {
             var result = await _readOrganizationService.GetByIdAsync(id, cancellationToken);
 
