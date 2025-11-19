@@ -1,0 +1,33 @@
+﻿using Jrg.SisMed.Application.Services.OrganizationServices;
+using Jrg.SisMed.Application.Services.UserServices;
+using Jrg.SisMed.Domain.Interfaces.Services.OrganizationServices;
+using Jrg.SisMed.Domain.Interfaces.Services.UserServices;
+using Microsoft.Extensions.DependencyInjection;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Jrg.SisMed.Infra.IoC
+{
+    public static class ServiceDependencyInjection
+    {
+        public static IServiceCollection AddServices(this IServiceCollection services)
+        {
+            // Organization Services
+            services.AddScoped<ICreateOrganizationService, CreateOrganizationService>();
+            services.AddScoped<IUpdateOrganizationService, UpdateOrganizationService>();
+            services.AddScoped<IDeleteOrganizationService, DeleteOrganizationService>();
+            services.AddScoped<IReadOrganizationService, ReadOrganizationService>();
+
+            // User Services
+            services.AddScoped<ICreateUserService, CreateUserService>();
+            services.AddScoped<IUpdateUserService, UpdateUserService>();
+            services.AddScoped<IReadUserService, ReadUserService>();
+            services.AddScoped<IDeleteUserService, DeleteUserService>();
+
+            return services;
+        }
+    }
+}

@@ -44,37 +44,18 @@ namespace Jrg.SisMed.Infra.IoC
             // Professional Factory Provider
             services.AddSingleton<IProfessionalFactoryProvider, ProfessionalModuleFactoryProvider>();
 
-            // Organization Services
-            services.AddScoped<ICreateOrganizationService, CreateOrganizationService>();
-            services.AddScoped<IUpdateOrganizationService, UpdateOrganizationService>();
-            services.AddScoped<IDeleteOrganizationService, DeleteOrganizationService>();
-            services.AddScoped<IReadOrganizationService, ReadOrganizationService>();
-
-            // User Services
-            services.AddScoped<ICreateUserService, CreateUserService>();
-            services.AddScoped<IUpdateUserService, UpdateUserService>();
-            services.AddScoped<IReadUserService, ReadUserService>();
-            services.AddScoped<IDeleteUserService, DeleteUserService>();
-
-            // Organization UseCases
-            services.AddScoped<CreateOrganizationUseCase>();
-            services.AddScoped<UpdateOrganizationUseCase>();
-            services.AddScoped<DeleteOrganizationUseCase>();
-            services.AddScoped<ReadOrganizationUseCase>();
-
-            // User UseCases
-            services.AddScoped<CreateUserUseCase>();
-            services.AddScoped<UpdateUserUseCase>();
-            services.AddScoped<ReadUserUseCase>();
-            services.AddScoped<DeleteUserUseCase>();
-
-            // Repositories
-            services.AddScoped<IOrganizationRepository, OrganizationRepository>();
-            services.AddScoped<IProfessionalRepository, ProfessionalRepository>();
-            services.AddScoped<IUserRepository, UserRepository>();
-
             // Registra FluentValidation - registra TODOS os validators do assembly automaticamente
             services.AddValidatorsFromAssemblyContaining<CreateUserValidation>();
+
+            //Injeta todos os services
+            services.AddServices();
+
+            //Injeta todos os use cases
+            services.AddUseCases();
+
+            //Injeto todos os repositories
+            services.AddRepositories();
+
 
             return services;
         }
