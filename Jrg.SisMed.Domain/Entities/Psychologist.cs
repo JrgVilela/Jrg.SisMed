@@ -35,9 +35,7 @@ namespace Jrg.SisMed.Domain.Entities
             string? rg,
             DateTime? birthDate,
             ProfessionalEnum.Gender gender,
-            string email,
-            string password, 
-            string crp) : base(name, cpf, rg, birthDate, gender, email, password)
+            string crp) : base(name, cpf, rg, birthDate, gender)
         {
             Crp = crp;
             Normalize();
@@ -61,11 +59,9 @@ namespace Jrg.SisMed.Domain.Entities
             string? rg,
             DateTime? birthDate,
             ProfessionalEnum.Gender gender,
-            string email,
-            string password,
             string crp)
         {
-            base.Update(name, cpf, rg, birthDate, gender, email, password);
+            base.Update(name, cpf, rg, birthDate, gender);
             Crp = crp;
             Normalize();
             Validate();

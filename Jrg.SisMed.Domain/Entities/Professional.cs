@@ -46,16 +46,9 @@ namespace Jrg.SisMed.Domain.Entities
         /// <param name="gender">Gênero da pessoa.</param>
         /// <param name="email">E-mail da pessoa.</param>
         /// <param name="password">Senha em texto plano (será hasheada automaticamente).</param>
-        public Professional(
-            string name, 
-            string cpf, 
-            string? rg, 
-            DateTime? birthDate, 
-            ProfessionalEnum.Gender gender, 
-            string email, 
-            string password)
+        public Professional(string name, string cpf, string? rg, DateTime? birthDate, ProfessionalEnum.Gender gender)
         {
-            Update(name, cpf, rg, birthDate, gender, email, password);
+            Update(name, cpf, rg, birthDate, gender);
         }
         #endregion
 
@@ -70,14 +63,7 @@ namespace Jrg.SisMed.Domain.Entities
         /// <param name="gender">Gênero da pessoa.</param>
         /// <param name="email">E-mail da pessoa.</param>
         /// <param name="password">Senha em texto plano (será hasheada automaticamente).</param>
-        public void Update(
-            string name, 
-            string cpf, 
-            string? rg, 
-            DateTime? birthDate, 
-            ProfessionalEnum.Gender gender, 
-            string email, 
-            string password)
+        public void Update(string name, string cpf, string? rg, DateTime? birthDate, ProfessionalEnum.Gender gender)
         {
             // Atribui valores temporários para validação
             Name = name;
@@ -85,13 +71,13 @@ namespace Jrg.SisMed.Domain.Entities
             Rg = rg;
             BirthDate = birthDate;
             Gender = gender;
-            
+
             // Valida ANTES de fazer hash da senha
             Validate();
-            
+
             // Normaliza os dados
             Normalize();
-            
+
             // Atualiza timestamp
             if (Id > 0) // Se já existe, atualiza UpdatedAt
                 UpdatedAt = DateTime.UtcNow;
@@ -104,14 +90,14 @@ namespace Jrg.SisMed.Domain.Entities
         {
             if (address == null)
                 throw new ArgumentNullException(nameof(address));
-                
+
             // Se for o primeiro endereço ou marcado como principal, remove flag dos outros
             if (!Addresses.Any() || address.IsPrincipal)
             {
                 foreach (var addr in Addresses)
                     addr.SetAsSecondary();
             }
-            
+
             Addresses.Add(address);
         }
 
@@ -122,14 +108,14 @@ namespace Jrg.SisMed.Domain.Entities
         {
             if (phone == null)
                 throw new ArgumentNullException(nameof(phone));
-                
+
             // Se for o primeiro telefone ou marcado como principal, remove flag dos outros
             if (!Phones.Any() || phone.IsPrincipal)
             {
                 foreach (var p in Phones)
                     p.SetAsSecondary();
             }
-            
+
             Phones.Add(phone);
         }
 
@@ -140,7 +126,7 @@ namespace Jrg.SisMed.Domain.Entities
         {
             if (address == null)
                 throw new ArgumentNullException(nameof(address));
-                
+
             Addresses.Remove(address);
         }
 
@@ -151,7 +137,7 @@ namespace Jrg.SisMed.Domain.Entities
         {
             if (phone == null)
                 throw new ArgumentNullException(nameof(phone));
-                
+
             Phones.Remove(phone);
         }
 
@@ -185,27 +171,27 @@ namespace Jrg.SisMed.Domain.Entities
             // Validação de Nome
             v.When(Name.IsNullOrWhiteSpace(), "O nome é obrigatório.");
             v.When(Name.Length > MaxNameLength, $"O nome deve conter no máximo {MaxNameLength} caracteres.");
-            
+
             // Validação de CPF
             v.When(Cpf.IsNullOrWhiteSpace(), "O CPF é obrigatório.");
             v.When(!Cpf.IsCpf(), "O CPF informado é inválido.");
-            
+
             // Validação de RG (opcional)
-            v.When(!Rg.IsNullOrWhiteSpace() && Rg!.Length > MaxRgLength, 
+            v.When(!Rg.IsNullOrWhiteSpace() && Rg!.Length > MaxRgLength,
                 $"O RG deve conter no máximo {MaxRgLength} caracteres.");
-            
+
             // Validação de Data de Nascimento
-            v.When(BirthDate.HasValue && BirthDate.Value > DateTime.Now, 
+            v.When(BirthDate.HasValue && BirthDate.Value > DateTime.Now,
                 "A data de nascimento não pode ser maior que a data atual.");
-            v.When(BirthDate.HasValue && BirthDate.Value < DateTime.Now.AddYears(-150), 
+            v.When(BirthDate.HasValue && BirthDate.Value < DateTime.Now.AddYears(-150),
                 "A data de nascimento é inválida.");
 
             // Validação de Enum - CORRIGIDO: Adiciona ! para inverter a lógica
-            v.When(!Enum.IsDefined(typeof(ProfessionalEnum.Gender), Gender), 
+            v.When(!Enum.IsDefined(typeof(ProfessionalEnum.Gender), Gender),
                 "O gênero informado é inválido.");
-            v.When(!Enum.IsDefined(typeof(ProfessionalEnum.State), State), 
+            v.When(!Enum.IsDefined(typeof(ProfessionalEnum.State), State),
                 "O status da pessoa é inválido.");
-            
+
             v.ThrowIfAny();
         }
 
@@ -234,7 +220,7 @@ namespace Jrg.SisMed.Domain.Entities
         {
             /// <summary>Pessoa ativa no sistema.</summary>
             Active = 1,
-            
+
             /// <summary>Pessoa inativa no sistema.</summary>
             Inactive = 2
         }
@@ -246,13 +232,13 @@ namespace Jrg.SisMed.Domain.Entities
         {
             /// <summary>Não especificado.</summary>
             None = 0,
-            
+
             /// <summary>Masculino.</summary>
             Male = 1,
-            
+
             /// <summary>Feminino.</summary>
             Female = 2,
-            
+
             /// <summary>Outro.</summary>
             Other = 3
         }

@@ -37,8 +37,6 @@ namespace Jrg.SisMed.Application.Factories
                 nutritionistDto.Rg,
                 nutritionistDto.BirthDate,
                 nutritionistDto.Gender,
-                nutritionistDto.Email,
-                nutritionistDto.Password,
                 nutritionistDto.Crn
             );
         }
@@ -52,8 +50,6 @@ namespace Jrg.SisMed.Application.Factories
             string? rg,
             DateTime? birthDate,
             ProfessionalEnum.Gender gender,
-            string email,
-            string password,
             string professionalRegistration)
         {
             // Validar CRN específico
@@ -66,8 +62,6 @@ namespace Jrg.SisMed.Application.Factories
                 rg,
                 birthDate,
                 gender,
-                email,
-                password,
                 NormalizeCrn(professionalRegistration)
             );
         }

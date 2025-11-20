@@ -37,8 +37,6 @@ namespace Jrg.SisMed.Application.Factories
                 psychologistDto.Rg,
                 psychologistDto.BirthDate,
                 psychologistDto.Gender,
-                psychologistDto.Email,
-                psychologistDto.Password,
                 psychologistDto.Crp
             );
         }
@@ -52,8 +50,6 @@ namespace Jrg.SisMed.Application.Factories
             string? rg,
             DateTime? birthDate,
             ProfessionalEnum.Gender gender,
-            string email,
-            string password,
             string professionalRegistration)
         {
             // Validar CRP específico
@@ -66,8 +62,6 @@ namespace Jrg.SisMed.Application.Factories
                 rg,
                 birthDate,
                 gender,
-                email,
-                password,
                 NormalizeCrp(professionalRegistration)
             );
         }

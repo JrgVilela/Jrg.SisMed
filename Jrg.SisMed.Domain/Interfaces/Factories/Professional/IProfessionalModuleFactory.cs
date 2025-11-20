@@ -23,8 +23,6 @@ namespace Jrg.SisMed.Domain.Interfaces.Factories.Professional
             string? rg,
             DateTime? birthDate,
             ProfessionalEnum.Gender gender,
-            string email,
-            string password,
             string professionalRegistration
         );
     }
