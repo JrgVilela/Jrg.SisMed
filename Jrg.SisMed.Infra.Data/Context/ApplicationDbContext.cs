@@ -23,6 +23,7 @@ namespace Jrg.SisMed.Infra.Data.Context
         public DbSet<OrganizationPhone> OrganizationPhones { get; set; }
         public DbSet<ProfessionalAddress> PersonAddresses { get; set; }
         public DbSet<ProfessionalPhone> PersonPhones { get; set; }
+        public DbSet<OrganizationProfessional> OrganizationProfessionals { get; set; }
         public DbSet<User> Users { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)

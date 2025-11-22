@@ -1,4 +1,5 @@
 ﻿using Jrg.SisMed.Application.UseCases.Organization;
+using Jrg.SisMed.Application.UseCases.ProfessionalUseCases;
 using Jrg.SisMed.Application.UseCases.User;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -18,6 +19,9 @@ namespace Jrg.SisMed.Infra.IoC
             services.AddScoped<UpdateOrganizationUseCase>();
             services.AddScoped<DeleteOrganizationUseCase>();
             services.AddScoped<ReadOrganizationUseCase>();
+
+            // Professional UseCases
+            services.AddScoped<RegisterProfessionalUseCase>();
 
             // User UseCases
             services.AddScoped<CreateUserUseCase>();

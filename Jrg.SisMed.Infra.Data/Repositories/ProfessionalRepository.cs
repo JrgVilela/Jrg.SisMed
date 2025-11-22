@@ -15,7 +15,7 @@ namespace Jrg.SisMed.Infra.Data.Repositories
     /// <summary>
     /// Implementação do repositório de Professional (User).
     /// </summary>
-    public class ProfessionalRepository : Repository<Professional>, IProfessionalRepository
+    public class ProfessionalRepository : Repository<Professional>, IProfessionalRepository<Professional>
     {
         /// <summary>
         /// Construtor do repositório de usuários.

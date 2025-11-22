@@ -10,7 +10,7 @@ namespace Jrg.SisMed.Domain.Interfaces.Repositories
     /// <summary>
     /// Interface específica para o repositório de Professional (User).
     /// </summary>
-    public interface IProfessionalRepository : IRepository<Professional>
+    public interface IProfessionalRepository<T> : IRepository<T>
     {
        
         /// <summary>
@@ -19,7 +19,7 @@ namespace Jrg.SisMed.Domain.Interfaces.Repositories
         /// <param name="cpf">CPF do usuário (apenas números).</param>
         /// <param name="cancellationToken">Token de cancelamento.</param>
         /// <returns>Usuário encontrado ou null.</returns>
-        Task<Professional?> GetByCpfAsync(string cpf, CancellationToken cancellationToken = default);
+        Task<T?> GetByCpfAsync(string cpf, CancellationToken cancellationToken = default);
 
 
         /// <summary>
@@ -36,7 +36,7 @@ namespace Jrg.SisMed.Domain.Interfaces.Repositories
         /// </summary>
         /// <param name="cancellationToken">Token de cancelamento.</param>
         /// <returns>Lista de usuários ativos.</returns>
-        Task<IEnumerable<Professional>> GetActiveUsersAsync(CancellationToken cancellationToken = default);
+        Task<IEnumerable<T>> GetActiveUsersAsync(CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Obtém um usuário com seus endereços e telefones (eager loading).
@@ -44,6 +44,6 @@ namespace Jrg.SisMed.Domain.Interfaces.Repositories
         /// <param name="id">ID do usuário.</param>
         /// <param name="cancellationToken">Token de cancelamento.</param>
         /// <returns>Usuário com relacionamentos carregados ou null.</returns>
-        Task<Professional?> GetByIdWithDetailsAsync(int id, CancellationToken cancellationToken = default);
+        Task<T?> GetByIdWithDetailsAsync(int id, CancellationToken cancellationToken = default);
     }
 }

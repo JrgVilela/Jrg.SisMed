@@ -62,6 +62,10 @@ namespace Jrg.SisMed.Infra.Data.EntityConfiguration
             builder.Property(p => p.UpdatedAt)
                 .HasComment("Data da última atualização do registro");
 
+            builder.Property(p => p.UserId)
+                .IsRequired()
+                .HasComment("ID do usuário associado");
+
             // Índices
             builder.HasIndex(p => p.Cpf)
                 .IsUnique()
@@ -76,7 +80,17 @@ namespace Jrg.SisMed.Infra.Data.EntityConfiguration
             builder.HasIndex(p => p.CreatedAt)
                 .HasDatabaseName("IX_Professional_CreatedAt");
 
+            builder.HasIndex(p => p.UserId)
+                .IsUnique()
+                .HasDatabaseName("IX_Professional_UserId");
+
             // Relacionamentos
+            builder.HasOne(p => p.User)
+                .WithOne(u => u.Professional)
+                .HasForeignKey<Professional>(p => p.UserId)
+                .OnDelete(DeleteBehavior.Restrict)
+                .HasConstraintName("FK_Professionals_Users");
+
             builder.HasMany(p => p.Addresses)
                 .WithOne(pa => pa.Professional)
                 .HasForeignKey(pa => pa.ProfessionalId)
