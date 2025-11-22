@@ -15,10 +15,5 @@ namespace Jrg.SisMed.Domain.Enumerators
         /// Profissional psicólogo.
         /// </summary>
         Psychologist,
-        
-        /// <summary>
-        /// Profissional nutricionista.
-        /// </summary>
-        Nutritionist,
     }
 }

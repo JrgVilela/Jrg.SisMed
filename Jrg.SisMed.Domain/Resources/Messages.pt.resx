@@ -192,4 +192,78 @@
   <data name="UserMessage_PasswordMaxLength" xml:space="preserve">
     <value>A senha não pode exceder {0} caracteres.</value>
   </data>
+  <data name="UserMessage_ValidationCodeNotFound" xml:space="preserve">
+    <value>Código de validação não encontrado.</value>
+  </data>
+  <data name="UserMessage_ValidationCodeExpired" xml:space="preserve">
+    <value>O código de validação expirou.</value>
+  </data>
+  <data name="UserMessage_ValidationCodeAlreadyUsed" xml:space="preserve">
+    <value>O código de validação já foi utilizado.</value>
+  </data>
+  <data name="UserMessage_ValidationCodeInvalid" xml:space="preserve">
+    <value>O código de validação é inválido.</value>
+  </data>
+  <data name="UserMessage_UserAlreadyActive" xml:space="preserve">
+    <value>O usuário já está ativo.</value>
+  </data>
+  <!-- Professional Messages -->
+  <data name="ProfessionalMessage_NameRequired" xml:space="preserve">
+    <value>O nome do profissional é obrigatório.</value>
+  </data>
+  <data name="ProfessionalMessage_NameMinLength" xml:space="preserve">
+    <value>O nome deve conter no mínimo {0} caracteres.</value>
+  </data>
+  <data name="ProfessionalMessage_NameMaxLength" xml:space="preserve">
+    <value>O nome deve conter no máximo {0} caracteres.</value>
+  </data>
+  <data name="ProfessionalMessage_CpfRequired" xml:space="preserve">
+    <value>O CPF é obrigatório.</value>
+  </data>
+  <data name="ProfessionalMessage_CpfInvalid" xml:space="preserve">
+    <value>O CPF informado é inválido.</value>
+  </data>
+  <data name="ProfessionalMessage_RegisterNumberRequired" xml:space="preserve">
+    <value>O número de registro profissional é obrigatório.</value>
+  </data>
+  <data name="ProfessionalMessage_RegisterNumberMaxLength" xml:space="preserve">
+    <value>O número de registro deve conter no máximo {0} caracteres.</value>
+  </data>
+  <data name="ProfessionalMessage_ProfessionalTypeRequired" xml:space="preserve">
+    <value>O tipo de profissional é obrigatório.</value>
+  </data>
+  <data name="ProfessionalMessage_ProfessionalTypeInvalid" xml:space="preserve">
+    <value>O tipo de profissional é inválido.</value>
+  </data>
+  <data name="ProfessionalMessage_PasswordStrengthRequired" xml:space="preserve">
+    <value>A senha deve conter letras maiúsculas, minúsculas, números e caracteres especiais.</value>
+  </data>
+  <data name="ProfessionalMessage_PhoneRequired" xml:space="preserve">
+    <value>O telefone é obrigatório.</value>
+  </data>
+  <data name="ProfessionalMessage_PhoneInvalid" xml:space="preserve">
+    <value>O telefone informado é inválido. Formato esperado: '+55 (11) 98399-1005' (celular) ou '+55 (11) 8399-1005' (fixo).</value>
+  </data>
+  <data name="ProfessionalMessage_CpfAlreadyExists" xml:space="preserve">
+    <value>Já existe um profissional cadastrado com este CPF.</value>
+  </data>
+  <data name="ProfessionalMessage_RegisterNumberAlreadyExists" xml:space="preserve">
+    <value>Já existe um profissional cadastrado com este número de registro.</value>
+  </data>
+  <!-- Phone Messages -->
+  <data name="PhoneMessage_PhoneRequired" xml:space="preserve">
+    <value>O telefone é obrigatório.</value>
+  </data>
+  <data name="PhoneMessage_PhoneInvalid" xml:space="preserve">
+    <value>O telefone informado é inválido. Formato esperado: '+55 (11) 98399-1005' (celular) ou '+55 (11) 8399-1005' (fixo).</value>
+  </data>
+  <data name="PhoneMessage_DdiInvalid" xml:space="preserve">
+    <value>O código do país (DDI) é inválido.</value>
+  </data>
+  <data name="PhoneMessage_DddInvalid" xml:space="preserve">
+    <value>O código de área (DDD) é inválido.</value>
+  </data>
+  <data name="PhoneMessage_NumberInvalid" xml:space="preserve">
+    <value>O número do telefone é inválido.</value>
+  </data>
 </root>

@@ -82,6 +82,79 @@ namespace Jrg.SisMed.Domain.Resources
         PasswordMinLength,
         PasswordMaxLength,
         StateInvalid,
-        MultipleUsersFound
+        MultipleUsersFound,
+        ValidationCodeNotFound,
+        ValidationCodeExpired,
+        ValidationCodeAlreadyUsed,
+        ValidationCodeInvalid,
+        UserAlreadyActive
+    }
+
+    public enum ProfessionalMessage
+    {
+        // Professional
+        NameRequired,
+        NameMinLength,
+        NameMaxLength,
+        CpfRequired,
+        CpfInvalid,
+        RegisterNumberRequired,
+        RegisterNumberMaxLength,
+        ProfessionalTypeRequired,
+        ProfessionalTypeInvalid,
+        
+        // Password
+        PasswordStrengthRequired,
+        
+        // Phone
+        PhoneRequired,
+        PhoneInvalid,
+        
+        // Address
+        StreetRequired,
+        StreetMaxLength,
+        NumberRequired,
+        NumberMaxLength,
+        ComplementMaxLength,
+        NeighborhoodRequired,
+        NeighborhoodMaxLength,
+        ZipCodeRequired,
+        ZipCodeInvalid,
+        CityRequired,
+        CityMaxLength,
+        StateRequired,
+        StateLength,
+        StateInvalid,
+        
+        // Validation
+        CpfAlreadyExists,
+        RegisterNumberAlreadyExists
+    }
+
+    public enum AddressMessage
+    {
+        StreetRequired,
+        StreetMaxLength,
+        NumberRequired,
+        NumberMaxLength,
+        ComplementMaxLength,
+        NeighborhoodRequired,
+        NeighborhoodMaxLength,
+        ZipCodeRequired,
+        ZipCodeInvalid,
+        CityRequired,
+        CityMaxLength,
+        StateRequired,
+        StateLength,
+        StateInvalid
+    }
+
+    public enum PhoneMessage
+    {
+        PhoneRequired,
+        PhoneInvalid,
+        DdiInvalid,
+        DddInvalid,
+        NumberInvalid
     }
 }

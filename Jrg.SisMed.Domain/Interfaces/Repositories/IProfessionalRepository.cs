@@ -32,6 +32,16 @@ namespace Jrg.SisMed.Domain.Interfaces.Repositories
         Task<bool> CpfExistsAsync(string cpf, int? excludeUserId = null, CancellationToken cancellationToken = default);
 
         /// <summary>
+        /// Verifica se um número de registro profissional já está cadastrado.
+        /// Para Psychologist, verifica o CRP. Para Nutritionist, verifica o CRN, etc.
+        /// </summary>
+        /// <param name="registerNumber">Número de registro a ser verificado.</param>
+        /// <param name="excludeProfessionalId">ID do profissional a ser excluído da verificação (para updates).</param>
+        /// <param name="cancellationToken">Token de cancelamento.</param>
+        /// <returns>True se o número de registro já existe, false caso contrário.</returns>
+        Task<bool> RegisterNumberExistsAsync(string registerNumber, int? excludeProfessionalId = null, CancellationToken cancellationToken = default);
+
+        /// <summary>
         /// Obtém usuários ativos.
         /// </summary>
         /// <param name="cancellationToken">Token de cancelamento.</param>
