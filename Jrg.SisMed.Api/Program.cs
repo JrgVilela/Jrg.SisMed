@@ -9,6 +9,30 @@ var builder = WebApplication.CreateBuilder(args);
 // Adiciona suporte à localização, apontando para a pasta dentro do Domain
 builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
 
+// Configuração CORS
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", policy =>
+    {
+        policy.AllowAnyOrigin()
+              .AllowAnyMethod()
+              .AllowAnyHeader();
+    });
+
+    // Política mais restritiva para produção (recomendado)
+    options.AddPolicy("Production", policy =>
+    {
+        policy.WithOrigins(
+                "https://seudominio.com.br",
+                "https://www.seudominio.com.br",
+                "https://app.seudominio.com.br"
+            )
+            .AllowAnyMethod()
+            .AllowAnyHeader()
+            .AllowCredentials();
+    });
+});
+
 // Configuração JWT Authentication
 var jwtSettings = builder.Configuration.GetSection("JwtSettings");
 var secretKey = jwtSettings["SecretKey"] ?? throw new InvalidOperationException("JWT SecretKey não configurada.");
@@ -140,6 +164,11 @@ if (app.Urls.Any(url => url.StartsWith("https://", StringComparison.OrdinalIgnor
 {
     app.UseHttpsRedirection();
 }
+
+// CORS - Deve vir ANTES de Authentication e Authorization
+// Em desenvolvimento usa a política "AllowAll"
+// Em produção, altere para "Production"
+app.UseCors(app.Environment.IsDevelopment() ? "AllowAll" : "Production");
 
 // IMPORTANTE: A ordem é crucial!
 app.UseAuthentication();  // Deve vir ANTES do UseAuthorization
