@@ -20,10 +20,11 @@ namespace Jrg.SisMed.Domain.Entities
         public string Name { get; private set; } = string.Empty;
         public string Email { get; private set; } = string.Empty;
         public string Password { get; private set; } = string.Empty;
+        public virtual Professional? Professional { get; private set; }
+
         public UserEnum.State State { get; private set; }
 
         #region Constructors
-
         protected User() { }
 
         public User(string name, string email, string password, UserEnum.State state = UserEnum.State.Active)
@@ -54,6 +55,12 @@ namespace Jrg.SisMed.Domain.Entities
         public void Deactivate()
         {
             State = UserEnum.State.Inactive;
+            UpdatedAt = DateTime.UtcNow;
+        }
+
+        public void Block()
+        {
+            State = UserEnum.State.Blocked;
             UpdatedAt = DateTime.UtcNow;
         }
 

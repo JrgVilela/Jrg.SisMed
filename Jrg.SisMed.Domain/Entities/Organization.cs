@@ -42,6 +42,11 @@ namespace Jrg.SisMed.Domain.Entities
         /// </summary>
         public virtual List<OrganizationPhone> Phones { get; private set; } = new List<OrganizationPhone>();
 
+        /// <summary>
+        /// Lista de profissionais associados à organização.
+        /// </summary>
+        public virtual List<OrganizationProfessional> Professionals { get; private set; } = new List<OrganizationProfessional>();
+
         #region Constructors
         /// <summary>
         /// Construtor protegido para uso do Entity Framework.

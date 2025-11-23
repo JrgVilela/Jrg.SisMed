@@ -15,7 +15,7 @@ namespace Jrg.SisMed.Infra.Data.Repositories
     /// <summary>
     /// Implementação do repositório de Professional (User).
     /// </summary>
-    public class ProfessionalRepository : Repository<Professional>, IProfessionalRepository
+    public class ProfessionalRepository : Repository<Professional>, IProfessionalRepository<Professional>
     {
         /// <summary>
         /// Construtor do repositório de usuários.
@@ -92,6 +92,30 @@ namespace Jrg.SisMed.Infra.Data.Repositories
                 .Include(u => u.Phones)
                     .ThenInclude(pp => pp.Phone)
                 .FirstOrDefaultAsync(u => u.Id == id, cancellationToken);
+        }
+
+        /// <summary>
+        /// Verifica se um número de registro profissional já está cadastrado.
+        /// Como Professional é abstrato, este método não pode verificar propriedades específicas.
+        /// Deve ser implementado nas classes derivadas (PsychologyRepository, NutritionistRepository, etc).
+        /// </summary>
+        /// <param name="registerNumber">Número de registro a ser verificado.</param>
+        /// <param name="excludeProfessionalId">ID do profissional a ser excluído da verificação.</param>
+        /// <param name="cancellationToken">Token de cancelamento.</param>
+        /// <returns>False (sempre), pois não há propriedade específica na classe base.</returns>
+        /// <remarks>
+        /// Este método retorna false porque Professional é abstrato e não possui
+        /// uma propriedade genérica de registro. As implementações concretas
+        /// (PsychologyRepository, NutritionistRepository) devem sobrescrever este método.
+        /// </remarks>
+        public virtual Task<bool> RegisterNumberExistsAsync(
+            string registerNumber, 
+            int? excludeProfessionalId = null, 
+            CancellationToken cancellationToken = default)
+        {
+            // Professional é abstrato e não tem propriedade de registro
+            // As implementações concretas devem sobrescrever este método
+            return Task.FromResult(false);
         }
     }
 }

@@ -6,9 +6,9 @@ using Jrg.SisMed.Application.Services.UserServices;
 using Jrg.SisMed.Application.UseCases.Organization;
 using Jrg.SisMed.Application.UseCases.User;
 using Jrg.SisMed.Application.Validations.UserValidations;
-using Jrg.SisMed.Domain.Interfaces.Factories.Professional;
-using Jrg.SisMed.Domain.Interfaces.Providers.Professional;
-using Jrg.SisMed.Domain.Interfaces.Repositories;
+using Jrg.SisMed.Domain.Entities;
+using Jrg.SisMed.Domain.Interfaces.Factories.ProfessionalFactories;
+using Jrg.SisMed.Domain.Interfaces.Providers.ProfessionalProviders;
 using Jrg.SisMed.Domain.Interfaces.Services.OrganizationServices;
 using Jrg.SisMed.Domain.Interfaces.Services.UserServices;
 using Jrg.SisMed.Infra.Data.Context;
@@ -38,8 +38,7 @@ namespace Jrg.SisMed.Infra.IoC
                     b => b.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName)));
 
             // Professional Factories
-            services.AddTransient<IProfessionalModuleFactory, PsychologyModuleFactory>();
-            services.AddTransient<IProfessionalModuleFactory, NutritionModuleFactory>();
+            services.AddTransient<IProfessionalModuleFactory<Psychologist>, PsychologyModuleFactory>();
 
             // Professional Factory Provider
             services.AddSingleton<IProfessionalFactoryProvider, ProfessionalModuleFactoryProvider>();

@@ -2,6 +2,7 @@
 using Jrg.SisMed.Domain.Helpers;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -24,11 +25,13 @@ namespace Jrg.SisMed.Domain.Entities
         public ProfessionalEnum.Gender Gender { get; private set; } = ProfessionalEnum.Gender.None;
         public ProfessionalEnum.State State { get; private set; } = ProfessionalEnum.State.Active;
 
-        //public string Email { get; private set; } = string.Empty;
-        //public string PasswordHash { get; private set; } = string.Empty;
+        [ForeignKey(nameof(User))]
+        public int UserId { get; private set; }
+        public virtual User? User { get; private set; }
 
         public virtual List<ProfessionalAddress> Addresses { get; private set; } = new List<ProfessionalAddress>();
         public virtual List<ProfessionalPhone> Phones { get; private set; } = new List<ProfessionalPhone>();
+        public virtual List<OrganizationProfessional> Organizations { get; private set; } = new List<OrganizationProfessional>();
 
         #region Constructors
         /// <summary>
@@ -84,6 +87,52 @@ namespace Jrg.SisMed.Domain.Entities
         }
 
         /// <summary>
+        /// Define o estado do usuário associado ao profissional.
+        /// </summary>
+        /// <param name="state">Estado do usuário.</param>
+        /// <exception cref="InvalidOperationException">Lançada se nenhum usuário estiver associado.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">Lançada se o estado for inválido.</exception>
+        public void SetStateUser(UserEnum.State state)
+        {
+            if (User == null)
+                throw new InvalidOperationException("Nenhum usuário está associado a este profissional.");
+
+            switch (state)
+            {
+                case UserEnum.State.Active:
+                    User.Activate();
+                    break;
+                case UserEnum.State.Inactive:
+                    User.Block();
+                    break;
+                case UserEnum.State.Blocked:
+                    User.Block();
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(state), "Estado inválido para o usuário.");
+            }
+        }
+
+        /// <summary>
+        /// Adiciona um usuário associado ao profissional.
+        /// </summary>
+        /// <param name="user"></param>
+        /// <exception cref="InvalidOperationException"></exception>
+        /// <exception cref="ArgumentNullException"></exception>
+        public void AddUser(User user)
+        {
+            if (User != null)
+                throw new InvalidOperationException("Um usuário já está associado a este profissional.");
+
+            if (user == null)
+                throw new ArgumentNullException(nameof(user));
+
+            user.Update(Name, user.Email, user.Password, UserEnum.State.Blocked);
+            User = user;
+            UserId = user.Id;
+        }
+
+        /// <summary>
         /// Adiciona um endereço à pessoa.
         /// </summary>
         public void AddAddress(ProfessionalAddress address)
@@ -117,6 +166,17 @@ namespace Jrg.SisMed.Domain.Entities
             }
 
             Phones.Add(phone);
+        }
+
+        public void AddOrganization(OrganizationProfessional organizationProfessional)
+        {
+            if (organizationProfessional == null)
+                throw new ArgumentNullException(nameof(organizationProfessional));
+
+            if(Organizations.Any(op => op.OrganizationId == organizationProfessional.OrganizationId))
+                throw new InvalidOperationException("A organização já está associada a este profissional.");
+
+            Organizations.Add(organizationProfessional);
         }
 
         /// <summary>

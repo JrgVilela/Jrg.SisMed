@@ -1,3 +1,4 @@
+using FluentValidation;
 using Jrg.SisMed.Api.Models;
 using Jrg.SisMed.Domain.Exceptions;
 using System.Net;
@@ -44,6 +45,7 @@ namespace Jrg.SisMed.Api.Middleware
 
             var errorResponse = exception switch
             {
+                ValidationException validationEx => HandleFluentValidationException(context, validationEx),
                 DomainValidationException domainEx => HandleDomainValidationException(context, domainEx),
                 NotFoundException notFoundEx => HandleNotFoundException(context, notFoundEx),
                 ConflictException conflictEx => HandleConflictException(context, conflictEx),
@@ -61,6 +63,23 @@ namespace Jrg.SisMed.Api.Middleware
 
             var json = JsonSerializer.Serialize(errorResponse, jsonOptions);
             await context.Response.WriteAsync(json);
+        }
+
+        /// <summary>
+        /// Trata exceções de validação do FluentValidation.
+        /// </summary>
+        private ErrorResponse HandleFluentValidationException(HttpContext context, ValidationException exception)
+        {
+            context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+
+            var errors = exception.Errors
+                .Select(e => $"{e.PropertyName}: {e.ErrorMessage}")
+                .ToList();
+
+            return ErrorResponse.CreateValidationError(
+                errors,
+                context.Request.Path
+            );
         }
 
         /// <summary>

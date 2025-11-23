@@ -4,6 +4,7 @@ using Jrg.SisMed.Infra.Data.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Jrg.SisMed.Infra.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251120214549_IncludeUserInProfessional")]
+    partial class IncludeUserInProfessional
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -220,71 +223,6 @@ namespace Jrg.SisMed.Infra.Data.Migrations
                         .HasDatabaseName("IX_OrganizationPhones_OrganizationId_PhoneId");
 
                     b.ToTable("OrganizationPhones", (string)null);
-                });
-
-            modelBuilder.Entity("Jrg.SisMed.Domain.Entities.OrganizationProfessional", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("GETUTCDATE()")
-                        .HasComment("Data de criação do registro");
-
-                    b.Property<int?>("CreatedById")
-                        .HasColumnType("int")
-                        .HasComment("ID do profissional que criou a associação");
-
-                    b.Property<int>("OrganizationId")
-                        .HasColumnType("int")
-                        .HasComment("ID da organização");
-
-                    b.Property<int>("ProfessionalId")
-                        .HasColumnType("int")
-                        .HasComment("ID do profissional");
-
-                    b.Property<int>("State")
-                        .HasColumnType("int")
-                        .HasComment("Estado da associação: 1=Active, 2=Inactive, 3=Blocked");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("datetime2")
-                        .HasComment("Data da última atualização do registro");
-
-                    b.Property<int?>("UpdatedById")
-                        .HasColumnType("int")
-                        .HasComment("ID do profissional que atualizou a associação");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CreatedAt")
-                        .HasDatabaseName("IX_OrganizationProfessionals_CreatedAt");
-
-                    b.HasIndex("CreatedById")
-                        .HasDatabaseName("IX_OrganizationProfessionals_CreatedById");
-
-                    b.HasIndex("OrganizationId")
-                        .HasDatabaseName("IX_OrganizationProfessionals_OrganizationId");
-
-                    b.HasIndex("ProfessionalId")
-                        .HasDatabaseName("IX_OrganizationProfessionals_ProfessionalId");
-
-                    b.HasIndex("State")
-                        .HasDatabaseName("IX_OrganizationProfessionals_State");
-
-                    b.HasIndex("UpdatedById")
-                        .HasDatabaseName("IX_OrganizationProfessionals_UpdatedById");
-
-                    b.HasIndex("OrganizationId", "ProfessionalId")
-                        .IsUnique()
-                        .HasDatabaseName("IX_OrganizationProfessionals_OrgId_ProfId");
-
-                    b.ToTable("OrganizationProfessionals", (string)null);
                 });
 
             modelBuilder.Entity("Jrg.SisMed.Domain.Entities.Phone", b =>
@@ -687,43 +625,6 @@ namespace Jrg.SisMed.Infra.Data.Migrations
                     b.Navigation("UpdatedBy");
                 });
 
-            modelBuilder.Entity("Jrg.SisMed.Domain.Entities.OrganizationProfessional", b =>
-                {
-                    b.HasOne("Jrg.SisMed.Domain.Entities.Professional", "CreatedBy")
-                        .WithMany()
-                        .HasForeignKey("CreatedById")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .HasConstraintName("FK_OrganizationProfessionals_CreatedBy");
-
-                    b.HasOne("Jrg.SisMed.Domain.Entities.Organization", "Organization")
-                        .WithMany("Professionals")
-                        .HasForeignKey("OrganizationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("FK_OrganizationProfessionals_Organizations");
-
-                    b.HasOne("Jrg.SisMed.Domain.Entities.Professional", "Professional")
-                        .WithMany("Organizations")
-                        .HasForeignKey("ProfessionalId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("FK_OrganizationProfessionals_Professionals");
-
-                    b.HasOne("Jrg.SisMed.Domain.Entities.Professional", "UpdatedBy")
-                        .WithMany()
-                        .HasForeignKey("UpdatedById")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .HasConstraintName("FK_OrganizationProfessionals_UpdatedBy");
-
-                    b.Navigation("CreatedBy");
-
-                    b.Navigation("Organization");
-
-                    b.Navigation("Professional");
-
-                    b.Navigation("UpdatedBy");
-                });
-
             modelBuilder.Entity("Jrg.SisMed.Domain.Entities.Phone", b =>
                 {
                     b.HasOne("Jrg.SisMed.Domain.Entities.Professional", "CreatedBy")
@@ -840,15 +741,11 @@ namespace Jrg.SisMed.Infra.Data.Migrations
             modelBuilder.Entity("Jrg.SisMed.Domain.Entities.Organization", b =>
                 {
                     b.Navigation("Phones");
-
-                    b.Navigation("Professionals");
                 });
 
             modelBuilder.Entity("Jrg.SisMed.Domain.Entities.Professional", b =>
                 {
                     b.Navigation("Addresses");
-
-                    b.Navigation("Organizations");
 
                     b.Navigation("Phones");
                 });

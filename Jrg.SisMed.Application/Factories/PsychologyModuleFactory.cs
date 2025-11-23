@@ -3,8 +3,13 @@ using Jrg.SisMed.Domain.Attributes;
 using Jrg.SisMed.Domain.Entities;
 using Jrg.SisMed.Domain.Enumerators;
 using Jrg.SisMed.Domain.Exceptions;
-using Jrg.SisMed.Domain.Interfaces.Factories.Professional;
+using Jrg.SisMed.Domain.Interfaces.Factories.ProfessionalFactories;
+using Jrg.SisMed.Domain.Interfaces.Services.ProfessionalServices;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace Jrg.SisMed.Application.Factories
 {
@@ -13,77 +18,19 @@ namespace Jrg.SisMed.Application.Factories
     /// Esta implementação na Application Layer usa DTOs para receber dados estruturados.
     /// </summary>
     [ProfessionalType(ProfessionalType.Psychologist)]
-    public class PsychologyModuleFactory : IProfessionalModuleFactory
+    public class PsychologyModuleFactory : IProfessionalModuleFactory<Psychologist>
     {
-        /// <summary>
-        /// Cria um novo profissional psicólogo com validações específicas usando DTO.
-        /// </summary>
-        /// <param name="dto">Dados para criação do psicólogo.</param>
-        /// <returns>Instância de Psychologist.</returns>
-        /// <exception cref="ArgumentException">Quando o DTO não é do tipo CreatePsychologistDto.</exception>
-        /// <exception cref="DomainValidationException">Quando o CRP é inválido.</exception>
-        public Professional CreateProfessionalFromDto(CreateProfessionalDto dto)
+        private readonly IRegisterService<Psychologist> _registerService;
+
+        public PsychologyModuleFactory(IRegisterService<Psychologist> registerService)
         {
-            if (dto is not CreatePsychologistDto psychologistDto)
-                throw new ArgumentException("DTO inválido para PsychologyModuleFactory. Esperado CreatePsychologistDto.", nameof(dto));
-
-            // Validar CRP específico
-            if (!ValidateCrp(psychologistDto.Crp))
-                throw new DomainValidationException(new[] { "CRP inválido. Deve ter pelo menos 5 caracteres." });
-
-            return CreateProfessional(
-                psychologistDto.Name,
-                psychologistDto.Cpf,
-                psychologistDto.Rg,
-                psychologistDto.BirthDate,
-                psychologistDto.Gender,
-                psychologistDto.Crp
-            );
+            _registerService = registerService;
         }
 
-        /// <summary>
-        /// Implementação da interface Domain. Cria um psicólogo com parâmetros primitivos.
-        /// </summary>
-        public Professional CreateProfessional(
-            string name,
-            string cpf,
-            string? rg,
-            DateTime? birthDate,
-            ProfessionalEnum.Gender gender,
-            string professionalRegistration)
-        {
-            // Validar CRP específico
-            if (!ValidateCrp(professionalRegistration))
-                throw new DomainValidationException(new[] { "CRP inválido. Deve ter pelo menos 5 caracteres." });
 
-            return new Psychologist(
-                name,
-                cpf,
-                rg,
-                birthDate,
-                gender,
-                NormalizeCrp(professionalRegistration)
-            );
-        }
-
-        /// <summary>
-        /// Valida o formato do CRP.
-        /// </summary>
-        /// <param name="crp">Número do CRP a ser validado.</param>
-        /// <returns>True se o CRP é válido, false caso contrário.</returns>
-        private static bool ValidateCrp(string crp)
+        public IRegisterService<Psychologist> CreateRegister()
         {
-            return !string.IsNullOrWhiteSpace(crp) && crp.Trim().Length >= 5;
-        }
-
-        /// <summary>
-        /// Normaliza o CRP removendo espaços e convertendo para maiúsculas.
-        /// </summary>
-        /// <param name="crp">CRP a ser normalizado.</param>
-        /// <returns>CRP normalizado.</returns>
-        private static string NormalizeCrp(string crp)
-        {
-            return crp.Trim().ToUpperInvariant();
+            return _registerService;
         }
     }
 }

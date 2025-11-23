@@ -1,4 +1,5 @@
-﻿using Jrg.SisMed.Domain.Interfaces.Repositories;
+﻿using Jrg.SisMed.Domain.Entities;
+using Jrg.SisMed.Domain.Interfaces.Repositories;
 using Jrg.SisMed.Infra.Data.Repositories;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -15,7 +16,8 @@ namespace Jrg.SisMed.Infra.IoC
         {
             // Repositories
             services.AddScoped<IOrganizationRepository, OrganizationRepository>();
-            services.AddScoped<IProfessionalRepository, ProfessionalRepository>();
+            services.AddScoped<IProfessionalRepository<Professional>, ProfessionalRepository>();
+            services.AddScoped<IProfessionalRepository<Psychologist>, PsychologyRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
 
             return services;
