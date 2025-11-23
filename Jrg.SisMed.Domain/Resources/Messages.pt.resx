@@ -207,7 +207,6 @@
   <data name="UserMessage_UserAlreadyActive" xml:space="preserve">
     <value>O usuário já está ativo.</value>
   </data>
-  <!-- Professional Messages -->
   <data name="ProfessionalMessage_NameRequired" xml:space="preserve">
     <value>O nome do profissional é obrigatório.</value>
   </data>
@@ -250,7 +249,48 @@
   <data name="ProfessionalMessage_RegisterNumberAlreadyExists" xml:space="preserve">
     <value>Já existe um profissional cadastrado com este número de registro.</value>
   </data>
-  <!-- Phone Messages -->
+  <data name="AddressMessage_StreetRequired" xml:space="preserve">
+    <value>A rua é obrigatório.</value>
+  </data>
+  <data name="AddressMessage_StreetMaxLength" xml:space="preserve">
+    <value>A rua não pode exceder {0} caracteres.</value>
+  </data>
+  <data name="AddressMessage_NumberRequired" xml:space="preserve">
+    <value>É necessário o número do endereço.</value>
+  </data>
+  <data name="AddressMessage_NumberMaxLength" xml:space="preserve">
+    <value>O número não pode exceder {0} caracteres.</value>
+  </data>
+  <data name="AddressMessage_ComplementMaxLength" xml:space="preserve">
+    <value>O complemento não pode exceder {0} caracteres.</value>
+  </data>
+  <data name="AddressMessage_NeighborhoodRequired" xml:space="preserve">
+    <value>É necessário ter um bairro.</value>
+  </data>
+  <data name="AddressMessage_NeighborhoodMaxLength" xml:space="preserve">
+    <value>O bairro não pode exceder {0} caracteres.</value>
+  </data>
+  <data name="AddressMessage_ZipCodeRequired" xml:space="preserve">
+    <value>O CEP é obrigatório.</value>
+  </data>
+  <data name="AddressMessage_ZipCodeInvalid" xml:space="preserve">
+    <value>O CEP fornecido é inválido.</value>
+  </data>
+  <data name="AddressMessage_CityRequired" xml:space="preserve">
+    <value>É necessário informar a cidade.</value>
+  </data>
+  <data name="AddressMessage_CityMaxLength" xml:space="preserve">
+    <value>A cidade não pode exceder {0} caracteres.</value>
+  </data>
+  <data name="AddressMessage_StateRequired" xml:space="preserve">
+    <value>O estado é obrigatório.</value>
+  </data>
+  <data name="AddressMessage_StateLength" xml:space="preserve">
+    <value>O estado deve ter exatamente {0} caracteres (abreviação de UF).</value>
+  </data>
+  <data name="AddressMessage_StateInvalid" xml:space="preserve">
+    <value>O estado fornecido é inválido.</value>
+  </data>
   <data name="PhoneMessage_PhoneRequired" xml:space="preserve">
     <value>O telefone é obrigatório.</value>
   </data>
@@ -265,5 +305,8 @@
   </data>
   <data name="PhoneMessage_NumberInvalid" xml:space="preserve">
     <value>O número do telefone é inválido.</value>
+  </data>
+  <data name="UserMessage_LoginFailed" xml:space="preserve">
+    <value>Login ou senha inválido</value>
   </data>
 </root>

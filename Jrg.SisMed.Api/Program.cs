@@ -1,10 +1,41 @@
 using Jrg.SisMed.Api.Middleware;
 using Jrg.SisMed.Infra.IoC;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Adiciona suporte à localização, apontando para a pasta dentro do Domain
 builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
+
+// Configuração JWT Authentication
+var jwtSettings = builder.Configuration.GetSection("JwtSettings");
+var secretKey = jwtSettings["SecretKey"] ?? throw new InvalidOperationException("JWT SecretKey não configurada.");
+
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(options =>
+{
+    options.RequireHttpsMetadata = false; // Apenas para desenvolvimento
+    options.SaveToken = true;
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey)),
+        ValidateIssuer = true,
+        ValidIssuer = jwtSettings["Issuer"],
+        ValidateAudience = true,
+        ValidAudience = jwtSettings["Audience"],
+        ValidateLifetime = true,
+        ClockSkew = TimeSpan.Zero // Remove atraso padrão de 5 minutos
+    };
+});
+
+builder.Services.AddAuthorization();
 
 builder.Services.AddInfrastructure(builder.Configuration);
 
@@ -27,8 +58,33 @@ builder.Services.AddSwaggerGen(options =>
         }
     });
 
+    // Configuração de autenticação JWT no Swagger
+    options.AddSecurityDefinition("Bearer", new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+    {
+        Name = "Authorization",
+        Type = Microsoft.OpenApi.Models.SecuritySchemeType.Http,
+        Scheme = "bearer",
+        BearerFormat = "JWT",
+        In = Microsoft.OpenApi.Models.ParameterLocation.Header,
+        Description = "Insira o token JWT no formato: Bearer {seu token}"
+    });
+
+    options.AddSecurityRequirement(new Microsoft.OpenApi.Models.OpenApiSecurityRequirement
+    {
+        {
+            new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+            {
+                Reference = new Microsoft.OpenApi.Models.OpenApiReference
+                {
+                    Type = Microsoft.OpenApi.Models.ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            },
+            Array.Empty<string>()
+        }
+    });
+
     // Configura o Swagger para usar nomes únicos para evitar conflitos
-    // Isso resolve o problema de enums com mesmo nome em diferentes namespaces
     options.CustomSchemaIds(type => 
     {
         // Se for um tipo genérico, use o nome genérico
@@ -85,6 +141,8 @@ if (app.Urls.Any(url => url.StartsWith("https://", StringComparison.OrdinalIgnor
     app.UseHttpsRedirection();
 }
 
+// IMPORTANTE: A ordem é crucial!
+app.UseAuthentication();  // Deve vir ANTES do UseAuthorization
 app.UseAuthorization();
 
 app.MapControllers();

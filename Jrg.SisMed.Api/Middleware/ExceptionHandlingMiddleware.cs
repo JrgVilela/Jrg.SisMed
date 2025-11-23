@@ -47,6 +47,7 @@ namespace Jrg.SisMed.Api.Middleware
             {
                 ValidationException validationEx => HandleFluentValidationException(context, validationEx),
                 DomainValidationException domainEx => HandleDomainValidationException(context, domainEx),
+                UnauthorizedException unauthorizedEx => HandleUnauthorizedException(context, unauthorizedEx),
                 NotFoundException notFoundEx => HandleNotFoundException(context, notFoundEx),
                 ConflictException conflictEx => HandleConflictException(context, conflictEx),
                 InvalidOperationException invalidOpEx => HandleInvalidOperationException(context, invalidOpEx),
@@ -93,6 +94,21 @@ namespace Jrg.SisMed.Api.Middleware
                 exception.Errors,
                 context.Request.Path
             );
+        }
+
+        /// <summary>
+        /// Trata exceções de autenticação/autorização não autorizada.
+        /// </summary>
+        private ErrorResponse HandleUnauthorizedException(HttpContext context, UnauthorizedException exception)
+        {
+            context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+
+            return new ErrorResponse
+            {
+                StatusCode = (int)HttpStatusCode.Unauthorized,
+                Message = exception.Message,
+                Path = context.Request.Path
+            };
         }
 
         /// <summary>

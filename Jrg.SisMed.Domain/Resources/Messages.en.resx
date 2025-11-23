@@ -207,7 +207,6 @@
   <data name="UserMessage_UserAlreadyActive" xml:space="preserve">
     <value>The user is already active.</value>
   </data>
-  <!-- Professional Messages -->
   <data name="ProfessionalMessage_NameRequired" xml:space="preserve">
     <value>Professional name is required.</value>
   </data>
@@ -250,7 +249,6 @@
   <data name="ProfessionalMessage_RegisterNumberAlreadyExists" xml:space="preserve">
     <value>A professional with this registration number already exists.</value>
   </data>
-  <!-- Address Messages -->
   <data name="AddressMessage_StreetRequired" xml:space="preserve">
     <value>Street is required.</value>
   </data>
@@ -293,7 +291,6 @@
   <data name="AddressMessage_StateInvalid" xml:space="preserve">
     <value>The state provided is invalid.</value>
   </data>
-  <!-- Phone Messages -->
   <data name="PhoneMessage_PhoneRequired" xml:space="preserve">
     <value>Phone is required.</value>
   </data>
@@ -308,5 +305,8 @@
   </data>
   <data name="PhoneMessage_NumberInvalid" xml:space="preserve">
     <value>Phone number is invalid.</value>
+  </data>
+  <data name="UserMessage_LoginFailed" xml:space="preserve">
+    <value>Invalid login or password</value>
   </data>
 </root>

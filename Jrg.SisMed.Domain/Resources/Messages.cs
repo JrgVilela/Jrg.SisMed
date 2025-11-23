@@ -87,7 +87,8 @@ namespace Jrg.SisMed.Domain.Resources
         ValidationCodeExpired,
         ValidationCodeAlreadyUsed,
         ValidationCodeInvalid,
-        UserAlreadyActive
+        UserAlreadyActive,
+        LoginFailed
     }
 
     public enum ProfessionalMessage
