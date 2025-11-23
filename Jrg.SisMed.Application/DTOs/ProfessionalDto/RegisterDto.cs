@@ -67,7 +67,7 @@ namespace Jrg.SisMed.Application.DTOs.ProfessionalDto
                 number: Phone.Split(' ')[2]
             )));
 
-            psychologist.AddUser(new User(Name, Email, Password, UserEnum.State.Blocked));
+            psychologist.AddUser(new User(Name, Email, Password, UserEnum.State.Active));
 
             psychologist.AddAddress(new ProfessionalAddress(psychologist, new Address(
                 street: Street,
