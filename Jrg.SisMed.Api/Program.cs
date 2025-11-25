@@ -22,14 +22,17 @@ builder.Services.AddCors(options =>
     // Política mais restritiva para produção (recomendado)
     options.AddPolicy("Production", policy =>
     {
-        policy.WithOrigins(
-                "https://seudominio.com.br",
-                "https://www.seudominio.com.br",
-                "https://app.seudominio.com.br"
-            )
-            .AllowAnyMethod()
-            .AllowAnyHeader()
-            .AllowCredentials();
+        policy.AllowAnyOrigin()
+              .AllowAnyMethod()
+              .AllowAnyHeader();
+        //policy.WithOrigins(
+        //        "https://seudominio.com.br",
+        //        "https://www.seudominio.com.br",
+        //        "https://app.seudominio.com.br"
+        //    )
+        //    .AllowAnyMethod()
+        //    .AllowAnyHeader()
+        //    .AllowCredentials();
     });
 });
 

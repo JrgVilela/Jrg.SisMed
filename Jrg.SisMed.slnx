@@ -3,6 +3,7 @@
     <Project Path="Jrg.SisMed.Api.Test/Jrg.SisMed.Api.Test.csproj" Id="41f30569-20b0-41ab-9d66-912093274c6d" />
     <Project Path="Jrg.SisMed.Domain.Test/Jrg.SisMed.Domain.Test.csproj" Id="2397990c-1804-4656-acf7-1dd218582fa2" />
   </Folder>
+  <Folder Name="/WebApp/" />
   <Project Path="Jrg.SisMed.Api/Jrg.SisMed.Api.csproj" />
   <Project Path="Jrg.SisMed.Application/Jrg.SisMed.Application.csproj" />
   <Project Path="Jrg.SisMed.Domain/Jrg.SisMed.Domain.csproj" />
