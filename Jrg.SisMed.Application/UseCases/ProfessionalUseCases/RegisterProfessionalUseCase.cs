@@ -45,7 +45,7 @@ namespace Jrg.SisMed.Application.UseCases.ProfessionalUseCases
             dynamic professional = dto.ToDomain();
 
             // Obtém a factory apropriada baseada no tipo de profissional
-            dynamic factory = _provider.GetFactory(dto.ProfessionalType);
+            var factory = _provider.GetFactory(dto.ProfessionalType);
             dynamic service = factory.CreateRegister();
 
             // Executa o registro

@@ -41,7 +41,7 @@ namespace Jrg.SisMed.Infra.IoC
 
             // Professional Factories
             services.AddScoped<IProfessionalModuleFactory, PsychologyModuleFactory>();
-            
+
             // Professional Factory Provider
             services.AddScoped<IProfessionalFactoryProvider, ProfessionalModuleFactoryProvider>();
 

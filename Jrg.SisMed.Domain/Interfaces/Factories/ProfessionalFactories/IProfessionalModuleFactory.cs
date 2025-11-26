@@ -14,6 +14,6 @@ namespace Jrg.SisMed.Domain.Interfaces.Factories.ProfessionalFactories
     public interface IProfessionalModuleFactory
     {
         ProfessionalType Type { get; }
-        object CreateRegister(); // service retorna como object, mas é o tipo real
+        object CreateRegister();
     }
 }
