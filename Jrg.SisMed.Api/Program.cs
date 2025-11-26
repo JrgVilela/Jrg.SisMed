@@ -1,13 +1,41 @@
 using Jrg.SisMed.Api.Middleware;
 using Jrg.SisMed.Infra.IoC;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Localization;
+using Microsoft.Extensions.Localization;
 using Microsoft.IdentityModel.Tokens;
+using System.Globalization;
+using System.Reflection;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Adiciona suporte à localização, apontando para a pasta dentro do Domain
-builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
+// Configuração de Localização
+// IMPORTANTE: Os arquivos .resx estão no projeto Domain
+builder.Services.AddLocalization();
+
+// Registra o ResourceManager do Domain
+builder.Services.AddSingleton<IStringLocalizerFactory, ResourceManagerStringLocalizerFactory>();
+
+// Configura culturas suportadas
+var supportedCultures = new[]
+{
+    new CultureInfo("pt-BR"),
+    new CultureInfo("en-US")
+};
+
+builder.Services.Configure<RequestLocalizationOptions>(options =>
+{
+    options.DefaultRequestCulture = new RequestCulture("pt-BR");
+    options.SupportedCultures = supportedCultures;
+    options.SupportedUICultures = supportedCultures;
+    options.RequestCultureProviders = new List<IRequestCultureProvider>
+    {
+        new AcceptLanguageHeaderRequestCultureProvider(),
+        new QueryStringRequestCultureProvider(),
+        new CookieRequestCultureProvider()
+    };
+});
 
 // Configuração CORS
 builder.Services.AddCors(options =>
@@ -25,14 +53,6 @@ builder.Services.AddCors(options =>
         policy.AllowAnyOrigin()
               .AllowAnyMethod()
               .AllowAnyHeader();
-        //policy.WithOrigins(
-        //        "https://seudominio.com.br",
-        //        "https://www.seudominio.com.br",
-        //        "https://app.seudominio.com.br"
-        //    )
-        //    .AllowAnyMethod()
-        //    .AllowAnyHeader()
-        //    .AllowCredentials();
     });
 });
 
@@ -47,7 +67,7 @@ builder.Services.AddAuthentication(options =>
 })
 .AddJwtBearer(options =>
 {
-    options.RequireHttpsMetadata = false; // Apenas para desenvolvimento
+    options.RequireHttpsMetadata = false;
     options.SaveToken = true;
     options.TokenValidationParameters = new TokenValidationParameters
     {
@@ -58,7 +78,7 @@ builder.Services.AddAuthentication(options =>
         ValidateAudience = true,
         ValidAudience = jwtSettings["Audience"],
         ValidateLifetime = true,
-        ClockSkew = TimeSpan.Zero // Remove atraso padrão de 5 minutos
+        ClockSkew = TimeSpan.Zero
     };
 });
 
@@ -66,7 +86,6 @@ builder.Services.AddAuthorization();
 
 builder.Services.AddInfrastructure(builder.Configuration);
 
-// Add services to the container.
 builder.Services.AddControllers();
 
 // Configuração do Swagger
@@ -85,7 +104,6 @@ builder.Services.AddSwaggerGen(options =>
         }
     });
 
-    // Configuração de autenticação JWT no Swagger
     options.AddSecurityDefinition("Bearer", new Microsoft.OpenApi.Models.OpenApiSecurityScheme
     {
         Name = "Authorization",
@@ -111,10 +129,8 @@ builder.Services.AddSwaggerGen(options =>
         }
     });
 
-    // Configura o Swagger para usar nomes únicos para evitar conflitos
     options.CustomSchemaIds(type => 
     {
-        // Se for um tipo genérico, use o nome genérico
         if (type.IsGenericType)
         {
             var genericTypeName = type.GetGenericTypeDefinition().Name.Replace("`1", "");
@@ -122,59 +138,46 @@ builder.Services.AddSwaggerGen(options =>
             return $"{genericTypeName}Of{genericArgs}";
         }
 
-        // Se for um tipo aninhado (como enums dentro de classes), use o nome completo
         if (type.DeclaringType != null)
         {
             return $"{type.DeclaringType.Name}{type.Name}";
         }
 
-        // Caso contrário, use apenas o nome do tipo
         return type.Name;
     });
-
-    // Habilita comentários XML (opcional)
-    // var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-    // var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-    // if (File.Exists(xmlPath))
-    // {
-    //     options.IncludeXmlComments(xmlPath);
-    // }
 });
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-
-// Middleware de tratamento de exceções global (DEVE ser o primeiro middleware)
+// Middleware de tratamento de exceções global
 app.UseExceptionHandling();
+
+// Middleware de localização (IMPORTANTE: Antes de outros middlewares)
+app.UseRequestLocalization();
 
 if (app.Environment.IsDevelopment())
 {
-    // Habilita Swagger UI no ambiente de desenvolvimento
     app.UseSwagger();
     app.UseSwaggerUI(options =>
     {
         options.SwaggerEndpoint("/swagger/v1/swagger.json", "Jrg.SisMed API v1");
-        options.RoutePrefix = "swagger"; // Swagger acessível em: https://localhost:{porta}/swagger
+        options.RoutePrefix = "swagger";
         options.DocumentTitle = "Jrg.SisMed API Documentation";
         options.EnableDeepLinking();
         options.DisplayRequestDuration();
     });
 }
 
-// Só usa HTTPS redirect se estiver configurado HTTPS
 if (app.Urls.Any(url => url.StartsWith("https://", StringComparison.OrdinalIgnoreCase)))
 {
     app.UseHttpsRedirection();
 }
 
-// CORS - Deve vir ANTES de Authentication e Authorization
-// Em desenvolvimento usa a política "AllowAll"
-// Em produção, altere para "Production"
+// CORS
 app.UseCors(app.Environment.IsDevelopment() ? "AllowAll" : "Production");
 
-// IMPORTANTE: A ordem é crucial!
-app.UseAuthentication();  // Deve vir ANTES do UseAuthorization
+// Authentication e Authorization
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

@@ -45,7 +45,7 @@ namespace Jrg.SisMed.Api.Models
             return new ErrorResponse
             {
                 StatusCode = (int)HttpStatusCode.BadRequest,
-                Message = "One or more validation errors occurred.",
+                Message = "Ocorreu um ou mais erros de validação.",
                 Errors = errors,
                 Path = path
             };

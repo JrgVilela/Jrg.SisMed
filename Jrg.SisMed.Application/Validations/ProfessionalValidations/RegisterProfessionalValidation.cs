@@ -55,9 +55,8 @@ namespace Jrg.SisMed.Application.Validations.ProfessionalValidations
 
             RuleFor(x => x.ProfessionalType)
                 .IsInEnum()
-                .WithMessage(_localizer.For(ProfessionalMessage.ProfessionalTypeInvalid).Value)
-                .NotEqual(default(ProfessionalType))
-                .WithMessage(_localizer.For(ProfessionalMessage.ProfessionalTypeRequired).Value);
+                .WithMessage(_localizer.For(ProfessionalMessage.ProfessionalTypeInvalid).Value);
+                
 
             // ========================================
             // VALIDAÇÕES DO USUÁRIO

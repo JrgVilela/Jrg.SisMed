@@ -72,7 +72,7 @@ namespace Jrg.SisMed.Api.Controllers
 
             // Executa o use case de registro
             // Exceções são tratadas pelo ExceptionHandlingMiddleware
-            var professionalId = await _registerUseCase.ExecuteAsync(registerDto);
+            var professionalId = await _registerUseCase.ExecuteAsync(registerDto, cancellationToken);
 
             _logger.LogInformation("Profissional registrado com sucesso. ID: {ProfessionalId}", professionalId);
 

@@ -14,6 +14,6 @@ namespace Jrg.SisMed.Domain.Enumerators
         /// <summary>
         /// Profissional psicólogo.
         /// </summary>
-        Psychologist,
+        Psychologist = 0,
     }
 }

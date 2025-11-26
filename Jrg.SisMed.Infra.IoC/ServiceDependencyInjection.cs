@@ -28,6 +28,7 @@ namespace Jrg.SisMed.Infra.IoC
             // Professional Services
             services.AddScoped<IRegisterService<Psychologist>, PsychologyRegisterService>();
 
+
             // User Services
             services.AddScoped<ICreateUserService, CreateUserService>();
             services.AddScoped<IUpdateUserService, UpdateUserService>();

@@ -33,7 +33,7 @@ namespace Jrg.SisMed.Application.UseCases.ProfessionalUseCases
         /// <param name="dto">DTO com os dados do profissional a ser registrado.</param>
         /// <returns>ID do profissional criado.</returns>
         /// <exception cref="ValidationException">Lançada quando os dados são inválidos.</exception>
-        public async Task<int> ExecuteAsync(RegisterDto dto)
+        public async Task<int> ExecuteAsync(RegisterDto dto, CancellationToken cancellationToken = default)
         {
             // Valida o DTO
             var validationResult = await _validator.ValidateAsync(dto);
@@ -42,14 +42,14 @@ namespace Jrg.SisMed.Application.UseCases.ProfessionalUseCases
                 throw new ValidationException(validationResult.Errors);
 
             // Converte DTO para entidade de domínio
-            var professional = dto.ToDomain();
+            dynamic professional = dto.ToDomain();
 
             // Obtém a factory apropriada baseada no tipo de profissional
             dynamic factory = _provider.GetFactory(dto.ProfessionalType);
             dynamic service = factory.CreateRegister();
 
             // Executa o registro
-            return await service.ExecuteAsync(professional);
+            return await service.ExecuteAsync(professional, cancellationToken);
         }
     }
 }
