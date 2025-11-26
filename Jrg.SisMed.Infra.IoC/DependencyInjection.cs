@@ -2,6 +2,7 @@
 using Jrg.SisMed.Application.Factories;
 using Jrg.SisMed.Application.Providers;
 using Jrg.SisMed.Application.Services.OrganizationServices;
+using Jrg.SisMed.Application.Services.ProfessionalServices.PsychologyServices;
 using Jrg.SisMed.Application.Services.UserServices;
 using Jrg.SisMed.Application.UseCases.Organization;
 using Jrg.SisMed.Application.UseCases.User;
@@ -10,6 +11,7 @@ using Jrg.SisMed.Domain.Entities;
 using Jrg.SisMed.Domain.Interfaces.Factories.ProfessionalFactories;
 using Jrg.SisMed.Domain.Interfaces.Providers.ProfessionalProviders;
 using Jrg.SisMed.Domain.Interfaces.Services.OrganizationServices;
+using Jrg.SisMed.Domain.Interfaces.Services.ProfessionalServices;
 using Jrg.SisMed.Domain.Interfaces.Services.UserServices;
 using Jrg.SisMed.Infra.Data.Context;
 using Jrg.SisMed.Infra.Data.Repositories;
@@ -38,10 +40,10 @@ namespace Jrg.SisMed.Infra.IoC
                     b => b.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName)));
 
             // Professional Factories
-            services.AddTransient<IProfessionalModuleFactory<Psychologist>, PsychologyModuleFactory>();
-
+            services.AddScoped<IProfessionalModuleFactory, PsychologyModuleFactory>();
+            
             // Professional Factory Provider
-            services.AddSingleton<IProfessionalFactoryProvider, ProfessionalModuleFactoryProvider>();
+            services.AddScoped<IProfessionalFactoryProvider, ProfessionalModuleFactoryProvider>();
 
             // Registra FluentValidation - registra TODOS os validators do assembly automaticamente
             services.AddValidatorsFromAssemblyContaining<CreateUserValidation>();

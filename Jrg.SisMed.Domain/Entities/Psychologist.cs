@@ -61,8 +61,8 @@ namespace Jrg.SisMed.Domain.Entities
             ProfessionalEnum.Gender gender,
             string crp)
         {
-            base.Update(name, cpf, rg, birthDate, gender);
             Crp = crp;
+            base.Update(name, cpf, rg, birthDate, gender);
             Normalize();
             Validate();
         }

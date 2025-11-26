@@ -1,14 +1,91 @@
 using Jrg.SisMed.Api.Middleware;
 using Jrg.SisMed.Infra.IoC;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Localization;
+using Microsoft.Extensions.Localization;
+using Microsoft.IdentityModel.Tokens;
+using System.Globalization;
+using System.Reflection;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Adiciona suporte à localização, apontando para a pasta dentro do Domain
-builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
+// Configuração de Localização
+// IMPORTANTE: Os arquivos .resx estão no projeto Domain
+builder.Services.AddLocalization();
+
+// Registra o ResourceManager do Domain
+builder.Services.AddSingleton<IStringLocalizerFactory, ResourceManagerStringLocalizerFactory>();
+
+// Configura culturas suportadas
+var supportedCultures = new[]
+{
+    new CultureInfo("pt-BR"),
+    new CultureInfo("en-US")
+};
+
+builder.Services.Configure<RequestLocalizationOptions>(options =>
+{
+    options.DefaultRequestCulture = new RequestCulture("pt-BR");
+    options.SupportedCultures = supportedCultures;
+    options.SupportedUICultures = supportedCultures;
+    options.RequestCultureProviders = new List<IRequestCultureProvider>
+    {
+        new AcceptLanguageHeaderRequestCultureProvider(),
+        new QueryStringRequestCultureProvider(),
+        new CookieRequestCultureProvider()
+    };
+});
+
+// Configuração CORS
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", policy =>
+    {
+        policy.AllowAnyOrigin()
+              .AllowAnyMethod()
+              .AllowAnyHeader();
+    });
+
+    // Política mais restritiva para produção (recomendado)
+    options.AddPolicy("Production", policy =>
+    {
+        policy.AllowAnyOrigin()
+              .AllowAnyMethod()
+              .AllowAnyHeader();
+    });
+});
+
+// Configuração JWT Authentication
+var jwtSettings = builder.Configuration.GetSection("JwtSettings");
+var secretKey = jwtSettings["SecretKey"] ?? throw new InvalidOperationException("JWT SecretKey não configurada.");
+
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(options =>
+{
+    options.RequireHttpsMetadata = false;
+    options.SaveToken = true;
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey)),
+        ValidateIssuer = true,
+        ValidIssuer = jwtSettings["Issuer"],
+        ValidateAudience = true,
+        ValidAudience = jwtSettings["Audience"],
+        ValidateLifetime = true,
+        ClockSkew = TimeSpan.Zero
+    };
+});
+
+builder.Services.AddAuthorization();
 
 builder.Services.AddInfrastructure(builder.Configuration);
 
-// Add services to the container.
 builder.Services.AddControllers();
 
 // Configuração do Swagger
@@ -27,11 +104,33 @@ builder.Services.AddSwaggerGen(options =>
         }
     });
 
-    // Configura o Swagger para usar nomes únicos para evitar conflitos
-    // Isso resolve o problema de enums com mesmo nome em diferentes namespaces
+    options.AddSecurityDefinition("Bearer", new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+    {
+        Name = "Authorization",
+        Type = Microsoft.OpenApi.Models.SecuritySchemeType.Http,
+        Scheme = "bearer",
+        BearerFormat = "JWT",
+        In = Microsoft.OpenApi.Models.ParameterLocation.Header,
+        Description = "Insira o token JWT no formato: Bearer {seu token}"
+    });
+
+    options.AddSecurityRequirement(new Microsoft.OpenApi.Models.OpenApiSecurityRequirement
+    {
+        {
+            new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+            {
+                Reference = new Microsoft.OpenApi.Models.OpenApiReference
+                {
+                    Type = Microsoft.OpenApi.Models.ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            },
+            Array.Empty<string>()
+        }
+    });
+
     options.CustomSchemaIds(type => 
     {
-        // Se for um tipo genérico, use o nome genérico
         if (type.IsGenericType)
         {
             var genericTypeName = type.GetGenericTypeDefinition().Name.Replace("`1", "");
@@ -39,52 +138,46 @@ builder.Services.AddSwaggerGen(options =>
             return $"{genericTypeName}Of{genericArgs}";
         }
 
-        // Se for um tipo aninhado (como enums dentro de classes), use o nome completo
         if (type.DeclaringType != null)
         {
             return $"{type.DeclaringType.Name}{type.Name}";
         }
 
-        // Caso contrário, use apenas o nome do tipo
         return type.Name;
     });
-
-    // Habilita comentários XML (opcional)
-    // var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-    // var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-    // if (File.Exists(xmlPath))
-    // {
-    //     options.IncludeXmlComments(xmlPath);
-    // }
 });
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-
-// Middleware de tratamento de exceções global (DEVE ser o primeiro middleware)
+// Middleware de tratamento de exceções global
 app.UseExceptionHandling();
+
+// Middleware de localização (IMPORTANTE: Antes de outros middlewares)
+app.UseRequestLocalization();
 
 if (app.Environment.IsDevelopment())
 {
-    // Habilita Swagger UI no ambiente de desenvolvimento
     app.UseSwagger();
     app.UseSwaggerUI(options =>
     {
         options.SwaggerEndpoint("/swagger/v1/swagger.json", "Jrg.SisMed API v1");
-        options.RoutePrefix = "swagger"; // Swagger acessível em: https://localhost:{porta}/swagger
+        options.RoutePrefix = "swagger";
         options.DocumentTitle = "Jrg.SisMed API Documentation";
         options.EnableDeepLinking();
         options.DisplayRequestDuration();
     });
 }
 
-// Só usa HTTPS redirect se estiver configurado HTTPS
 if (app.Urls.Any(url => url.StartsWith("https://", StringComparison.OrdinalIgnoreCase)))
 {
     app.UseHttpsRedirection();
 }
 
+// CORS
+app.UseCors(app.Environment.IsDevelopment() ? "AllowAll" : "Production");
+
+// Authentication e Authorization
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

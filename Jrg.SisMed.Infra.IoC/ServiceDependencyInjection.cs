@@ -1,4 +1,5 @@
-﻿using Jrg.SisMed.Application.Services.OrganizationServices;
+﻿using Jrg.SisMed.Application.Services.AuthServices;
+using Jrg.SisMed.Application.Services.OrganizationServices;
 using Jrg.SisMed.Application.Services.ProfessionalServices.PsychologyServices;
 using Jrg.SisMed.Application.Services.UserServices;
 using Jrg.SisMed.Domain.Entities;
@@ -27,11 +28,16 @@ namespace Jrg.SisMed.Infra.IoC
             // Professional Services
             services.AddScoped<IRegisterService<Psychologist>, PsychologyRegisterService>();
 
+
             // User Services
             services.AddScoped<ICreateUserService, CreateUserService>();
             services.AddScoped<IUpdateUserService, UpdateUserService>();
             services.AddScoped<IReadUserService, ReadUserService>();
             services.AddScoped<IDeleteUserService, DeleteUserService>();
+            services.AddScoped<ILoginUserService, LoginUserService>();
+
+            // Auth Services
+            services.AddScoped<JwtTokenService>();
 
             return services;
         }

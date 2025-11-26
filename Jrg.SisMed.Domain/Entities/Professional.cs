@@ -76,7 +76,7 @@ namespace Jrg.SisMed.Domain.Entities
             Gender = gender;
 
             // Valida ANTES de fazer hash da senha
-            Validate();
+            //Validate();
 
             // Normaliza os dados
             Normalize();
@@ -127,7 +127,6 @@ namespace Jrg.SisMed.Domain.Entities
             if (user == null)
                 throw new ArgumentNullException(nameof(user));
 
-            user.Update(Name, user.Email, user.Password, UserEnum.State.Blocked);
             User = user;
             UserId = user.Id;
         }

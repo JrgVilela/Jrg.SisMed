@@ -18,7 +18,7 @@ namespace Jrg.SisMed.Application.Factories
     /// Esta implementação na Application Layer usa DTOs para receber dados estruturados.
     /// </summary>
     [ProfessionalType(ProfessionalType.Psychologist)]
-    public class PsychologyModuleFactory : IProfessionalModuleFactory<Psychologist>
+    public class PsychologyModuleFactory : IProfessionalModuleFactory
     {
         private readonly IRegisterService<Psychologist> _registerService;
 
@@ -27,10 +27,8 @@ namespace Jrg.SisMed.Application.Factories
             _registerService = registerService;
         }
 
+        public ProfessionalType Type => ProfessionalType.Psychologist;
 
-        public IRegisterService<Psychologist> CreateRegister()
-        {
-            return _registerService;
-        }
+        public object CreateRegister() => _registerService;
     }
 }

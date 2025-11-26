@@ -37,7 +37,7 @@ namespace Jrg.SisMed.Application.DTOs.ProfessionalDto
         public string NomeFantasia { get; set; } = string.Empty;
         public string Cnpj { get; set; } = string.Empty;
 
-        public Professional ToDomain()
+        public object ToDomain()
         {
             switch (ProfessionalType)
             {

@@ -1,5 +1,6 @@
 ﻿
 using Jrg.SisMed.Domain.Entities;
+using Jrg.SisMed.Domain.Enumerators;
 using Jrg.SisMed.Domain.Interfaces.Services.ProfessionalServices;
 
 namespace Jrg.SisMed.Domain.Interfaces.Factories.ProfessionalFactories
@@ -10,8 +11,9 @@ namespace Jrg.SisMed.Domain.Interfaces.Factories.ProfessionalFactories
     /// Esta interface pertence ao Domain, mas as implementações concretas na Application Layer
     /// podem receber DTOs e convertê-los internamente.
     /// </summary>
-    public interface IProfessionalModuleFactory<T> where T : Professional
+    public interface IProfessionalModuleFactory
     {
-        IRegisterService<T> CreateRegister();
+        ProfessionalType Type { get; }
+        object CreateRegister(); // service retorna como object, mas é o tipo real
     }
 }
