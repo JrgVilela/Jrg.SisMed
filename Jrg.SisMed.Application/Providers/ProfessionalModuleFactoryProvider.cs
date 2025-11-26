@@ -1,5 +1,6 @@
 ﻿using Jrg.SisMed.Domain.Attributes;
 using Jrg.SisMed.Domain.Enumerators;
+using Jrg.SisMed.Domain.Interfaces.Factories.ProfessionalFactories;
 using Jrg.SisMed.Domain.Interfaces.Providers.ProfessionalProviders;
 using System;
 using System.Collections.Generic;
@@ -12,21 +13,20 @@ namespace Jrg.SisMed.Application.Providers
 {
     public class ProfessionalModuleFactoryProvider : IProfessionalFactoryProvider
     {
-        private readonly IEnumerable<object> _factories;
+        private readonly IReadOnlyDictionary<ProfessionalType, IProfessionalModuleFactory> _factories;
 
-        public ProfessionalModuleFactoryProvider(IEnumerable<object> factories)
+        public ProfessionalModuleFactoryProvider(IEnumerable<IProfessionalModuleFactory> factories)
         {
-            _factories = factories;
+            _factories = factories.ToDictionary(f => f.Type);
         }
 
-        public object? GetFactory(ProfessionalType type)
+        public IProfessionalModuleFactory GetFactory(ProfessionalType type)
         {
-            if (_factories == null || !_factories.Any())
-                return null;
+            if (_factories.TryGetValue(type, out var factory))
+                return factory;
 
-            return _factories.First(f =>
-             f.GetType().GetCustomAttribute<ProfessionalTypeAttribute>()?.Type == type) ??
-             throw new ArgumentException($"Falhar no carregamento do factory informado.");
+            throw new InvalidOperationException(
+                $"No professional module factory registered for type '{type}'.");
         }
     }
 }

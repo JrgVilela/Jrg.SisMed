@@ -10,6 +10,6 @@ namespace Jrg.SisMed.Domain.Interfaces.Providers.ProfessionalProviders
 {
     public interface IProfessionalFactoryProvider
     {
-        object GetFactory(ProfessionalType type);
+        IProfessionalModuleFactory GetFactory(ProfessionalType type);
     }
 }
